@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tate-zwt.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1、使用pip3 安装Python3 的资源库pip3 install xlwt或者想要一次性安装多个库需要把需要安装的库放在requirements.txt，使用pip3安装的可以使用指令pip3 install -r requirements.txt 2、python 合并拼接字符串123456789&gt;&gt;&gt; a &#x3D; [&quot;hello&quot;, &quot;worl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python Develop Tips">
+<meta property="og:url" content="https://tate-zwt.github.io/2021/01/03/Python-Develop-Tips/index.html">
+<meta property="og:site_name" content="Tate Blog">
+<meta property="og:description" content="1、使用pip3 安装Python3 的资源库pip3 install xlwt或者想要一次性安装多个库需要把需要安装的库放在requirements.txt，使用pip3安装的可以使用指令pip3 install -r requirements.txt 2、python 合并拼接字符串123456789&gt;&gt;&gt; a &#x3D; [&quot;hello&quot;, &quot;worl">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-01-03T14:41:44.000Z">
+<meta property="article:modified_time" content="2021-12-23T07:42:37.450Z">
+<meta property="article:author" content="番茄炒蛋">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tate-zwt.github.io/2021/01/03/Python-Develop-Tips/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Python Develop Tips | Tate Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tate Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2021/01/03/Python-Develop-Tips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python Develop Tips
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 22:41:44" itemprop="dateCreated datePublished" datetime="2021-01-03T22:41:44+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-23 15:42:37" itemprop="dateModified" datetime="2021-12-23T15:42:37+08:00">2021-12-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1、使用pip3-安装Python3-的资源库"><a href="#1、使用pip3-安装Python3-的资源库" class="headerlink" title="1、使用pip3 安装Python3 的资源库"></a>1、使用pip3 安装Python3 的资源库</h2><p><code>pip3 install xlwt</code><br>或者想要一次性安装多个库需要把需要安装的库放在requirements.txt，使用pip3安装的可以使用指令<br><code>pip3 install -r requirements.txt</code></p>
+<h2 id="2、python-合并拼接字符串"><a href="#2、python-合并拼接字符串" class="headerlink" title="2、python 合并拼接字符串"></a>2、python 合并拼接字符串</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; a = [&quot;hello&quot;, &quot;world&quot;]</span><br><span class="line">&gt;&gt;&gt; a</span><br><span class="line">[&#x27;hello&#x27;, &#x27;world&#x27;]</span><br><span class="line">&gt;&gt;&gt; &#x27; &#x27;.join(a)</span><br><span class="line">&#x27;hello world&#x27;</span><br><span class="line">&gt;&gt;&gt; &#x27;,&#x27;.join(a)</span><br><span class="line">&#x27;hello,world&#x27;</span><br><span class="line">&gt;&gt;&gt; &#x27;&#x27;.join(a)</span><br><span class="line">&#x27;helloworld&#x27;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3、使用pip相关"><a href="#3、使用pip相关" class="headerlink" title="3、使用pip相关"></a>3、使用pip相关</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">使用pip3 list 查看当前已安装的库和版本</span><br><span class="line">使用 pip install --upgrade pip 进行升级</span><br></pre></td></tr></table></figure>
+
+<h2 id="4、VSCode-过滤-pyc等文件，在settings-json输入"><a href="#4、VSCode-过滤-pyc等文件，在settings-json输入" class="headerlink" title="4、VSCode 过滤.pyc等文件，在settings.json输入"></a>4、VSCode 过滤.pyc等文件，在settings.json输入</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&quot;files.exclude&quot;: &#123;</span><br><span class="line">        &quot;**/.git&quot;: true,</span><br><span class="line">        &quot;**/.svn&quot;: true,</span><br><span class="line">        &quot;**/.hg&quot;: true,</span><br><span class="line">        &quot;**/*.pyc&quot;: true,</span><br><span class="line">        &quot;**/.DS_Store&quot;: true</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5、创建Django项目"><a href="#5、创建Django项目" class="headerlink" title="5、创建Django项目"></a>5、创建Django项目</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 创建Django项目</span><br><span class="line">django-admin startproject name</span><br><span class="line"># 创建子应用</span><br><span class="line">python manage.py startapp name</span><br></pre></td></tr></table></figure>
+<h2 id="6、模型迁移"><a href="#6、模型迁移" class="headerlink" title="6、模型迁移"></a>6、模型迁移</h2><p>迁移由两步完成 :</p>
+<ul>
+<li>生成迁移文件,根据模型类生成创建表的语句<br><code>python manage.py makemigrations</code></li>
+<li>执行迁移：根据第一步生成的语句在数据库中创建表<br><code>python manage.py migrate</code></li>
+</ul>
+<h2 id="7、Django继承AbstractUser新建User-Model时出现错误"><a href="#7、Django继承AbstractUser新建User-Model时出现错误" class="headerlink" title="7、Django继承AbstractUser新建User Model时出现错误"></a>7、Django继承AbstractUser新建User Model时出现错误</h2><p>ERRORS:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">audit.UserProfile.groups: (fields.E304) Reverse accessor for &#x27;UserProfile.groups&#x27; clashes with reverse accessor for &#x27;User.groups&#x27;.</span><br><span class="line">HINT: Add or change a related_name argument to the definition for &#x27;UserProfile.groups&#x27; or &#x27;User.groups&#x27;.</span><br><span class="line">audit.UserProfile.user_permissions: (fields.E304) Reverse accessor for &#x27;UserProfile.user_permissions&#x27; clashes with reverse accessor for &#x27;User.user_permissions&#x27;.</span><br><span class="line">HINT: Add or change a related_name argument to the definition for &#x27;UserProfile.user_permissions&#x27; or &#x27;User.user_permissions&#x27;.</span><br><span class="line">auth.User.groups: (fields.E304) Reverse accessor for &#x27;User.groups&#x27; clashes with reverse accessor for &#x27;UserProfile.groups&#x27;.</span><br><span class="line">HINT: Add or change a related_name argument to the definition for &#x27;User.groups&#x27; or &#x27;UserProfile.groups&#x27;.</span><br><span class="line">auth.User.user_permissions: (fields.E304) Reverse accessor for &#x27;User.user_permissions&#x27; clashes with reverse accessor for &#x27;UserProfile.user_permissions&#x27;.</span><br><span class="line">HINT: Add or change a related_name argument to the definition for &#x27;User.user_permissions&#x27; or &#x27;UserProfile.user_permissions&#x27;.</span><br></pre></td></tr></table></figure>
+
+<p>需要在setting中重载AUTH_USER_MODEL</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">AUTH_USER_MODEL = &#x27;users.UserProfile&#x27;</span><br><span class="line"></span><br><span class="line">users：你的app</span><br><span class="line"></span><br><span class="line">UserProfile：model</span><br></pre></td></tr></table></figure>
+
+<h2 id="8、Django创建管理用户"><a href="#8、Django创建管理用户" class="headerlink" title="8、Django创建管理用户"></a>8、Django创建管理用户</h2><p><code>python manage.py createsuperuser</code></p>
+<h2 id="9、RuntimeError-cryptography-is-required-for-sha256-password-or-caching-sha2-password"><a href="#9、RuntimeError-cryptography-is-required-for-sha256-password-or-caching-sha2-password" class="headerlink" title="9、RuntimeError: cryptography is required for sha256_password or caching_sha2_password"></a>9、RuntimeError: cryptography is required for sha256_password or caching_sha2_password</h2><p>这段报错意思是说 sha256_password 和 caching_sha2_password 这两个加密算法需要用到 cryptography 。虽然意思很明了，但是可能不知道如何解决。<br>其实 cryptography 是一个python包，所以解决方法很简单：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install cryptography</span><br></pre></td></tr></table></figure>
+
+<h2 id="10-、NameError-name-‘-mysql’-is-not-defined"><a href="#10-、NameError-name-‘-mysql’-is-not-defined" class="headerlink" title="10 、NameError: name ‘_mysql’ is not defined"></a>10 、NameError: name ‘_mysql’ is not defined</h2><p>解决Django执行manage.py 提示 NameError: name ‘_mysql’ is not defined 问题<br>原因是：<br>Mysqldb 不兼容 python3.5 以后的版本</p>
+<p>解决办法：<br>使用pymysql代替MySQLdb</p>
+<p>步骤：</p>
+<p>安装pymysql：pip install pymysql<br>打开项目在setting.py的init.py,或直接在当前py文件最开头添加如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import pymysql </span><br><span class="line">pymysql.install_as_MySQLdb()</span><br></pre></td></tr></table></figure>
+<p>重新执行后报错<br><code>django.core.exceptions.ImproperlyConfigured: mysqlclient 1.4.0 or newer is required; you have 0.10.1.</code><br>有一个好办法,直接指定版本,比其他的解决方法简单一些…</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import pymysql</span><br><span class="line">pymysql.version_info = (1, 4, 13, &quot;final&quot;, 0)</span><br><span class="line">pymysql.install_as_MySQLdb()</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/1f0c8e3c438b">参考</a></p>
+<h2 id="11、Error-That-port-is-already-in-use"><a href="#11、Error-That-port-is-already-in-use" class="headerlink" title="11、Error: That port is already in use."></a>11、Error: That port is already in use.</h2><p>有两个方法可以解决(假设8000端口被占用)：<br>1.使用python manage.py runserver 8001 开一个新的端口。<br>2.kill掉原来的端口(在root条件下)。<br>2.1 在终端输入lsof -i:8000，列出进程信息。<br>2.2 然后，找到进程的PID号，比如我的PID号就是24194。<br>2.3 输入kill -9 PID，比如kill -9 24194 就可以关闭该端口了。<br>2.4使用python manage.py runserver 就能继续使用8000端口了。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/" rel="prev" title="计算机网络相关知识">
+      <i class="fa fa-chevron-left"></i> 计算机网络相关知识
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/05/SwiftUI-Develop-Tips/" rel="next" title="SwiftUI Develop Tips">
+      SwiftUI Develop Tips <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E4%BD%BF%E7%94%A8pip3-%E5%AE%89%E8%A3%85Python3-%E7%9A%84%E8%B5%84%E6%BA%90%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">1、使用pip3 安装Python3 的资源库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81python-%E5%90%88%E5%B9%B6%E6%8B%BC%E6%8E%A5%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">2.</span> <span class="nav-text">2、python 合并拼接字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E4%BD%BF%E7%94%A8pip%E7%9B%B8%E5%85%B3"><span class="nav-number">3.</span> <span class="nav-text">3、使用pip相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81VSCode-%E8%BF%87%E6%BB%A4-pyc%E7%AD%89%E6%96%87%E4%BB%B6%EF%BC%8C%E5%9C%A8settings-json%E8%BE%93%E5%85%A5"><span class="nav-number">4.</span> <span class="nav-text">4、VSCode 过滤.pyc等文件，在settings.json输入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5%E3%80%81%E5%88%9B%E5%BB%BADjango%E9%A1%B9%E7%9B%AE"><span class="nav-number">5.</span> <span class="nav-text">5、创建Django项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6%E3%80%81%E6%A8%A1%E5%9E%8B%E8%BF%81%E7%A7%BB"><span class="nav-number">6.</span> <span class="nav-text">6、模型迁移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7%E3%80%81Django%E7%BB%A7%E6%89%BFAbstractUser%E6%96%B0%E5%BB%BAUser-Model%E6%97%B6%E5%87%BA%E7%8E%B0%E9%94%99%E8%AF%AF"><span class="nav-number">7.</span> <span class="nav-text">7、Django继承AbstractUser新建User Model时出现错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8%E3%80%81Django%E5%88%9B%E5%BB%BA%E7%AE%A1%E7%90%86%E7%94%A8%E6%88%B7"><span class="nav-number">8.</span> <span class="nav-text">8、Django创建管理用户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9%E3%80%81RuntimeError-cryptography-is-required-for-sha256-password-or-caching-sha2-password"><span class="nav-number">9.</span> <span class="nav-text">9、RuntimeError: cryptography is required for sha256_password or caching_sha2_password</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E3%80%81NameError-name-%E2%80%98-mysql%E2%80%99-is-not-defined"><span class="nav-number">10.</span> <span class="nav-text">10 、NameError: name ‘_mysql’ is not defined</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11%E3%80%81Error-That-port-is-already-in-use"><span class="nav-number">11.</span> <span class="nav-text">11、Error: That port is already in use.</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">番茄炒蛋</p>
+  <div class="site-description" itemprop="description">「 少点虚的，多点实践，持续学习，终身学习」</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Tate-zwt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Tate-zwt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tate_zhangweiting@163.com" title="E-Mail → mailto:tate_zhangweiting@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">番茄炒蛋</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

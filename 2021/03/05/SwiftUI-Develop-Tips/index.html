@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tate-zwt.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1、使用SwiftRealm会导致没法预览报Updating took more than 5 seconds花了点时间查找问题，最后发现是因为初始化数据库写在AppDelegate，写在SceneDelegate就没事了！ 2、SwiftUI数据流温故知新 - 属性包装@State@State属性允许修改Struct的属性，这些属性在普通的Struct里面是不允许修改的。当把@State放置到属">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SwiftUI Develop Tips">
+<meta property="og:url" content="https://tate-zwt.github.io/2021/03/05/SwiftUI-Develop-Tips/index.html">
+<meta property="og:site_name" content="Tate Blog">
+<meta property="og:description" content="1、使用SwiftRealm会导致没法预览报Updating took more than 5 seconds花了点时间查找问题，最后发现是因为初始化数据库写在AppDelegate，写在SceneDelegate就没事了！ 2、SwiftUI数据流温故知新 - 属性包装@State@State属性允许修改Struct的属性，这些属性在普通的Struct里面是不允许修改的。当把@State放置到属">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-03-05T12:42:52.000Z">
+<meta property="article:modified_time" content="2021-12-23T07:43:26.679Z">
+<meta property="article:author" content="番茄炒蛋">
+<meta property="article:tag" content="SwiftUI">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tate-zwt.github.io/2021/03/05/SwiftUI-Develop-Tips/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>SwiftUI Develop Tips | Tate Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tate Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2021/03/05/SwiftUI-Develop-Tips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SwiftUI Develop Tips
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-05 20:42:52" itemprop="dateCreated datePublished" datetime="2021-03-05T20:42:52+08:00">2021-03-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-23 15:43:26" itemprop="dateModified" datetime="2021-12-23T15:43:26+08:00">2021-12-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1、使用SwiftRealm会导致没法预览报Updating-took-more-than-5-seconds"><a href="#1、使用SwiftRealm会导致没法预览报Updating-took-more-than-5-seconds" class="headerlink" title="1、使用SwiftRealm会导致没法预览报Updating took more than 5 seconds"></a>1、使用SwiftRealm会导致没法预览报<code>Updating took more than 5 seconds</code></h2><p>花了点时间查找问题，最后发现是因为初始化数据库写在AppDelegate，写在SceneDelegate就没事了！</p>
+<h2 id="2、SwiftUI数据流温故知新-属性包装"><a href="#2、SwiftUI数据流温故知新-属性包装" class="headerlink" title="2、SwiftUI数据流温故知新 - 属性包装"></a>2、SwiftUI数据流温故知新 - 属性包装</h2><h3 id="State"><a href="#State" class="headerlink" title="@State"></a>@State</h3><p>@State属性允许修改Struct的属性，这些属性在普通的Struct里面是不允许修改的。当把@State放置到属性前，该属性实际上会被放到Struct的外部存储起来，这意味着SwiftUI能够随时销毁和重建Struct而不会丢失属性的值。<br>@State包装的属性通常是设置成私有的，不让外部使用。如果想让外部使用，则应该使用@ObservedObject和@EnvironmentObject，他们能够使外部修改属性后，状态能够得到改变。<br>建议把@State包装的属性都设置成私有</p>
+<h3 id="Published"><a href="#Published" class="headerlink" title="@Published"></a>@Published</h3><p>@Published是SwiftUI最有用的包装之一，允许我们创建出能够被自动观察的对象属性，SwiftUI会自动监视这个属性，一旦发生了改变，会自动修改与该属性绑定的界面。<br>1.首先需要遵循ObservableObject属性</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">class Bag: ObservableObject &#123; var items = [String]() &#125;</span><br></pre></td></tr></table></figure>
+<p>2.包装属性</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">class Bag: ObservableObject &#123; @Published var items = [String]() &#125;</span><br></pre></td></tr></table></figure>
+<p>这样就完成了。@Published包装会自动添加willSet方法监视属性的改变。</p>
+<h3 id="ObservedObject"><a href="#ObservedObject" class="headerlink" title="@ObservedObject"></a>@ObservedObject</h3><p>@ObservedObject告诉SwiftUI，这个对象是可以被观察的，里面含有被@Published包装了的属性。<br>@ObservedObject包装的对象，必须遵循ObservableObject协议。也就是说必须是class对象，不能是struct。<br>@ObservedObject允许外部进行访问和修改。</p>
+<h3 id="EnvironmentObject"><a href="#EnvironmentObject" class="headerlink" title="@EnvironmentObject"></a>@EnvironmentObject</h3><p>@EnvironmentObject包装的属性是全局的，整个app都可以访问<br>需要注意的是，不需要给定默认值，由于该属性是整个app都可以访问的，SwiftUI会自动的从环境中取出来。<br>当有这样一个场景，A-&gt;B-&gt;C-&gt;D-&gt;E-&gt;F，A界面的数据要传递给F界面，假如使用@ObservedObject包装，则需要一层一层传递，而使用@EnvironmentObject则不需要，直接在F界面，通过SwiftUI环境直接取出来就行。<br>需要注意的是，当界面显示时，就会去环境中取，但是，假如之前没有把属性放到环境中，则程序会崩溃。</p>
+<h3 id="Environment"><a href="#Environment" class="headerlink" title="@Environment"></a>@Environment</h3><p>@Environment与@EnvironmentObject作用是不同的，@Environment是从环境中取出预定义的值，比如获得当前是暗黑模式还是正常模式，屏幕的大小等等。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Environment(\.horizontalSizeClass) var horizontalSizeClass</span><br><span class="line">@Environment(\.managedObjectContext) var managedObjectContext</span><br></pre></td></tr></table></figure>
+
+<h3 id="Binding"><a href="#Binding" class="headerlink" title="@Binding"></a>@Binding</h3><p>@Binding也是非常重要的一个包装，声明一个属性是从外部获取的，并且与外部是共享的。相当于外部传过来的时候，不是传递的值。任何一方修改都会让SwiftUI的监视生效。</p>
+<h3 id="GestureState"><a href="#GestureState" class="headerlink" title="@GestureState"></a>@GestureState</h3><p>@GestureState能够让我们传递手势的状态，虽然使用@State也能实现，但@GestureState能让手势结束后我们回到最初的状态。</p>
+<p>设置属性，设置zero意味着手势结束后，会回到最初的值。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SwiftUI/" rel="tag"># SwiftUI</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/03/Python-Develop-Tips/" rel="prev" title="Python Develop Tips">
+      <i class="fa fa-chevron-left"></i> Python Develop Tips
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/17/%E5%8D%81%E5%A4%A7%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3/" rel="next" title="十大常见算法核心思想">
+      十大常见算法核心思想 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E4%BD%BF%E7%94%A8SwiftRealm%E4%BC%9A%E5%AF%BC%E8%87%B4%E6%B2%A1%E6%B3%95%E9%A2%84%E8%A7%88%E6%8A%A5Updating-took-more-than-5-seconds"><span class="nav-number">1.</span> <span class="nav-text">1、使用SwiftRealm会导致没法预览报Updating took more than 5 seconds</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81SwiftUI%E6%95%B0%E6%8D%AE%E6%B5%81%E6%B8%A9%E6%95%85%E7%9F%A5%E6%96%B0-%E5%B1%9E%E6%80%A7%E5%8C%85%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">2、SwiftUI数据流温故知新 - 属性包装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#State"><span class="nav-number">2.1.</span> <span class="nav-text">@State</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Published"><span class="nav-number">2.2.</span> <span class="nav-text">@Published</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ObservedObject"><span class="nav-number">2.3.</span> <span class="nav-text">@ObservedObject</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EnvironmentObject"><span class="nav-number">2.4.</span> <span class="nav-text">@EnvironmentObject</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Environment"><span class="nav-number">2.5.</span> <span class="nav-text">@Environment</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Binding"><span class="nav-number">2.6.</span> <span class="nav-text">@Binding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GestureState"><span class="nav-number">2.7.</span> <span class="nav-text">@GestureState</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">番茄炒蛋</p>
+  <div class="site-description" itemprop="description">「 少点虚的，多点实践，持续学习，终身学习」</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Tate-zwt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Tate-zwt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tate_zhangweiting@163.com" title="E-Mail → mailto:tate_zhangweiting@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">番茄炒蛋</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

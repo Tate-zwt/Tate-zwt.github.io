@@ -502,7 +502,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2016/09/01/%E3%80%8C%20iOS%E5%B9%B2%E8%B4%A7%20%E3%80%8D%E6%8F%90%E9%AB%98%E4%BB%A3%E7%A0%81%E7%AE%80%E6%B4%81%E7%9A%84%E6%96%B9%E6%B3%95/">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2021/03/05/SwiftUI-Develop-Tips/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -516,7 +516,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2016/09/01/%E3%80%8C%20iOS%E5%B9%B2%E8%B4%A7%20%E3%80%8D%E6%8F%90%E9%AB%98%E4%BB%A3%E7%A0%81%E7%AE%80%E6%B4%81%E7%9A%84%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">「 iOS干货 」提高代码简洁的方法</a>
+            <a href="/2021/03/05/SwiftUI-Develop-Tips/" class="post-title-link" itemprop="url">SwiftUI Develop Tips</a>
         </h2>
 
         <div class="post-meta">
@@ -526,14 +526,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2016-09-01 19:28:29" itemprop="dateCreated datePublished" datetime="2016-09-01T19:28:29+08:00">2016-09-01</time>
+              <time title="Created: 2021-03-05 20:42:52" itemprop="dateCreated datePublished" datetime="2021-03-05T20:42:52+08:00">2021-03-05</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-22 17:08:20" itemprop="dateModified" datetime="2021-12-22T17:08:20+08:00">2021-12-22</time>
+                <time title="Modified: 2021-12-23 15:43:26" itemprop="dateModified" datetime="2021-12-23T15:43:26+08:00">2021-12-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -556,15 +556,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>开发项目的时候，常常会有一些代码重复而且冗余，在用的时候需要写很长的代码或者用的地方也多，所以这个时候就需要集中起来封装，使代码复用性强，用短短的几行代码搞定。这些方法我都封装在<code>category、tools、View</code>，加上代码里都有写注释，用起来很方便，实用性强，读起来也易懂，可以让代码更加的简洁。里面有一些也是参考别人源码，也做了下搬运工，希望对你们开发项目有所帮助。</p>
-<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><h6 id="WTSDK"><a href="#WTSDK" class="headerlink" title="WTSDK"></a>WTSDK</h6><p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221635861.png" alt="WTSDK目录"><br>看目录结构就觉得清晰易懂，反正我是这么觉得的☺️</p>
-<h6 id="Category（分类）"><a href="#Category（分类）" class="headerlink" title="Category（分类）"></a>Category（分类）</h6><p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221635046.png" alt="Category"></p>
-<h6 id="NS（NS前缀的分类）"><a href="#NS（NS前缀的分类）" class="headerlink" title="NS（NS前缀的分类）"></a>NS（NS前缀的分类）</h6><p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221636013.png" alt="NS"></p>
-<h6 id="UI（UI前缀的分类）"><a href="#UI（UI前缀的分类）" class="headerlink" title="UI（UI前缀的分类）"></a>UI（UI前缀的分类）</h6><p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221636070.png" alt="UI"><br>看<code>class名称</code>，它们都是对应对象的分类方法，里面扩展了很多实用性的功能，具体可以看源码。</p>
-<h6 id="Tool（工具类集合）"><a href="#Tool（工具类集合）" class="headerlink" title="Tool（工具类集合）"></a>Tool（工具类集合）</h6><p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221636337.png" alt="Tool"><br><code>Singleton</code>是一个单例模式的宏使用方法：<br>在<code>.h</code>里写上<code>singleton_interface(类名称)</code>与<code>.m</code>里写上<code>singleton_implementation(类名称)</code>即完美支持MRC和ARC下的单例使用。<br><code>WTConst</code>里面包括很多实用性很强的宏定义，具体看源码。<br><code>WTUtility</code>里面定义了很多实用性很强的类方法，具体看源码。</p>
-<h6 id="View（UITextField与UITextView）"><a href="#View（UITextField与UITextView）" class="headerlink" title="View（UITextField与UITextView）"></a>View（UITextField与UITextView）</h6><p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221636362.png" alt="View"><br><code>View</code>文件夹里包括<code>UITextField</code>与<code>UITextView</code>原生控件的封装。我一直觉得这两个原生控件每次用的时候都要加入好多的判断与代理方法，而且都是差不多一样的，所以我就针对这两个进行了封装，把常用的功能都集合在里面，比如限制文字输入长度等等，这样使用起来更加的方便和简洁。具体可以看下源码。</p>
-<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><p>你可以看下<code>WTSDK</code>里面有啥需要的，单独拉某个文件到你的项目里使用即可。<br>如果你都要使用的话，直接导入<code>#import &quot;WTConst.h&quot;</code>即可。<br>注意如果用到<code>UIViewController+WT</code>还需要项目里有<a target="_blank" rel="noopener" href="https://github.com/jdg/MBProgressHUD">MBProgressHUD</a>这个库。</p>
-<p>####源码在这<br><a target="_blank" rel="noopener" href="https://github.com/Tate-zwt/WTSDK">GitHub</a> 如果你觉得不错的话，麻烦你点一下Star，thank you all!</p>
+          <h2 id="1、使用SwiftRealm会导致没法预览报Updating-took-more-than-5-seconds"><a href="#1、使用SwiftRealm会导致没法预览报Updating-took-more-than-5-seconds" class="headerlink" title="1、使用SwiftRealm会导致没法预览报Updating took more than 5 seconds"></a>1、使用SwiftRealm会导致没法预览报<code>Updating took more than 5 seconds</code></h2><p>花了点时间查找问题，最后发现是因为初始化数据库写在AppDelegate，写在SceneDelegate就没事了！</p>
+<h2 id="2、SwiftUI数据流温故知新-属性包装"><a href="#2、SwiftUI数据流温故知新-属性包装" class="headerlink" title="2、SwiftUI数据流温故知新 - 属性包装"></a>2、SwiftUI数据流温故知新 - 属性包装</h2><h3 id="State"><a href="#State" class="headerlink" title="@State"></a>@State</h3><p>@State属性允许修改Struct的属性，这些属性在普通的Struct里面是不允许修改的。当把@State放置到属性前，该属性实际上会被放到Struct的外部存储起来，这意味着SwiftUI能够随时销毁和重建Struct而不会丢失属性的值。<br>@State包装的属性通常是设置成私有的，不让外部使用。如果想让外部使用，则应该使用@ObservedObject和@EnvironmentObject，他们能够使外部修改属性后，状态能够得到改变。<br>建议把@State包装的属性都设置成私有</p>
+<h3 id="Published"><a href="#Published" class="headerlink" title="@Published"></a>@Published</h3><p>@Published是SwiftUI最有用的包装之一，允许我们创建出能够被自动观察的对象属性，SwiftUI会自动监视这个属性，一旦发生了改变，会自动修改与该属性绑定的界面。<br>1.首先需要遵循ObservableObject属性</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">class Bag: ObservableObject &#123; var items = [String]() &#125;</span><br></pre></td></tr></table></figure>
+<p>2.包装属性</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">class Bag: ObservableObject &#123; @Published var items = [String]() &#125;</span><br></pre></td></tr></table></figure>
+<p>这样就完成了。@Published包装会自动添加willSet方法监视属性的改变。</p>
+<h3 id="ObservedObject"><a href="#ObservedObject" class="headerlink" title="@ObservedObject"></a>@ObservedObject</h3><p>@ObservedObject告诉SwiftUI，这个对象是可以被观察的，里面含有被@Published包装了的属性。<br>@ObservedObject包装的对象，必须遵循ObservableObject协议。也就是说必须是class对象，不能是struct。<br>@ObservedObject允许外部进行访问和修改。</p>
+<h3 id="EnvironmentObject"><a href="#EnvironmentObject" class="headerlink" title="@EnvironmentObject"></a>@EnvironmentObject</h3><p>@EnvironmentObject包装的属性是全局的，整个app都可以访问<br>需要注意的是，不需要给定默认值，由于该属性是整个app都可以访问的，SwiftUI会自动的从环境中取出来。<br>当有这样一个场景，A-&gt;B-&gt;C-&gt;D-&gt;E-&gt;F，A界面的数据要传递给F界面，假如使用@ObservedObject包装，则需要一层一层传递，而使用@EnvironmentObject则不需要，直接在F界面，通过SwiftUI环境直接取出来就行。<br>需要注意的是，当界面显示时，就会去环境中取，但是，假如之前没有把属性放到环境中，则程序会崩溃。</p>
+<h3 id="Environment"><a href="#Environment" class="headerlink" title="@Environment"></a>@Environment</h3><p>@Environment与@EnvironmentObject作用是不同的，@Environment是从环境中取出预定义的值，比如获得当前是暗黑模式还是正常模式，屏幕的大小等等。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Environment(\.horizontalSizeClass) var horizontalSizeClass</span><br><span class="line">@Environment(\.managedObjectContext) var managedObjectContext</span><br></pre></td></tr></table></figure>
+
+<h3 id="Binding"><a href="#Binding" class="headerlink" title="@Binding"></a>@Binding</h3><p>@Binding也是非常重要的一个包装，声明一个属性是从外部获取的，并且与外部是共享的。相当于外部传过来的时候，不是传递的值。任何一方修改都会让SwiftUI的监视生效。</p>
+<h3 id="GestureState"><a href="#GestureState" class="headerlink" title="@GestureState"></a>@GestureState</h3><p>@GestureState能够让我们传递手势的状态，虽然使用@State也能实现，但@GestureState能让手势结束后我们回到最初的状态。</p>
+<p>设置属性，设置zero意味着手势结束后，会回到最初的值。</p>
 
       
     </div>
@@ -584,7 +590,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2016/08/31/iOS%E9%9B%86%E6%88%90Ping++%E6%94%AF%E4%BB%98,%E7%BB%95%E8%BF%87%E4%B8%80%E4%BA%9B%E5%9D%91/">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2021/01/03/Python-Develop-Tips/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -598,7 +604,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2016/08/31/iOS%E9%9B%86%E6%88%90Ping++%E6%94%AF%E4%BB%98,%E7%BB%95%E8%BF%87%E4%B8%80%E4%BA%9B%E5%9D%91/" class="post-title-link" itemprop="url">iOS集成Ping++支付,绕过一些坑</a>
+            <a href="/2021/01/03/Python-Develop-Tips/" class="post-title-link" itemprop="url">Python Develop Tips</a>
         </h2>
 
         <div class="post-meta">
@@ -608,14 +614,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2016-08-31 20:18:50" itemprop="dateCreated datePublished" datetime="2016-08-31T20:18:50+08:00">2016-08-31</time>
+              <time title="Created: 2021-01-03 22:41:44" itemprop="dateCreated datePublished" datetime="2021-01-03T22:41:44+08:00">2021-01-03</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-22 17:05:22" itemprop="dateModified" datetime="2021-12-22T17:05:22+08:00">2021-12-22</time>
+                <time title="Modified: 2021-12-23 15:42:37" itemprop="dateModified" datetime="2021-12-23T15:42:37+08:00">2021-12-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -623,7 +629,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                  <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
                 </span>
             </span>
 
@@ -638,15 +644,39 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>这一段时间比较忙，主要公司的产品需要重构与加多一个货币支付系统。说到移动端的支付，自然会牵扯到支付这一块。支付这一块主流的目前就微信、支付宝、银联。做过这些SDK集成的开发者都知道，集成相对复杂，而且要花大量的时间去阅读他们提供的开发文档，不过还好现在有很多开发者都分享了他们的集成心得，使这件事越发简单，比如：<a target="_blank" rel="noopener" href="http://www.jianshu.com/p/97d38b00e53d">iOS支付[支付宝、银联、微信]</a>、<a target="_blank" rel="noopener" href="http://www.jianshu.com/p/6d67cfe0f00c">10分钟搞定支付宝和微信支付 的 各种填坑</a>等等，但是呢，其实还有更加简单的,<a target="_blank" rel="noopener" href="https://www.pingxx.com/docs/overview">Ping++</a>。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/08/31/iOS%E9%9B%86%E6%88%90Ping++%E6%94%AF%E4%BB%98,%E7%BB%95%E8%BF%87%E4%B8%80%E4%BA%9B%E5%9D%91/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h2 id="1、使用pip3-安装Python3-的资源库"><a href="#1、使用pip3-安装Python3-的资源库" class="headerlink" title="1、使用pip3 安装Python3 的资源库"></a>1、使用pip3 安装Python3 的资源库</h2><p><code>pip3 install xlwt</code><br>或者想要一次性安装多个库需要把需要安装的库放在requirements.txt，使用pip3安装的可以使用指令<br><code>pip3 install -r requirements.txt</code></p>
+<h2 id="2、python-合并拼接字符串"><a href="#2、python-合并拼接字符串" class="headerlink" title="2、python 合并拼接字符串"></a>2、python 合并拼接字符串</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; a = [&quot;hello&quot;, &quot;world&quot;]</span><br><span class="line">&gt;&gt;&gt; a</span><br><span class="line">[&#x27;hello&#x27;, &#x27;world&#x27;]</span><br><span class="line">&gt;&gt;&gt; &#x27; &#x27;.join(a)</span><br><span class="line">&#x27;hello world&#x27;</span><br><span class="line">&gt;&gt;&gt; &#x27;,&#x27;.join(a)</span><br><span class="line">&#x27;hello,world&#x27;</span><br><span class="line">&gt;&gt;&gt; &#x27;&#x27;.join(a)</span><br><span class="line">&#x27;helloworld&#x27;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3、使用pip相关"><a href="#3、使用pip相关" class="headerlink" title="3、使用pip相关"></a>3、使用pip相关</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">使用pip3 list 查看当前已安装的库和版本</span><br><span class="line">使用 pip install --upgrade pip 进行升级</span><br></pre></td></tr></table></figure>
+
+<h2 id="4、VSCode-过滤-pyc等文件，在settings-json输入"><a href="#4、VSCode-过滤-pyc等文件，在settings-json输入" class="headerlink" title="4、VSCode 过滤.pyc等文件，在settings.json输入"></a>4、VSCode 过滤.pyc等文件，在settings.json输入</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&quot;files.exclude&quot;: &#123;</span><br><span class="line">        &quot;**/.git&quot;: true,</span><br><span class="line">        &quot;**/.svn&quot;: true,</span><br><span class="line">        &quot;**/.hg&quot;: true,</span><br><span class="line">        &quot;**/*.pyc&quot;: true,</span><br><span class="line">        &quot;**/.DS_Store&quot;: true</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5、创建Django项目"><a href="#5、创建Django项目" class="headerlink" title="5、创建Django项目"></a>5、创建Django项目</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 创建Django项目</span><br><span class="line">django-admin startproject name</span><br><span class="line"># 创建子应用</span><br><span class="line">python manage.py startapp name</span><br></pre></td></tr></table></figure>
+<h2 id="6、模型迁移"><a href="#6、模型迁移" class="headerlink" title="6、模型迁移"></a>6、模型迁移</h2><p>迁移由两步完成 :</p>
+<ul>
+<li>生成迁移文件,根据模型类生成创建表的语句<br><code>python manage.py makemigrations</code></li>
+<li>执行迁移：根据第一步生成的语句在数据库中创建表<br><code>python manage.py migrate</code></li>
+</ul>
+<h2 id="7、Django继承AbstractUser新建User-Model时出现错误"><a href="#7、Django继承AbstractUser新建User-Model时出现错误" class="headerlink" title="7、Django继承AbstractUser新建User Model时出现错误"></a>7、Django继承AbstractUser新建User Model时出现错误</h2><p>ERRORS:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">audit.UserProfile.groups: (fields.E304) Reverse accessor for &#x27;UserProfile.groups&#x27; clashes with reverse accessor for &#x27;User.groups&#x27;.</span><br><span class="line">HINT: Add or change a related_name argument to the definition for &#x27;UserProfile.groups&#x27; or &#x27;User.groups&#x27;.</span><br><span class="line">audit.UserProfile.user_permissions: (fields.E304) Reverse accessor for &#x27;UserProfile.user_permissions&#x27; clashes with reverse accessor for &#x27;User.user_permissions&#x27;.</span><br><span class="line">HINT: Add or change a related_name argument to the definition for &#x27;UserProfile.user_permissions&#x27; or &#x27;User.user_permissions&#x27;.</span><br><span class="line">auth.User.groups: (fields.E304) Reverse accessor for &#x27;User.groups&#x27; clashes with reverse accessor for &#x27;UserProfile.groups&#x27;.</span><br><span class="line">HINT: Add or change a related_name argument to the definition for &#x27;User.groups&#x27; or &#x27;UserProfile.groups&#x27;.</span><br><span class="line">auth.User.user_permissions: (fields.E304) Reverse accessor for &#x27;User.user_permissions&#x27; clashes with reverse accessor for &#x27;UserProfile.user_permissions&#x27;.</span><br><span class="line">HINT: Add or change a related_name argument to the definition for &#x27;User.user_permissions&#x27; or &#x27;UserProfile.user_permissions&#x27;.</span><br></pre></td></tr></table></figure>
+
+<p>需要在setting中重载AUTH_USER_MODEL</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">AUTH_USER_MODEL = &#x27;users.UserProfile&#x27;</span><br><span class="line"></span><br><span class="line">users：你的app</span><br><span class="line"></span><br><span class="line">UserProfile：model</span><br></pre></td></tr></table></figure>
+
+<h2 id="8、Django创建管理用户"><a href="#8、Django创建管理用户" class="headerlink" title="8、Django创建管理用户"></a>8、Django创建管理用户</h2><p><code>python manage.py createsuperuser</code></p>
+<h2 id="9、RuntimeError-cryptography-is-required-for-sha256-password-or-caching-sha2-password"><a href="#9、RuntimeError-cryptography-is-required-for-sha256-password-or-caching-sha2-password" class="headerlink" title="9、RuntimeError: cryptography is required for sha256_password or caching_sha2_password"></a>9、RuntimeError: cryptography is required for sha256_password or caching_sha2_password</h2><p>这段报错意思是说 sha256_password 和 caching_sha2_password 这两个加密算法需要用到 cryptography 。虽然意思很明了，但是可能不知道如何解决。<br>其实 cryptography 是一个python包，所以解决方法很简单：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install cryptography</span><br></pre></td></tr></table></figure>
+
+<h2 id="10-、NameError-name-‘-mysql’-is-not-defined"><a href="#10-、NameError-name-‘-mysql’-is-not-defined" class="headerlink" title="10 、NameError: name ‘_mysql’ is not defined"></a>10 、NameError: name ‘_mysql’ is not defined</h2><p>解决Django执行manage.py 提示 NameError: name ‘_mysql’ is not defined 问题<br>原因是：<br>Mysqldb 不兼容 python3.5 以后的版本</p>
+<p>解决办法：<br>使用pymysql代替MySQLdb</p>
+<p>步骤：</p>
+<p>安装pymysql：pip install pymysql<br>打开项目在setting.py的init.py,或直接在当前py文件最开头添加如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import pymysql </span><br><span class="line">pymysql.install_as_MySQLdb()</span><br></pre></td></tr></table></figure>
+<p>重新执行后报错<br><code>django.core.exceptions.ImproperlyConfigured: mysqlclient 1.4.0 or newer is required; you have 0.10.1.</code><br>有一个好办法,直接指定版本,比其他的解决方法简单一些…</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import pymysql</span><br><span class="line">pymysql.version_info = (1, 4, 13, &quot;final&quot;, 0)</span><br><span class="line">pymysql.install_as_MySQLdb()</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/1f0c8e3c438b">参考</a></p>
+<h2 id="11、Error-That-port-is-already-in-use"><a href="#11、Error-That-port-is-already-in-use" class="headerlink" title="11、Error: That port is already in use."></a>11、Error: That port is already in use.</h2><p>有两个方法可以解决(假设8000端口被占用)：<br>1.使用python manage.py runserver 8001 开一个新的端口。<br>2.kill掉原来的端口(在root条件下)。<br>2.1 在终端输入lsof -i:8000，列出进程信息。<br>2.2 然后，找到进程的PID号，比如我的PID号就是24194。<br>2.3 输入kill -9 PID，比如kill -9 24194 就可以关闭该端口了。<br>2.4使用python manage.py runserver 就能继续使用8000端口了。</p>
+
       
     </div>
 
@@ -665,7 +695,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2016/04/17/iOS%20Runtime%E7%89%B9%E6%80%A7%E4%B9%8B%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1/">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2020/07/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -679,7 +709,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2016/04/17/iOS%20Runtime%E7%89%B9%E6%80%A7%E4%B9%8B%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1/" class="post-title-link" itemprop="url">iOS Runtime特性之关联对象</a>
+            <a href="/2020/07/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/" class="post-title-link" itemprop="url">计算机网络相关知识</a>
         </h2>
 
         <div class="post-meta">
@@ -689,14 +719,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2016-04-17 22:38:28" itemprop="dateCreated datePublished" datetime="2016-04-17T22:38:28+08:00">2016-04-17</time>
+              <time title="Created: 2020-07-15 22:00:53" itemprop="dateCreated datePublished" datetime="2020-07-15T22:00:53+08:00">2020-07-15</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-22 17:05:43" itemprop="dateModified" datetime="2021-12-22T17:05:43+08:00">2021-12-22</time>
+                <time title="Modified: 2021-12-23 15:40:08" itemprop="dateModified" datetime="2021-12-23T15:40:08+08:00">2021-12-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -704,7 +734,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
                 </span>
             </span>
 
@@ -719,298 +749,80 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>现在你准备用一个系统的类或者是你写的类，但是这个类并不能满足你的需求，你需要额外添加一个属性。<br>一般解决办法要么是 <code>extends(继承)</code>，要么使用 <code>category(类别)</code>。<br>而我并不推荐使用 <code>extends</code> ，主要是耦合性太强，一般我使用 <code>category</code> 。<br>我们都知道，分类中是无法设置属性的，如果在分类的声明中写<code>@property</code> 只能为其生成<code>get</code> 和 <code>set</code> 方法的声明，<br>但是有时候使用类别也需要增加一个额外属性，<br>那么怎么办呢？<br>这个时候，<code>runtime</code>的关联属性就能发挥它的作用了。<br>一般都是<code>key value</code> 的存在。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/04/17/iOS%20Runtime%E7%89%B9%E6%80%A7%E4%B9%8B%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
+          <h1 id="从输入URL（www-google-com）到页面加载发生了什么？"><a href="#从输入URL（www-google-com）到页面加载发生了什么？" class="headerlink" title="从输入URL（www.google.com）到页面加载发生了什么？"></a>从输入URL（<a href="http://www.google.com）到页面加载发生了什么？">www.google.com）到页面加载发生了什么？</a></h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1.DNS解析（网址 -&gt; IP地址）：DNS缓存：浏览器和操作系统。分级查询：本地DNF服务器，根域名服务器，com顶级域名服务器，google.com域名服务器 </span><br><span class="line">2.TCP连接（三次握手）-&gt; 为什么两次不可以？</span><br><span class="line">3.发送HTTP请求</span><br><span class="line">4.服务器处理请求，并且返回HTTP报文</span><br><span class="line">5.浏览器解析和渲染页面</span><br><span class="line">6.连接结束（四次挥手）-&gt; 为什么三次不可以？</span><br></pre></td></tr></table></figure>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2016/03/20/iOS%20Develop%20Tips/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tate Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/03/20/iOS%20Develop%20Tips/" class="post-title-link" itemprop="url">iOS Develop Tips</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2016-03-20 20:23:45" itemprop="dateCreated datePublished" datetime="2016-03-20T20:23:45+08:00">2016-03-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-22 17:06:00" itemprop="dateModified" datetime="2021-12-22T17:06:00+08:00">2021-12-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>记录一些常用到的代码块 -&gt; self command C+V😄  continuous updating!</p>
-<h5 id="Objective-C-tips"><a href="#Objective-C-tips" class="headerlink" title="Objective-C tips"></a>Objective-C tips</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//使控件从导航栏以下开始</span><br><span class="line">self.edgesForExtendedLayout=UIRectEdgeNone;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> //将navigation返回按钮文字position设置不在屏幕上显示</span><br><span class="line">[[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(NSIntegerMin, NSIntegerMin) forBarMetrics:UIBarMetricsDefault];</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//解决ScrollView等在viewController无法滚动到最顶部</span><br><span class="line">//自动滚动调整，默认为YES</span><br><span class="line">self.automaticallyAdjustsScrollViewInsets = NO;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//隐藏navigationBar上返回按钮</span><br><span class="line">[self.navigationController.navigationItem setHidesBackButton:YES];</span><br><span class="line">[self.navigationItem setHidesBackButton:YES];</span><br><span class="line">[self.navigationController.navigationBar.backItem setHidesBackButton:YES];</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//去除tableview底部多余的空白cell </span><br><span class="line">self.tableView.tableFooterView = [UIView new];</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/** 显示完整的CellSeparator线 */</span><br><span class="line">-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath&#123;</span><br><span class="line">    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) &#123;</span><br><span class="line">        [cell setSeparatorInset:UIEdgeInsetsZero];</span><br><span class="line">    &#125;</span><br><span class="line">    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) &#123;</span><br><span class="line">        [cell setPreservesSuperviewLayoutMargins:NO];</span><br><span class="line">    &#125;</span><br><span class="line">    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) &#123;</span><br><span class="line">        [cell setLayoutMargins:UIEdgeInsetsZero];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>滑动的时候隐藏navigation bar</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">navigationController.hidesBarsOnSwipe = Yes;</span><br></pre></td></tr></table></figure>
-<p>将Navigationbar变成透明而不模糊</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[self.navigationController.navigationBar setBackgroundImage:[UIImage new]</span><br><span class="line">                         forBarMetrics:UIBarMetricsDefault];</span><br><span class="line">self.navigationController.navigationBar .shadowImage = [UIImage new];</span><br><span class="line">self.navigationController.navigationBar .translucent = YES;</span><br></pre></td></tr></table></figure>
-
-
-<p>NSString</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">//截取字符串</span><br><span class="line">NSString *interceptStr1 = @&quot;Tate_zwt&quot;;</span><br><span class="line">interceptStr1 = [interceptStr1 substringToIndex:3];//截取下标3之前的字符串</span><br><span class="line">NSLog(@&quot;截取的值为:%@&quot;,interceptStr1);//截取的值为:Tat</span><br><span class="line"></span><br><span class="line">NSString *interceptStr2 = @&quot;Tate_zwt&quot;;</span><br><span class="line">NSRange rang = &#123;3,1&#125;;</span><br><span class="line">interceptStr2 = [interceptStr2 substringWithRange:rang];//截取rang范围的字符串</span><br><span class="line">NSLog(@&quot;截取的值为:%@&quot;,interceptStr2);//截取的值为:e</span><br><span class="line"></span><br><span class="line">NSString *interceptStr3 = @&quot;Tate_zwt&quot;;</span><br><span class="line">interceptStr3 = [interceptStr3 substringFromIndex:3];//截取下标3之后的字符串</span><br><span class="line">NSLog(@&quot;截取的值为:%@&quot;,interceptStr3);//截取的值为:e_zwt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//匹配字符串</span><br><span class="line">NSString *matchingStr = @&quot;Tate_zwt&quot;;</span><br><span class="line">NSRange range = [matchingStr rangeOfString:@&quot;t&quot;];//匹配得到的下标</span><br><span class="line">NSLog(@&quot;rang:%@&quot;,NSStringFromRange(range));//rang:&#123;2, 1&#125;</span><br><span class="line">matchingStr = [matchingStr substringWithRange:range];//截取范围类的字符串</span><br><span class="line">NSLog(@&quot;截取的值为:%@&quot;,matchingStr);//截取的值为:t</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//分割字符串</span><br><span class="line">NSString *splitStr = @&quot;Tate_zwt_zwt&quot;;</span><br><span class="line">NSArray *array = [splitStr componentsSeparatedByString:@&quot;_&quot;]; //从字符A中分隔成2个元素的数组</span><br><span class="line">NSLog(@&quot;array:%@&quot;,array); //输出3个对象分别是:Tate,zwt,zwt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//拼接字符串</span><br><span class="line">NSMutableString *appendStr =  [NSMutableString string];</span><br><span class="line">//使用逗号拼接</span><br><span class="line">//[append appendFormat:@&quot;%@zwt&quot;, append.length ? @&quot;,&quot; : @&quot;&quot;];</span><br><span class="line">[appendStr appendString:@&quot;我是&quot;];</span><br><span class="line">[appendStr appendString:@&quot;Tate-zwt&quot;];</span><br><span class="line">NSLog(@&quot;%@&quot;,appendStr);//输出:我是Tate-zwt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//替换字符串</span><br><span class="line">NSString *replaceStr = @&quot;我是&amp;nbspTate-zwt&quot;;</span><br><span class="line">replaceStr = [replaceStr stringByReplacingOccurrencesOfString:@&quot;&amp;nbsp&quot; withString:@&quot;&quot;];</span><br><span class="line">NSLog(@&quot;%@&quot;,replaceStr);//输出:我是Tate-zwt</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">//判断字符串内是否还包含特定的字符串(前缀，后缀)</span><br><span class="line">NSString *hasStr = @&quot;Tate.zwt&quot;;</span><br><span class="line">[hasStr hasPrefix:@&quot;Tate&quot;] == 1 ?  NSLog(@&quot;YES&quot;) : NSLog(@&quot;NO&quot;); //前缀</span><br><span class="line">[hasStr hasSuffix:@&quot;.zwt&quot;] == 1 ?  NSLog(@&quot;YES&quot;) : NSLog(@&quot;NO&quot;); // 后缀</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//字符串是否包含特定的字符</span><br><span class="line">NSString *containStr = @&quot;iOS Developer,喜欢做有趣的产品&quot;;</span><br><span class="line">NSRange rangeDeveloper = [containStr rangeOfString:@&quot;Developer&quot;];</span><br><span class="line">NSRange rangeProduct = [containStr rangeOfString:@&quot;Product&quot;];</span><br><span class="line">rangeDeveloper.location != NSNotFound == 1 ?  NSLog(@&quot;YES&quot;) : NSLog(@&quot;NO&quot;);</span><br><span class="line">rangeProduct.location != NSNotFound == 1 ?  NSLog(@&quot;YES&quot;) : NSLog(@&quot;NO&quot;);</span><br></pre></td></tr></table></figure>
-
-<p>UIPageControl如何改变点的大小?<br>重写setCurrentPage方法即可:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">- (void)setCurrentPage:(NSInteger)page &#123;</span><br><span class="line">    [super setCurrentPage:page];</span><br><span class="line">    for (NSUInteger subviewIndex = 0; subviewIndex &lt; [self.subviews count]; subviewIndex++) &#123;</span><br><span class="line">        UIView *subview = [self.subviews objectAtIndex:subviewIndex];</span><br><span class="line">        UIImageView *imageView = nil;</span><br><span class="line">        if (subviewIndex == page) &#123;</span><br><span class="line">            CGFloat w = 8;</span><br><span class="line">            CGFloat h = 8;</span><br><span class="line">            imageView = [[UIImageView alloc] initWithFrame:CGRectMake(-1.5, -1.5, w, h)];</span><br><span class="line">            imageView.image = [UIImage imageNamed:@&quot;banner_red&quot;];</span><br><span class="line">            [subview setFrame:CGRectMake(subview.frame.origin.x, subview.frame.origin.y, w, h)];</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            CGFloat w = 5;</span><br><span class="line">            CGFloat h = 5;</span><br><span class="line">            imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, w, h)];</span><br><span class="line">            imageView.image = [UIImage imageNamed:@&quot;banner_gray&quot;];</span><br><span class="line">            [subview setFrame:CGRectMake(subview.frame.origin.x, subview.frame.origin.y, w, h)];</span><br><span class="line">        &#125;</span><br><span class="line">        imageView.tag = 10010;</span><br><span class="line">        UIImageView *lastImageView = (UIImageView *) [subview viewWithTag:10010];</span><br><span class="line">        [lastImageView removeFromSuperview]; //把上一次添加的view移除</span><br><span class="line">        [subview addSubview:imageView];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如何改变多行UILabel的行高？<br>Show me the code：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">_promptLabel = [UILabel new];</span><br><span class="line">NSString *labelText = @&quot;Talk is cheap\nShow me the code&quot;;</span><br><span class="line">_promptLabel.text = labelText;</span><br><span class="line">_promptLabel.numberOfLines = 2;</span><br><span class="line">_promptLabel.font = [UIFont systemFontOfSize:14];</span><br><span class="line">NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:labelText];</span><br><span class="line">NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];</span><br><span class="line">[paragraphStyle setLineSpacing:10]; //调整行间距</span><br><span class="line">[attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [labelText length])];</span><br><span class="line">_promptLabel.attributedText = attributedString;</span><br><span class="line">[_promptLabel sizeToFit];</span><br><span class="line">[self.view addSubview:_promptLabel];</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>如何让Label等控件支持HTML格式的代码？<br>使用NSAttributedString:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NSString *htmlString = @&quot;&lt;div&gt;Tate&lt;span style=&#x27;color:#1C86EE;&#x27;&gt;《iOS Develop Tips》&lt;/span&gt;get &lt;span style=&#x27;color:#1C86EE;&#x27;&gt;Tate_zwt&lt;/span&gt; 打赏 &lt;span style=&#x27;color:#FF3E96;&#x27;&gt;100&lt;/span&gt; 金币&lt;/div&gt;&quot;;</span><br><span class="line">NSAttributedString *attributedString = [[NSAttributedString alloc] initWithData:[htmlString dataUsingEncoding:NSUnicodeStringEncoding] options:@&#123; NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType &#125; documentAttributes:nil error:nil];</span><br><span class="line">_contentLabel.attributedText = attributedString;</span><br></pre></td></tr></table></figure>
-
-<p>如何让Label等控件同时支持HTML代码和行间距？</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithData:[_open_bonus_article dataUsingEncoding:NSUnicodeStringEncoding] options:@&#123; NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType &#125; documentAttributes:nil error:nil];</span><br><span class="line">NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];</span><br><span class="line">[paragraphStyle setLineSpacing:12]; //调整行间距</span><br><span class="line">[attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [attributedString length])];</span><br><span class="line">_detailLabel.attributedText = attributedString;</span><br><span class="line">[_detailLabel sizeToFit];</span><br></pre></td></tr></table></figure>
-<p>pop回根控制器视图</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//这里也可以指定pop到哪个索引控制器</span><br><span class="line">[self.navigationController popToViewController: [self.navigationController.viewControllers objectAtIndex: ([self.navigationController.viewControllers count] - 3)] animated:YES];</span><br><span class="line">//或者</span><br><span class="line">[self.navigationController popToRootViewControllerAnimated:YES];</span><br></pre></td></tr></table></figure>
-<p>dismiss回根控制器视图(PS：只能返回两层)</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">if ([self respondsToSelector:@selector(presentingViewController)])&#123;</span><br><span class="line">self.presentingViewController.view.alpha = 0;</span><br><span class="line">[self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];</span><br><span class="line"> &#125;else &#123;</span><br><span class="line">self.parentViewController.view.alpha = 0;</span><br><span class="line">[self.parentViewController.parentViewController dismissViewControllerAnimated:YES completion:nil];</span><br><span class="line"> &#125;</span><br><span class="line">//或者</span><br><span class="line">if ([self respondsToSelector:@selector(presentingViewController)])&#123;</span><br><span class="line">[self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];</span><br><span class="line">&#125;else &#123;</span><br><span class="line">[self.parentViewController.parentViewController dismissViewControllerAnimated:YES completion:nil];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>两个控制器怎么无限push?</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">NSMutableArray *vcArr = [self.navigationController.viewControllers mutableCopy];</span><br><span class="line">[vcArr removeLastObject];</span><br><span class="line">[vcArr addObject:loginVC];</span><br><span class="line">[self.navigationController setViewControllers:vcArr animated:YES];</span><br></pre></td></tr></table></figure>
-
-<p>NSDictionary 怎么转成NSString</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NSData *jsonData = [NSJSONSerialization dataWithJSONObject:response.data options:0 error:0];</span><br><span class="line">NSString *dataStr =  [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];</span><br></pre></td></tr></table></figure>
-
-<p>获取系统可用存储空间 ，单位：字节</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> *  获取系统可用存储空间</span><br><span class="line"> *</span><br><span class="line"> *  @return 系统空用存储空间，单位：字节</span><br><span class="line"> */</span><br><span class="line">-(NSUInteger)systemFreeSpace&#123;</span><br><span class="line">    NSString *docPath=[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];</span><br><span class="line">    NSDictionary *dict=[[NSFileManager defaultManager] attributesOfFileSystemForPath:docPath error:nil];</span><br><span class="line">    return [[dict objectForKey:NSFileSystemFreeSize] integerValue];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>有时OC调用JS代码没反应？<br>stringByEvaluatingJavaScriptFromString 必须在主线程里执行</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">            [weakSelf.webView stringByEvaluatingJavaScriptFromString:jsStr];</span><br><span class="line">//            [weakSelf.webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@&quot;alertTest(&#x27;%@&#x27;);&quot;, @&quot;test&quot;]];</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2016/03/02/iOS%E6%92%AD%E6%94%BEGIF%E5%8A%A8%E7%94%BB%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tate Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/03/02/iOS%E6%92%AD%E6%94%BEGIF%E5%8A%A8%E7%94%BB%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/" class="post-title-link" itemprop="url">iOS播放GIF动画的几种方式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2016-03-02 22:05:04" itemprop="dateCreated datePublished" datetime="2016-03-02T22:05:04+08:00">2016-03-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-22 17:05:29" itemprop="dateModified" datetime="2021-12-22T17:05:29+08:00">2021-12-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="1-使用UIWebView播放"><a href="#1-使用UIWebView播放" class="headerlink" title="1.使用UIWebView播放"></a>1.使用UIWebView播放</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#pragma clang diagnostic ignored &quot;-Wnonnull&quot;</span><br><span class="line">NSString *path = [[NSBundle mainBundle] pathForResource:@&quot;&lt;#gifName#&gt;&quot; ofType:@&quot;gif&quot;];</span><br><span class="line">NSData *gifData = [NSData dataWithContentsOfFile:path];</span><br><span class="line">UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(&lt;#x#&gt;, &lt;#y#&gt;, &lt;#w#&gt;, &lt;#h#&gt;)];</span><br><span class="line">webView.scalesPageToFit = YES;</span><br><span class="line">[webView loadData:gifData MIMEType:@&quot;image/gif&quot; textEncodingName:nil baseURL:nil];</span><br><span class="line">webView.backgroundColor = [UIColor clearColor];</span><br><span class="line">webView.opaque = NO;</span><br><span class="line">[self.view addSubview:webView];</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/03/02/iOS%E6%92%AD%E6%94%BEGIF%E5%8A%A8%E7%94%BB%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2016/02/02/iOS%20%E9%9B%86%E6%88%90%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81%EF%BC%8C%E7%BB%95%E8%BF%87%E4%B8%80%E4%BA%9B%E5%9D%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tate Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/02/02/iOS%20%E9%9B%86%E6%88%90%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81%EF%BC%8C%E7%BB%95%E8%BF%87%E4%B8%80%E4%BA%9B%E5%9D%91/" class="post-title-link" itemprop="url">iOS 集成极光推送，绕过一些坑</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2016-02-02 21:23:54" itemprop="dateCreated datePublished" datetime="2016-02-02T21:23:54+08:00">2016-02-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-22 17:06:10" itemprop="dateModified" datetime="2021-12-22T17:06:10+08:00">2021-12-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近公司要求把维护期的项目都集成极光推送，集成期间遇到一些小坑，特此在这总结！</p>
-<h4 id="极光推送能干嘛？"><a href="#极光推送能干嘛？" class="headerlink" title="极光推送能干嘛？"></a>极光推送能干嘛？</h4><blockquote>
-<p>1.为 JPush Server 上报 Device Token，免除开发者管理 Device Token 的麻烦<br>2.支持iOS APNs推送<br>3.前台运行时，可接收由JPush下发的（透传的）自定义消息<br>4.灵活管理接收用户：Tag（标签分组）、Alias（用户别名）、RegistrationID（设备注册ID）</p>
+<p>DNS解析流程：<br><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231538618.png" alt="6055764-8ca1c59f8c2da535.png"></p>
+<h1 id="DNS-解析安全问题"><a href="#DNS-解析安全问题" class="headerlink" title="DNS 解析安全问题"></a>DNS 解析安全问题</h1><p>1、DNS 劫持<br><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231538323.png" alt="DNS 劫持.png"><br>一种可能的域名劫持方式即黑客侵入了宽带路由器并对终端用户的本地 DNS 服务器进行篡改，指向黑客自 己伪造的本地 DNS 服务器，进而通过控制本地 DNS 服务器的逻辑返回错误的 IP 信息进行域名劫持。 另一方面，由于 DNS 解析主要是基于 UDP 协议，除了上述攻击行为外，攻击者还可以监听终端用户的域名 解析请求，并在本地 DNS 服务器返回正确结果之前将伪造的 DNS 解析响应传递给终端用户，进而控制终端 用户的域名访问行为。</p>
+<p>2、缓存污染（DNS 污染）。<br> 我们知道在接收到域名解析请求时，本地 DNS 服务器首先会查找缓存，如果缓存命中就会直接返回缓存结 果，不再进行递归 DNS 查询。这时候如果本地 DNS 服务器针对部分域名的缓存进行更改，比如将缓存结果 指向第三方的广告页，就会导致用户的访问请求被引导到这些广告页地址上。<br> 3、如何解决 DNS 劫持？<br> DNS 解析发生在 HTTP 协议之前，DNS 解析和 DNS 劫持和 HTTP 没有关系，DNS 协议使用的是 UDP 协议向服 务器的 53 端口进行请求。 要想解决 DNS 劫持： </p>
+<blockquote>
+<p>可以使用 HttpDNS 的方案：使用 HTTP 协议向 DNS 服务器的 80 端口进行请求,来规避 DNS 劫持 比如：<a target="_blank" rel="noopener" href="http://119.29.29.29/d?dn=domain&amp;ip=clientIp">http://119.29.29.29/d?dn=domain&amp;ip=clientIp</a><br>在终端上，可以更换 DNS 服务器，不管手机还是电脑，都能手动配置 DNS</p>
 </blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/02/02/iOS%20%E9%9B%86%E6%88%90%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81%EF%BC%8C%E7%BB%95%E8%BF%87%E4%B8%80%E4%BA%9B%E5%9D%91/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231538517.png"></p>
+<p>三次握手：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">第一次握手：客户端 -&gt; 服务端：发送SYN=1（请求建立连接），seq=n（序列号）</span><br><span class="line">第二次握手：服务端 -&gt; 客户端：SYN=1（同意建立连接），服务器收到客户端的seq序列号，它会给它发送ack字段=n+1(序列号加1，确认收到信息)和seq=x（服务端序列号）</span><br><span class="line">第三次握手：客户端 -&gt; 服务端：SYN=0（开始发送信息）,发送ack字段=x+1(序列号加1，确认收到信息)和seq=n+1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>第一次握手表示：客户端具有发送信息的能力<br>第二次握手表示：服务端具有接收信息的能力和发送信息的能力<br>第三次握手表示：客户端具有接收信息的能力</p>
+</blockquote>
+<p>TCP三次握手过程<br>第一次握手：主机A通过向主机B 发送一个含有同步序列号的标志位的数据段给主机B，向主机B 请求建立连接，通过这个数据段， 主机A告诉主机B 两件事：我想要和你通信；你可以用哪个序列号作为起始数据段来回应我。</p>
+<p>第二次握手：主机B 收到主机A的请求后，用一个带有确认应答（ACK）和同步序列号（SYN）标志位的数据段响应主机A，也告诉主机A两件事：我已经收到你的请求了，你可以传输数据了；你要用那个序列号作为起始数据段来回应我</p>
+<p>第三次握手：主机A收到这个数据段后，再发送一个确认应答，确认已收到主机B 的数据段：”我已收到回复，我现在要开始传输实际数据了，这样3次握手就完成了，主机A和主机B 就可以传输数据了。</p>
+<p>三次握手原因<br>避免资源被浪费掉。如果在第二步握手时，由于网络延迟导致确认包不能及时到达客户端，那么客户端会认为第一次握手失败，再次发送连接请求，服务端收到后再次发送确认包。在这种情况下，服务端已经创建了两次连接，等待两个客户端发送数据，而实际却只有一个客户端发送数据。</p>
+<p>三次握手的特点<br>没有应用层的数据 ,SYN这个标志位只有在TCP建立连接时才会被置1 ,握手完成后SYN标志位被置0。</p>
+<p>四次挥手：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">第一次挥手：客户端 -&gt; 服务端：发完了</span><br><span class="line">第二次挥手：服务端 -&gt; 客户端：知道发完了</span><br><span class="line">第三次挥手：服务端 -&gt; 客户端：收完了</span><br><span class="line">第四次挥手：客户端 -&gt; 服务端：知道收完了</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>第一次:发完了，第二次：知道发完了，第三次:收完了，第四次:知道收完了</p>
+</blockquote>
+<p>TCP建立连接要进行3次握手，而断开连接要进行4次<br>第一次： 当主机A完成数据传输后,将控制位FIN置1，提出停止TCP连接的请求 ；</p>
+<p>第二次： 主机B收到FIN后对其作出响应，确认这一方向上的TCP连接将关闭,将ACK置1；</p>
+<p>第三次： 由B 端再提出反方向的关闭请求,将FIN置1 ；</p>
+<p>第四次： 主机A对主机B的请求进行确认，将ACK置1，双方向的关闭结束.。</p>
+<p>由TCP的三次握手和四次断开可以看出，TCP使用面向连接的通信方式， 大大提高了数据通信的可靠性，使发送数据端和接收端在数据正式传输前就有了交互， 为数据正式传输打下了可靠的基础。</p>
+<p>四次挥手原因<br>由于TCP的连接是全双工，双方都可以主动传输数据，一方的断开需要告知对方，让对方可以相关操作，负责任的表现。</p>
+<p>使用TCP协议有：FTP（文件传输协议）、Telnet（远程登录协议）、SMTP（简单邮件传输协议）、POP3（和SMTP相对，用于接收邮件）、HTTP协议等</p>
+<p>浏览器解析和渲染页面：</p>
+<blockquote>
+<p>自上而下 下载||渲染  css并行  图片异步请求下载 js挂起<br>html -&gt; dom + css -&gt; cssom = render渲染树（不渲染：head，display:none）4.布局 5.绘制</p>
+</blockquote>
+<h1 id="影响一个HTTP网络请求的因素"><a href="#影响一个HTTP网络请求的因素" class="headerlink" title="影响一个HTTP网络请求的因素"></a>影响一个HTTP网络请求的因素</h1><blockquote>
+<p>1.网络波动或者网络延迟；这种情况最常见，导致的原因是由服务器之间网络的连通情况和心跳包的容纳情况决定的<br>2.跨域请求；这种情况一般出现在做外贸或者金融类的公司，比如，美国的服务器，访问上海的服务器，异地处理，请求需要跨越VPN和国际传输，在加上三次握手协议，再加上国际信息传输的特殊渠道供给和波动，会大大延迟数据的响应时间<br>3.服务器转发次数过多；比如A服务器给B服务请发起请求，B服务器在转发给C由C处理结果之后在依次返回，最后又A收到结果，请求时效加倍，响应时效加倍，服务的可用率就降低了<br>4.服务器本身的原因：网卡不够完善（多网卡划分，网卡部分缺失），内存供给不足等等都会导致各种各样的响应慢<br>5.网段划分不一致：如A服务器10M带宽，B服务器10K带宽（分流），1秒一次的心跳，最终决定响应时间的一定是最慢的那个B，因为B的慢，会拖累整个服务集群交互;再比如阿里云华南地区和华北地区两台服务器之间的交互也没有两台华北地区服务器交互来得快<br>…<br>简单说，要想服务器交互的尽可能的快，尽量保证服务器的部署网段尽可能一致，带宽没有短板，尽量减少多次转发和跨域的可能性…</p>
+</blockquote>
+<p>更多原因：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/ae4f288136dd">HTTP慢的原因和解决方式</a></p>
+<h1 id="HTTP和HTTPS的区别"><a href="#HTTP和HTTPS的区别" class="headerlink" title="HTTP和HTTPS的区别"></a>HTTP和HTTPS的区别</h1><p>HTTPS：HTTP -&gt; SSL（加密）/TLS（解密）包括对称加密和非对称加密，公钥和私钥代表非对称加密，只有密钥就是对称加密</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.HTTPS需要CA请求证书（付费的）</span><br><span class="line">2.HTTP传输都是明文传送的可以截获，HTTPS传输都是客户端通过SSL加密，服务端通过TLS解密</span><br><span class="line">3.连接方式，端口不同，HTTP端口80，HTTPS端口443</span><br><span class="line">4.HTTPS防止运营商劫持</span><br></pre></td></tr></table></figure>
+<p>证书机制</p>
+<blockquote>
+<p>1.作为服务端的小红，首先把自己的公钥发给证书颁发机构，向证书颁发机构申请证书。<br>2.证书颁发机构自己也有一对公钥私钥。机构利用自己的私钥来加密Key1，并且通过服务端网址等信息生成一个证书签名，证书签名同样经过机构的私钥加密。证书制作完成后，机构把证书发送给了服务端小红。<br>3.当小灰向小红请求通信的时候，小红不再直接返回自己的公钥，而是把自己申请的证书返回给小灰。<br>4.小灰收到证书以后，要做的第一件事情是验证证书的真伪。需要说明的是，各大浏览器和操作系统已经维护了所有权威证书机构的名称和公钥。所以小灰只需要知道是哪个机构颁布的证书，就可以从本地找到对应的机构公钥，解密出证书签名。</p>
+</blockquote>
+<p>参考链接:<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/jiangshangchunjiezi/article/details/88545263">https://blog.csdn.net/jiangshangchunjiezi/article/details/88545263</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/sunzhao/p/9081272.html">Https单向认证和双向认证</a><br>app客户端不需要处理证书就属于单向认证，双向认证app客户端是属要处理证书的。</p>
+<h1 id="Get、Post区别"><a href="#Get、Post区别" class="headerlink" title="Get、Post区别"></a>Get、Post区别</h1><p>(1). 从功能上讲<br>GET一般用来从服务器上获取资源，POST一般用来更新服务器上的资源；</p>
+<p>(2). 从REST服务（REST软件架构）角度上说，GET是幂等的，即读取同一个资源，总是得到相同的数据，而POST不是幂等的，因为每次请求对资源的改变并不是相同的；进一步地，GET不会改变服务器上的资源，而POST会对服务器资源进行改变；</p>
+<p>(3). 从请求参数形式上看<br>GET请求的数据会附在URL之后，即将请求数据放置在HTTP报文的 请求头 中，以?分割URL和传输数据，参数之间以&amp;相连。特别地，如果数据是英文字母/数字，原样发送；否则，会将其编码为 application/x-www-form-urlencoded MIME 字符串(如果是空格，转换为+，如果是中文/其他字符，则直接把字符串用BASE64加密，得出如：%E4%BD%A0%E5%A5%BD，其中％XX中的XX为该符号以16进制表示的ASCII)；<br>而POST请求会把提交的数据则放置在是HTTP请求报文的 请求体 中。</p>
+<p>(4). 就安全性而言<br>POST的安全性要比GET的安全性高，因为GET请求提交的数据将明文出现在URL上，而且POST请求参数则被包装到请求体中，相对更安全。</p>
+<p>(5). 从请求的大小看<br>GET请求的长度受限于浏览器或服务器对URL长度的限制，允许发送的数据量比较小，而POST请求则是没有大小限制的。</p>
+<p>参考链接:<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/jiangshangchunjiezi/java/article/details/88546010">https://blog.csdn.net/jiangshangchunjiezi/java/article/details/88546010</a></p>
+<h1 id="Cookie、Session区别"><a href="#Cookie、Session区别" class="headerlink" title="Cookie、Session区别"></a>Cookie、Session区别</h1><p>cookie 和session 的区别：</p>
+<p>1、存放位置：cookie数据存放在客户的浏览器上，session数据放在服务器上。</p>
+<p>2、安全性：cookie不是很安全，别人可以分析存放在本地的COOKIE并进行COOKIE欺骗<br>   考虑到安全应当使用session。</p>
+<p>3、性能：session会在一定时间内保存在服务器上。当访问增多，会比较占用你服务器的性能<br>   考虑到减轻服务器性能方面，应当使用COOKIE。</p>
+<p>4、大小限制：单个cookie保存的数据不能超过4K，很多浏览器都限制一个站点最多保存20个cookie。Session没有大小限制，理论上只与服务器的内存大小有关；</p>
+<p>5、所以个人建议：<br>   将登陆信息等重要信息存放为SESSION<br>   其他信息如果需要保留，可以放在COOKIE中</p>
+<h1 id="TCP、UDP-区别"><a href="#TCP、UDP-区别" class="headerlink" title="TCP、UDP 区别"></a>TCP、UDP 区别</h1><p>TCP（Transmission Control Protocol 传输控制协议）是一种面向连接的、可靠的、基于字节流的传输层通信协议</p>
+<p>TCP的优点<br>可靠，稳定<br>TCP的可靠体现在TCP在传递数据之前，会有三次握手来建立连接，而且在数据传递时，有确认、窗口、重传、拥塞控制机制，在数据传完后，还会断开连接用来节约系统资源。</p>
+<p>TCP的缺点<br>慢，效率低，占用系统资源高，易被攻击<br>TCP在传递数据之前，要先建连接，这会消耗时间，而且在数据传递时，确认机制、重传机制、拥塞控制机制等都会消耗大量的时间，而且要在每台设备上维护所有的传输连接，事实上，每个连接都会占用系统的CPU、内存等硬件资源。</p>
+<p>由于TCP存在确认机制和三次握手机制，这些是导致TCP容易被人利用，实现DOS、DDOS、CC等攻击。</p>
+<p>TCP应用场景<br>当对网络通讯质量有要求的时候，比如：整个数据要准确无误的传递给对方，这往往用于一些要求可靠的应用，比如HTTP、HTTPS、FTP等传输文件的协议，POP、SMTP等邮件传输的协议。</p>
+<p>在日常生活中，常见使用TCP协议的应用比如：浏览器使用HTTP，Outlook使用POP、SMTP，QQ文件传输等。</p>
+<p>UDP协议<br>UDP 是User Datagram Protocol的简称， 中文名是用户数据报协议，是OSI（Open System Interconnection，开放式系统互联） 参考模型中一种无连接的传输层协议，提供面向事务的简单不可靠信息传送服务，IETF RFC 768是UDP的正式规范。UDP在IP报文的协议号是17。</p>
+<p>UDP的优点<br>快，比TCP稍安全<br>UDP没有TCP的握手、确认、窗口、重传、拥塞控制等机制，UDP是一个无状态的传输协议，所以它在传递数据时非常快。没有TCP的这些机制，UDP较TCP被攻击者利用的漏洞就要少一些。但UDP也是无法避免攻击的，比如：UDP Flood攻击……</p>
+<p>UDP的缺点<br>不可靠，不稳定<br>因为UDP没有TCP那些可靠的机制，在数据传递时，如果网络质量不好，就会很容易丢包。</p>
+<p>UDP应用场景<br>当对网络通讯质量要求不高的时候，要求网络通讯速度能尽量的快，这时就可以使用UDP。在日常生活中，常见使用UDP协议的应用比如：QQ语音、QQ视频、TFTP等。</p>
+<p>Socekt 类似SDK ，就是封装了TCP和 UDP 这些协议的东西，方便程序员调用</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/nieliangcai/p/10362751.html">说说TCP,UDP和socket,Http之间联系和区别</a></p>
+<h1 id="HTTP-的请求方式"><a href="#HTTP-的请求方式" class="headerlink" title="HTTP 的请求方式"></a>HTTP 的请求方式</h1><p>根据 HTTP 标准，HTTP 请求可以使用多种请求方法。<br>HTTP1.0 定义了三种请求方法： GET, POST 和 HEAD方法。<br>HTTP1.1 新增了六种请求方法：OPTIONS、PUT、PATCH、DELETE、TRACE 和 CONNECT 方法。<br><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231538343.png" alt="image.png"></p>
+<p>1、GET<br>向特定的资源发出请求。注意：GET方法不应当被用于产生“副作用”的操作中，例如在Web Application中，其中一个原因是GET可能会被网络蜘蛛等随意访问。Loadrunner中对应get请求函数：web_link和web_url<br>2、HEAD<br>向服务器索与GET请求相一致的响应，只不过响应体将不会被返回。这一方法可以再不必传输整个响应内容的情况下，就可以获取包含在响应小消息头中的元信息。<br>3、POST<br>向指定资源提交数据进行处理请求（例如提交表单或者上传文件）。数据被包含在请求体中。POST请求可能会导致新的资源的建立和/或已有资源的修改。 Loadrunner中对应POST请求函数：web_submit_data,web_submit_form<br>4、PUT<br>向指定资源位置上传其最新内容<br>5、DELETE<br>请求服务器删除Request-URL所标识的资源<br>6、CONNECT<br>HTTP/1.1协议中预留给能够将连接改为管道方式的代理服务器。<br>7、OPTIONS<br>返回服务器针对特定资源所支持的HTTP请求方法，也可以利用向web服务器发送‘*’的请求来测试服务器的功能性<br>8、TRACE<br>回显服务器收到的请求，主要用于测试或诊断<br>9、PATCH<br>是对PUT方法的补充，用来对已知资源进行局部更新。</p>
+
       
     </div>
 
@@ -1029,7 +841,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2015/12/05/%E8%A7%A3%E5%86%B3%20iOS%20View%20Controller%20Push%E3%80%81Pop%20%E6%97%B6%E7%9A%84%E9%BB%91%E5%BD%B1/">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2020/06/06/iOS%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6%E7%9A%84%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1043,7 +855,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2015/12/05/%E8%A7%A3%E5%86%B3%20iOS%20View%20Controller%20Push%E3%80%81Pop%20%E6%97%B6%E7%9A%84%E9%BB%91%E5%BD%B1/" class="post-title-link" itemprop="url">解决 iOS View Controller Push/Pop 时的黑影</a>
+            <a href="/2020/06/06/iOS%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6%E7%9A%84%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6/" class="post-title-link" itemprop="url">iOS特殊字符的转义字符</a>
         </h2>
 
         <div class="post-meta">
@@ -1053,14 +865,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2015-12-05 22:53:44" itemprop="dateCreated datePublished" datetime="2015-12-05T22:53:44+08:00">2015-12-05</time>
+              <time title="Created: 2020-06-06 22:36:57" itemprop="dateCreated datePublished" datetime="2020-06-06T22:36:57+08:00">2020-06-06</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-22 17:08:13" itemprop="dateModified" datetime="2021-12-22T17:08:13+08:00">2021-12-22</time>
+                <time title="Modified: 2021-12-23 15:37:35" itemprop="dateModified" datetime="2021-12-23T15:37:35+08:00">2021-12-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1083,16 +895,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>项目收尾的时候发现在push时右上角会有黑影，push完成后就消失了，如图：<br><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221635213.jpeg" alt="frist"></p>
-<h3 id="那么如何解决这个问题呢？"><a href="#那么如何解决这个问题呢？" class="headerlink" title="那么如何解决这个问题呢？"></a>那么如何解决这个问题呢？</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2015/12/05/%E8%A7%A3%E5%86%B3%20iOS%20View%20Controller%20Push%E3%80%81Pop%20%E6%97%B6%E7%9A%84%E9%BB%91%E5%BD%B1/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231537007.png" alt="image.png"></p>
+<p>比如你要” 能在代码里显示你就必须填写&quot; </p>
+
       
     </div>
 
@@ -1111,7 +916,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2015/10/05/Xcode%E6%B8%85%E7%90%86%E7%BC%93%E5%AD%98%E3%80%81%E6%B8%85%E7%90%86%E5%A4%9A%E4%BD%99provisioning-profile-%E8%AF%81%E4%B9%A6/">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2020/05/23/Git-Tips/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1125,7 +930,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2015/10/05/Xcode%E6%B8%85%E7%90%86%E7%BC%93%E5%AD%98%E3%80%81%E6%B8%85%E7%90%86%E5%A4%9A%E4%BD%99provisioning-profile-%E8%AF%81%E4%B9%A6/" class="post-title-link" itemprop="url">Xcode清理缓存、清理多余provisioning profile 证书</a>
+            <a href="/2020/05/23/Git-Tips/" class="post-title-link" itemprop="url">Git Tips</a>
         </h2>
 
         <div class="post-meta">
@@ -1135,14 +940,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2015-10-05 20:53:44" itemprop="dateCreated datePublished" datetime="2015-10-05T20:53:44+08:00">2015-10-05</time>
+              <time title="Created: 2020-05-23 15:34:49" itemprop="dateCreated datePublished" datetime="2020-05-23T15:34:49+08:00">2020-05-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-22 17:01:21" itemprop="dateModified" datetime="2021-12-22T17:01:21+08:00">2021-12-22</time>
+                <time title="Modified: 2021-12-23 15:36:28" itemprop="dateModified" datetime="2021-12-23T15:36:28+08:00">2021-12-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1165,9 +970,271 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>我们开发久了，Xcode的缓存会越来越大，主要是会产生很多项目编译缓存，占用一大堆硬盘空间，这个时候就要清理了。笔者有次清理出20多G的空间，这是相当给力的，你也可以试试哈😄。还有开发多款APP后可能会产生多余的证书provisioning profile，这个时候也是要清理的。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">1、清理Xcode编译项目产生的缓存垃圾</span><br><span class="line"></span><br><span class="line">手动删除：</span><br><span class="line"></span><br><span class="line">打开菜单的前往-&gt;前往文件夹输入—&gt; ~/Library/Developer/Xcode/DerivedData</span><br><span class="line"></span><br><span class="line">2、删除Xcode中多余的证书provisioning profile</span><br><span class="line"></span><br><span class="line">手动删除：</span><br><span class="line"></span><br><span class="line">打开菜单的前往-&gt;前往文件夹输入—&gt; ~/Library/MobileDevice/Provisioning Profiles </span><br></pre></td></tr></table></figure>
-<p>这样对于使用128G的固态MacPro 清理出一定的空间是相当有用的！</p>
+          <h2 id="1、有些FQ需要设置代理"><a href="#1、有些FQ需要设置代理" class="headerlink" title="1、有些FQ需要设置代理"></a>1、有些FQ需要设置代理</h2><p> 设置你自己的IP和host</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.proxy &#x27;socks5://127.0.0.1:1080&#x27;</span><br><span class="line">git config --global https.proxy &#x27;socks5://127.0.0.1:1080&#x27;</span><br></pre></td></tr></table></figure>
+<p>使用<code>git config --global --list</code>命令查看是否配置成功</p>
+<p>移除git代理配置，可以用下面命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global --unset http.proxy</span><br><span class="line">git config --global --unset https.proxy</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="2、-gitignore-不起作用问题的解决"><a href="#2、-gitignore-不起作用问题的解决" class="headerlink" title="2、.gitignore 不起作用问题的解决"></a>2、.gitignore 不起作用问题的解决</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git rm -r --cached .  </span><br><span class="line">git add .</span><br><span class="line">git commit -m &quot;update gitignore&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3、解决Mac下SourceTree每次都让输入密码的问题"><a href="#3、解决Mac下SourceTree每次都让输入密码的问题" class="headerlink" title="3、解决Mac下SourceTree每次都让输入密码的问题"></a>3、解决Mac下SourceTree每次都让输入密码的问题</h2><p>1、命令行进入项目目录，输入：<br>git config –global credential.helper store<br>2、在source tree更新代码，提示输入密码，输入一次后以后就不需要输入了</p>
+<h2 id="4、-Git-合并分支冲突解决过程"><a href="#4、-Git-合并分支冲突解决过程" class="headerlink" title="4、 Git 合并分支冲突解决过程"></a>4、 Git 合并分支冲突解决过程</h2><blockquote>
+<p>Step 1. Fetch and check out the branch for this merge request<br>git fetch origin<br>git checkout -b 2.5 origin/2.5 //临时分支<br>Step 2. Review the changes locally<br>Step 3. Merge the branch and fix any conflicts that come up<br>git fetch origin<br>git checkout origin/develop //目标分支<br>git merge –no-ff 2.5 //合并后解决冲突<br>Step 4. Push the result of the merge to GitLab<br>git push origin develop //上传合并后的分支</p>
+</blockquote>
+<p>在解决完分支你可以会遇到错误，如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231535227.png" alt="解决完的分支push报错"></p>
+<p>1、git cannot read property fullname of undefined<br>意思是说你push的分支是一个临时创建的错误冲突分支，你需要去设置head，如图：<br><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231535257.png" alt="右键点击"></p>
+<p>右键点击分支，create branch here,设置再进行push即可。</p>
+<p>有一点需要注意的是： 比如分支A 和分支B 是从master分支出来的，那么你们 A被临时修改紧急BUG之后上线，那么A需要先跟master合并后再让A跟B合并，并解决冲突，这样子，能让master保持是上线的版本。</p>
+<p>参考链接：<br> <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/42694584/push-fails-in-gitkraken-with-errormessage-push-failed-cannot-read-property-ful">链接</a> </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2020/04/17/Flutter-Develop-Tips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/17/Flutter-Develop-Tips/" class="post-title-link" itemprop="url">Flutter Develop Tips</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-04-17 17:32:19" itemprop="dateCreated datePublished" datetime="2020-04-17T17:32:19+08:00">2020-04-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-23 15:34:06" itemprop="dateModified" datetime="2021-12-23T15:34:06+08:00">2021-12-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Flutter/" itemprop="url" rel="index"><span itemprop="name">Flutter</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>iOS打包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flutter build ios --release</span><br></pre></td></tr></table></figure>
+<p>Android打包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flutter build apk</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-vscode-跑真机-Xcode报错dyld-Library-not-loaded-rpath-App-framework-App"><a href="#1-vscode-跑真机-Xcode报错dyld-Library-not-loaded-rpath-App-framework-App" class="headerlink" title="1.vscode 跑真机 Xcode报错dyld: Library not loaded: @rpath/App.framework/App"></a>1.vscode 跑真机 Xcode报错<code>dyld: Library not loaded: @rpath/App.framework/App</code></h2><p>由于之前把APP.Framework 移除了，使用真机重新编译，后来手动导入时候没有加载。<br><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231533816.png" alt="image.png"><br>把Embed状态改成Embed &amp; Sign即可。</p>
+<h2 id="2-vscode-调试快捷键："><a href="#2-vscode-调试快捷键：" class="headerlink" title="2.vscode 调试快捷键："></a>2.vscode 调试快捷键：</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">R键：点击后热加载，直接查看预览效果</span><br><span class="line">P键：在虚拟机中显示布局网格，方便约束布局</span><br><span class="line">O键:切换Android和iOS的预览模式</span><br><span class="line">Q键:退出调试预览模式</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-使用第三方库报错Exception-MissingPluginException-No-implementation-found-for-method"><a href="#3-使用第三方库报错Exception-MissingPluginException-No-implementation-found-for-method" class="headerlink" title="3.使用第三方库报错Exception: MissingPluginException(No implementation found for method"></a>3.使用第三方库报错Exception: MissingPluginException(No implementation found for method</h2><p>这是应为iOS没有被pod , 关闭as或者vs code再打开会重新编译，编译器会读取后自动pod。也可以手动pod install 一下也行。</p>
+<h2 id="4-Android权限"><a href="#4-Android权限" class="headerlink" title="4.Android权限"></a>4.Android权限</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br></pre></td><td class="code"><pre><span class="line">权限代码：</span><br><span class="line">1.android.permission.WRITE_USER_DICTIONARY允许应用程序向用户词典中写入新词</span><br><span class="line"></span><br><span class="line">2.android.permission.WRITE_SYNC_SETTINGS写入Google在线同步设置</span><br><span class="line"></span><br><span class="line">3.android.permission.WRITE_SOCIAL_STREAM读取用户的社交信息流</span><br><span class="line"></span><br><span class="line">4.android.permission.WRITE_SMS允许程序写短信</span><br><span class="line"></span><br><span class="line">5.android.permission.WRITE_SETTINGS允许程序读取或写入系统设置</span><br><span class="line"></span><br><span class="line">6.android.permission.WRITE_SECURE_SETTINGS允许应用程序读取或写入安全系统设置</span><br><span class="line"></span><br><span class="line">7.android.permission.WRITE_PROFILE允许程序写入个人资料数据</span><br><span class="line"></span><br><span class="line">8.com.android.browser.permission.WRITE_HISTORY_BOOKMARKS允许一个应用程序写(但不可读)用户的浏览历史和书签</span><br><span class="line"></span><br><span class="line">9.android.permission.WRITE_GSERVICES允许程序修改Google服务地图</span><br><span class="line"></span><br><span class="line">10.android.permission.WRITE_EXTERNAL_STORAGE允许程序写入外部存储,如SD卡上写文件</span><br><span class="line"></span><br><span class="line">11.android.permission.WRITE_CONTACTS写入联系人,但不可读取</span><br><span class="line"></span><br><span class="line">12.android.permission.WRITE_CALL_LOG允许程序写入（但是不能读）用户的联系人数据</span><br><span class="line"></span><br><span class="line">13.android.permission.WRITE_CALENDAR允许程序写入日程，但不可读取</span><br><span class="line"></span><br><span class="line">14.android.permission.WRITE_APN_SETTINGS允许程序写入网络GPRS接入点设置</span><br><span class="line"></span><br><span class="line">15.android.permission.WAKE_LOCK允许程序在手机屏幕关闭后后台进程仍然运行</span><br><span class="line"></span><br><span class="line">16.android.permission.VIBRATE允许程序振动</span><br><span class="line"></span><br><span class="line">17.android.permission.USE_SIP允许程序使用SIP视频服务</span><br><span class="line"></span><br><span class="line">18.android.permission.USE_CREDENTIALS允许程序请求验证从AccountManager</span><br><span class="line"></span><br><span class="line">19.android.permission.UPDATE_DEVICE_STATS允许程序更新设备状态</span><br><span class="line"></span><br><span class="line">20.com.android.launcher.permission.UNINSTALL_SHORTCUT删除快捷方式</span><br><span class="line"></span><br><span class="line">21.android.permission.TRANSMIT_IR允许使用设备的红外发射器，如果可用</span><br><span class="line"></span><br><span class="line">22.android.permission.SYSTEM_ALERT_WINDOW允许程序显示系统窗口</span><br><span class="line"></span><br><span class="line">23.android.permission.SUBSCRIBED_FEEDS_WRITE允许程序写入或修改订阅内容的数据库</span><br><span class="line"></span><br><span class="line">24.android.permission.SUBSCRIBED_FEEDS_READ允许程序访问订阅信息的数据库</span><br><span class="line"></span><br><span class="line">22.android.permission.STATUS_BAR允许程序打开、关闭、禁用状态栏</span><br><span class="line"></span><br><span class="line">23.android.permission.SIGNAL_PERSISTENT_PROCESSES允许程序发送一个永久的进程信号</span><br><span class="line"></span><br><span class="line">24.android.permission.SET_WALLPAPER_HINTS允许程序设置壁纸建议</span><br><span class="line"></span><br><span class="line">25.android.permission.SET_WALLPAPER允许程序设置桌面壁纸</span><br><span class="line"></span><br><span class="line">26.android.permission.SET_TIME_ZONE允许程序设置系统时区</span><br><span class="line"></span><br><span class="line">27.android.permission.SET_TIME允许程序设置系统时间</span><br><span class="line"></span><br><span class="line">28.android.permission.SET_PROCESS_LIMIT允许程序设置最大的进程数量的限制</span><br><span class="line"></span><br><span class="line">29.android.permission.SET_PREFERRED_APPLICATIONS允许程序设置应用的参数，已不再工作具体查看addPackageToPreferred(String) 介绍</span><br><span class="line"></span><br><span class="line">30.android.permission.SET_POINTER_SPEED无法被第三方应用获得，系统权限</span><br><span class="line"></span><br><span class="line">31.android.permission.SET_ORIENTATION允许程序设置屏幕方向为横屏或标准方式显示，不用于普通应用</span><br><span class="line"></span><br><span class="line">32.android.permission.SET_DEBUG_APP允许程序设置调试程序，一般用于开发</span><br><span class="line"></span><br><span class="line">33.android.permission.SET_ANIMATION_SCALE允许程序设置全局动画缩放</span><br><span class="line"></span><br><span class="line">34.android.permission.SET_ALWAYS_FINISH允许程序设置程序在后台是否总是退出</span><br><span class="line"></span><br><span class="line">36.com.android.alarm.permission.SET_ALARM允许程序设置闹铃提醒</span><br><span class="line"></span><br><span class="line">37.android.permission.SET_ACTIVITY_WATCHER允许程序设置Activity观察器一般用于monkey测试</span><br><span class="line"></span><br><span class="line">38.android.permission.SEND_SMS允许程序发送短信</span><br><span class="line"></span><br><span class="line">39.android.permission.SEND_RESPOND_VIA_MESSAGE允许用户在来电的时候用你的应用进行即时的短信息回复。</span><br><span class="line"></span><br><span class="line">40.android.permission.RESTART_PACKAGES允许程序结束任务通过restartPackage(String)方法，该方式将在外来放弃</span><br><span class="line"></span><br><span class="line">41.android.permission.REORDER_TASKS允许程序重新排序系统Z轴运行中的任务</span><br><span class="line"></span><br><span class="line">42.android.permission.RECORD_AUDIO允许程序录制声音通过手机或耳机的麦克</span><br><span class="line"></span><br><span class="line">43.android.permission.RECEIVE_WAP_PUSH允许程序接收WAP PUSH信息</span><br><span class="line"></span><br><span class="line">44.android.permission.RECEIVE_SMS允许程序接收短信</span><br><span class="line"></span><br><span class="line">45.android.permission.RECEIVE_MMS允许程序接收彩信</span><br><span class="line"></span><br><span class="line">46.android.permission.RECEIVE_BOOT_COMPLETED允许程序开机自动运行</span><br><span class="line"></span><br><span class="line">47.android.permission.REBOOT允许程序重新启动设备</span><br><span class="line"></span><br><span class="line">48.android.permission.READ_USER_DICTIONARY从一个提供器中获取数据，针对对应的提供器，应用程序需要“读访问权限”</span><br><span class="line"></span><br><span class="line">49.android.permission.READ_SYNC_STATS允许程序读取同步状态，获得Google在线同步状态</span><br><span class="line"></span><br><span class="line">50.android.permission.READ_SYNC_SETTINGS允许程序读取同步设置，读取Google在线同步设置</span><br><span class="line"></span><br><span class="line">51.android.permission.READ_SOCIAL_STREAM读取用户的社交信息流</span><br><span class="line"></span><br><span class="line">52.android.permission.READ_SMS允许程序读取短信内容</span><br><span class="line"></span><br><span class="line">53.android.permission.READ_PROFILE访问用户个人资料</span><br><span class="line"></span><br><span class="line">54.android.permission.READ_PHONE_STATE允许程序访问电话状态</span><br><span class="line"></span><br><span class="line">55.android.permission.READ_LOGS允许程序读取系统底层日志</span><br><span class="line"></span><br><span class="line">56.android.permission.READ_INPUT_STATE允许程序读取当前键的输入状态，仅用于系统</span><br><span class="line"></span><br><span class="line">57.com.android.browser.permission.READ_HISTORY_BOOKMARKS允许程序读取浏览器收藏夹和历史记录</span><br><span class="line"></span><br><span class="line">58.android.permission.READ_FRAME_BUFFER允许程序读取帧缓存用于屏幕截图</span><br><span class="line"></span><br><span class="line">59.android.permission.READ_EXTERNAL_STORAGE程序可以读取设备外部存储空间（内置SDcard和外置SDCard）的文件，如果您的App已经添加了“WRITE_EXTERNAL_STORAGE ”权限 ，则就没必要添加读的权限了，写权限已经包含了读权限了。</span><br><span class="line"></span><br><span class="line">60.android.permission.READ_CONTACTS允许程序访问联系人通讯录信息</span><br><span class="line"></span><br><span class="line">61.android.permission.READ_CALL_LOG读取通话记录</span><br><span class="line"></span><br><span class="line">62.android.permission.READ_CALENDAR允许程序读取用户的日程信息</span><br><span class="line"></span><br><span class="line">63.android.permission.PROCESS_OUTGOING_CALLS允许程序监视，修改或放弃播出电话</span><br><span class="line"></span><br><span class="line">64.android.permission.PERSISTENT_ACTIVITY允许程序创建一个永久的Activity，该功能标记为将来将被移除</span><br><span class="line"></span><br><span class="line">65.android.permission.NFC允许程序执行NFC近距离通讯操作，用于移动支持</span><br><span class="line"></span><br><span class="line">66.android.permission.MOUNT_UNMOUNT_FILESYSTEMS允许程序挂载、反挂载外部文件系统</span><br><span class="line"></span><br><span class="line">67.android.permission.MOUNT_FORMAT_FILESYSTEMS允许程序格式化可移动文件系统，比如格式化清空SD卡</span><br><span class="line"></span><br><span class="line">68.android.permission.MODIFY_PHONE_STATE允许程序修改电话状态，如飞行模式，但不包含替换系统拨号器界面</span><br><span class="line"></span><br><span class="line">69.android.permission.MODIFY_AUDIO_SETTINGS允许程序修改声音设置信息</span><br><span class="line"></span><br><span class="line">70.android.permission.MEDIA_CONTENT_CONTROL允许一个应用程序知道什么是播放和控制其内容。不被第三方应用使用。</span><br><span class="line"></span><br><span class="line">71.android.permission.MASTER_CLEAR允许程序执行软格式化，删除系统配置信息</span><br><span class="line"></span><br><span class="line">72.android.permission.MANAGE_DOCUMENTS允许一个应用程序来管理文档的访问，通常是一个文档选择器部分</span><br><span class="line"></span><br><span class="line">73.android.permission.MANAGE_APP_TOKENS管理创建、摧毁、Z轴顺序，仅用于系统</span><br><span class="line"></span><br><span class="line">74.android.permission.MANAGE_ACCOUNTS允许程序管理AccountManager中的账户列表</span><br><span class="line"></span><br><span class="line">75.android.permission.LOCATION_HARDWARE允许一个应用程序中使用定位功能的硬件，不使用第三方应用</span><br><span class="line"></span><br><span class="line">76.android.permission.KILL_BACKGROUND_PROCESSES允许程序调用killBackgroundProcesses(String).方法结束后台进程</span><br><span class="line"></span><br><span class="line">77.android.permission.INTERNET允许程序访问网络连接，可能产生GPRS流量</span><br><span class="line"></span><br><span class="line">78.android.permission.INTERNAL_SYSTEM_WINDOW允许程序打开内部窗口，不对第三方应用程序开放此权限</span><br><span class="line"></span><br><span class="line">79.com.android.launcher.permission.INSTALL_SHORTCUT创建快捷方式</span><br><span class="line"></span><br><span class="line">80.android.permission.INSTALL_PACKAGES允许程序安装应用</span><br><span class="line"></span><br><span class="line">81.android.permission.INSTALL_LOCATION_PROVIDER允许程序安装定位提供</span><br><span class="line"></span><br><span class="line">82.android.permission.INJECT_EVENTS允许程序访问本程序的底层事件，获取按键、轨迹球的事件流</span><br><span class="line"></span><br><span class="line">83.android.permission.HARDWARE_TEST允许程序访问硬件辅助设备，用于硬件测试</span><br><span class="line"></span><br><span class="line">84.android.permission.GLOBAL_SEARCH允许程序允许全局搜索</span><br><span class="line"></span><br><span class="line">85.android.permission.GET_TOP_ACTIVITY_INFO允许一个应用程序检索私有信息是当前最顶级的活动，不被第三方应用使用</span><br><span class="line"></span><br><span class="line">86.android.permission.GET_TASKS允许程序获取任务信息</span><br><span class="line"></span><br><span class="line">87.android.permission.GET_PACKAGE_SIZE允许程序获取应用的文件大小</span><br><span class="line"></span><br><span class="line">88.android.permission.GET_ACCOUNTS允许程序访问账户Gmail列表</span><br><span class="line"></span><br><span class="line">89.android.permission.FORCE_BACK允许程序强制使用back后退按键，无论Activity是否在顶层</span><br><span class="line"></span><br><span class="line">90.android.permission.FLASHLIGHT允许访问闪光灯</span><br><span class="line"></span><br><span class="line">91.android.permission.FACTORY_TEST允许程序运行工厂测试模式</span><br><span class="line"></span><br><span class="line">92.android.permission.EXPAND_STATUS_BAR允许程序扩展或收缩状态栏</span><br><span class="line"></span><br><span class="line">93.android.permission.DUMP允许程序获取系统dump信息从系统服务</span><br><span class="line"></span><br><span class="line">94.android.permission.DISABLE_KEYGUARD允许程序禁用键盘锁</span><br><span class="line"></span><br><span class="line">95.android.permission.DIAGNOSTIC允许程序到RW到诊断资源</span><br><span class="line"></span><br><span class="line">96.android.permission.DEVICE_POWER允许程序访问底层电源管理</span><br><span class="line"></span><br><span class="line">97.android.permission.DELETE_PACKAGES允许程序删除应用</span><br><span class="line"></span><br><span class="line">98.android.permission.DELETE_CACHE_FILES允许程序删除缓存文件</span><br><span class="line"></span><br><span class="line">99.android.permission.CONTROL_LOCATION_UPDATES允许程序获得移动网络定位信息改变</span><br><span class="line"></span><br><span class="line">100.android.permission.CLEAR_APP_USER_DATA允许程序清除用户数据</span><br><span class="line"></span><br><span class="line">101.android.permission.CLEAR_APP_CACHE允许程序清除应用缓存</span><br><span class="line"></span><br><span class="line">102.android.permission.CHANGE_WIFI_STATE允许程序改变WiFi状态</span><br><span class="line"></span><br><span class="line">103.android.permission.CHANGE_WIFI_MULTICAST_STATE允许程序改变WiFi多播状态</span><br><span class="line"></span><br><span class="line">104.android.permission.CHANGE_NETWORK_STATE允许程序改变网络状态,如是否联网</span><br><span class="line"></span><br><span class="line">105.android.permission.CHANGE_CONFIGURATION允许当前应用改变配置，如定位</span><br><span class="line"></span><br><span class="line">106.android.permission.CHANGE_COMPONENT_ENABLED_STATE改变组件是否启用状态</span><br><span class="line"></span><br><span class="line">107.android.permission.CAPTURE_VIDEO_OUTPUT允许一个应用程序捕获视频输出，不被第三方应用使用</span><br><span class="line"></span><br><span class="line">108.android.permission.CAPTURE_SECURE_VIDEO_OUTPUT允许一个应用程序捕获视频输出。不被第三方应用使用</span><br><span class="line"></span><br><span class="line">109.android.permission.CAPTURE_AUDIO_OUTPUT允许一个应用程序捕获音频输出。不被第三方应用使用</span><br><span class="line"></span><br><span class="line">110.android.permission.CAMERA允许程序访问摄像头进行拍照</span><br><span class="line"></span><br><span class="line">111.android.permission.CALL_PRIVILEGED允许程序拨打电话，替换系统的拨号器界面</span><br><span class="line"></span><br><span class="line">112.android.permission.CALL_PHONE允许程序从非系统拨号器里拨打电话</span><br><span class="line"></span><br><span class="line">113.android.permission.BROADCAST_WAP_PUSHWAP PUSH服务收到后触发一个广播</span><br><span class="line"></span><br><span class="line">114.android.permission.BROADCAST_STICKY允许程序收到广播后快速收到下一个广播</span><br><span class="line"></span><br><span class="line">115.android.permission.BROADCAST_SMS允许程序当收到短信时触发一个广播</span><br><span class="line"></span><br><span class="line">116.android.permission.BROADCAST_PACKAGE_REMOVED允许程序删除时广播</span><br><span class="line"></span><br><span class="line">117.android.permission.BRICK能够禁用手机，非常危险，顾名思义就是让手机变成砖头</span><br><span class="line"></span><br><span class="line">118.android.permission.BLUETOOTH_PRIVILEGED允许应用程序配对蓝牙设备，而无需用户交互。这不是第三方应用程序可用。</span><br><span class="line"></span><br><span class="line">119.android.permission.BLUETOOTH_ADMIN允许程序进行发现和配对新的蓝牙设备</span><br><span class="line"></span><br><span class="line">120.android.permission.BLUETOOTH允许程序连接配对过的蓝牙设备</span><br><span class="line"></span><br><span class="line">121.android.permission.BIND_WALLPAPER必须通过WallpaperService服务来请求，只有系统才能用</span><br><span class="line"></span><br><span class="line">122.android.permission.BIND_VPN_SERVICE绑定VPN服务必须通过VpnService服务来请求,只有系统才能用</span><br><span class="line"></span><br><span class="line">123.android.permission.BIND_TEXT_SERVICE必须要求textservice(例如吗 spellcheckerservice)，以确保只有系统可以绑定到它。</span><br><span class="line"></span><br><span class="line">124.android.permission.BIND_REMOTEVIEWS必须通过RemoteViewsService服务来请求，只有系统才能用</span><br><span class="line"></span><br><span class="line">125.android.permission.BIND_PRINT_SERVICE必须要求由printservice，以确保只有系统可以绑定到它。</span><br><span class="line"></span><br><span class="line">126.android.permission.BIND_NOTIFICATION_LISTENER_SERVICE必须要求由notificationlistenerservice，以确保只有系统可以绑定到它。</span><br><span class="line"></span><br><span class="line">127.android.permission.BIND_NFC_SERVICE由hostapduservice或offhostapduservice必须确保只有系统可以绑定到它。</span><br><span class="line"></span><br><span class="line">128.android.permission.BIND_INPUT_METHOD请求InputMethodService服务，只有系统才能使用</span><br><span class="line"></span><br><span class="line">129.android.permission.BIND_DEVICE_ADMIN请求系统管理员接收者receiver，只有系统才能使用</span><br><span class="line"></span><br><span class="line">130.android.permission.BIND_APPWIDGET允许程序告诉appWidget服务需要访问小插件的数据库，只有非常少的应用才用到此权限</span><br><span class="line"></span><br><span class="line">131.android.permission.BIND_ACCESSIBILITY_SERVICE请求accessibilityservice服务，以确保只有系统可以绑定到它。</span><br><span class="line"></span><br><span class="line">132.android.permission.AUTHENTICATE_ACCOUNTS允许程序通过账户验证方式访问账户管理ACCOUNT_MANAGER相关信息</span><br><span class="line"></span><br><span class="line">133.com.android.voicemail.permission.ADD_VOICEMAIL允许一个应用程序添加语音邮件系统</span><br><span class="line"></span><br><span class="line">134.android.permission.ACCOUNT_MANAGER允许程序获取账户验证信息，主要为GMail账户信息，只有系统级进程才能访问的权限</span><br><span class="line"></span><br><span class="line">135.android.permission.ACCESS_WIFI_STATE允许程序获取当前WiFi接入的状态以及WLAN热点的信息</span><br><span class="line"></span><br><span class="line">136.android.permission.ACCESS_SURFACE_FLINGERAndroid平台上底层的图形显示支持，一般用于游戏或照相机预览界面和底层模式的屏幕截图</span><br><span class="line"></span><br><span class="line">137.android.permission.ACCESS_NETWORK_STATE允许程序获取网络信息状态，如当前的网络连接是否有效</span><br><span class="line"></span><br><span class="line">138.android.permission.ACCESS_MOCK_LOCATION允许程序获取模拟定位信息，一般用于帮助开发者调试应用</span><br><span class="line"></span><br><span class="line">139.android.permission.ACCESS_LOCATION_EXTRA_COMMANDS允许程序访问额外的定位提供者指令</span><br><span class="line"></span><br><span class="line">140.android.permission.ACCESS_FINE_LOCATION允许程序通过GPS芯片接收卫星的定位信息</span><br><span class="line"></span><br><span class="line">141.android.permission.ACCESS_COARSE_LOCATION允许程序通过WiFi或移动基站的方式获取用户错略的经纬度信息</span><br><span class="line"></span><br><span class="line">142.android.permission.ACCESS_CHECKIN_PROPERTIES允许程序读取或写入登记check-in数据库属性表的权限</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-iOS加载启动页的资源放到跟目录下，不要放到Assets-xcassets，这样子才会打开就加载成功，不然会白屏一下子。"><a href="#5-iOS加载启动页的资源放到跟目录下，不要放到Assets-xcassets，这样子才会打开就加载成功，不然会白屏一下子。" class="headerlink" title="5.iOS加载启动页的资源放到跟目录下，不要放到Assets.xcassets，这样子才会打开就加载成功，不然会白屏一下子。"></a>5.iOS加载启动页的资源放到跟目录下，不要放到Assets.xcassets，这样子才会打开就加载成功，不然会白屏一下子。</h2><h2 id="6-代表可选参数，可以不传类似swift有了默认值的参数"><a href="#6-代表可选参数，可以不传类似swift有了默认值的参数" class="headerlink" title="6.{}代表可选参数，可以不传类似swift有了默认值的参数"></a>6.<code>&#123;&#125;</code>代表可选参数，可以不传类似swift有了默认值的参数</h2><h2 id="7-No-Podfile-39-found-in-the-project-directory"><a href="#7-No-Podfile-39-found-in-the-project-directory" class="headerlink" title="7.[!] No `Podfile&#39; found in the project directory."></a>7.<code>[!] No `Podfile&#39; found in the project directory.</code></h2><p>报这个错误如果Podfile是存在的，可以检查下目录路径是不是包含多个中文文件夹，换个目录就可以解决了</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2019/11/15/iOS-%E5%86%85%E8%B4%AD%E7%9A%84%E5%9D%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/15/iOS-%E5%86%85%E8%B4%AD%E7%9A%84%E5%9D%91/" class="post-title-link" itemprop="url">iOS 内购的坑</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-11-15 14:29:53" itemprop="dateCreated datePublished" datetime="2019-11-15T14:29:53+08:00">2019-11-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-23 15:31:00" itemprop="dateModified" datetime="2021-12-23T15:31:00+08:00">2021-12-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>内购的坑：<br>1、设计内购订单状态：游客购买（未充值到账户）、游客购买（已充值到账户）、登录用户购买<br>2、实现游客未登陆模式下购买逻辑，我的app是根据当前是否登录，如果没有登录，默认提取uuid作为订单的用户id，如果登录，用户id就是登录用户的id。<br>3、因为苹果提到了未登陆下也可以内购，然后提供给这个游客随时注册的方法，这里放在一起考虑就可以得出来结论，当已经产生内购的设备，有用户通过这个设备登录或者注册新用户，通过设备的uuid获取到之前游客购买（未充值到账户）的内购虚拟货币总量，直接充值进当前登录或者新注册的账户中，同时更改这部分内购订单的状态。<br>4、可以在内购充值的时候，弹个框仿照B站，提示说<br>登录账号(推荐，可在不同设备使用)<br>以游客身份继续(仅限当前设备使用)</p>
+<p>注意下：使用uuid需要存储到系统中的keychain中，来保证以后每次可以得到相同的唯一标志。</p>
+<p>最后加一点个人理解：内购这东西，有人说是绑定用户的appid，但是我通过设备绑定也上架了，苹果并不是强制要求内购绑定用户当前登录的appid，主要是需要让用户在不登录下能以游客方式进行内购！！！<br>因为并没有看到任何接口或者方法通过用户的appid可以查询到内购订单。<br>但是通过设备uuid的模式，确实可行。而且这样实现也比较简单，同时也做到了逻辑严谨。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2018/12/23/CocoaPods-Tips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/12/23/CocoaPods-Tips/" class="post-title-link" itemprop="url">CocoaPods Tips</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-12-23 15:40:32" itemprop="dateCreated datePublished" datetime="2018-12-23T15:40:32+08:00">2018-12-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-23 15:41:26" itemprop="dateModified" datetime="2021-12-23T15:41:26+08:00">2021-12-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>1、使用缓存更新命令行<br>pod update –verbose –no-repo-update</p>
+<p>2、解决 The sandbox is not in sync with the Podfile.lock. Run ‘pod install’ or update your CocoaPods install<br>方案一：<br>command+Q 退出 Xcode，重新执行pod install，之后再重新打开Xcode运行。</p>
+<p>正常 方案一: 即可解决问题.</p>
+<p>方案二：<br>稍微麻烦一点，删除以下文件：<br>xcworkspace<br>Podfile.lock<br>Pods文件夹<br>~/Library/Developer/Xcode/DerivedData路径下对应工程的文件夹<br>之后重新执行pod install –verbose –no-repo-update</p>
+<p>方案三:（最简单）<br>1.找到项目根目录下的Podfile.lock文件,和Pods文件夹下的Manifest.lock文件<br>2.然后复制Podfile.lock文件的内容替换掉Manifest.lock文件内的内容,好啦,至此问题解决</p>
+<p>3、pod 单独安装一个新添加的库<br>这将安装新项目而不更新现有的repos<br><code>pod install --no-repo-update</code></p>
+<p>4、升级Xcode12.5,报错Showing All Errors Only Command PhaseScriptExecution failed with a nonzero exit code<br>原因：Xcode12淘汰了VALID_ARCHS,但是有些集成进来的第三方库还是有这个key,Xcode12模拟器已经用arm架构来编译项目,而link链接的还是x86架构，pod之前集成的还是以前的，直接重新集成，clean project</p>
+<p>解除集成cocoapods<br><code>pod deintegrate</code><br>重新集成cocoapods<br><code>pod install</code><br>clean project<br>run project</p>
+<p>注意，项目配置有<code>VALID_ARCHS</code>需要删除，不然真机没法编译过</p>
+<p>5、Cocoapods报错:RuntimeError - [Xcodeproj] Unknown object version.解决办法<br>注意其中的错误提示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">### Error</span><br><span class="line">RuntimeError - [Xcodeproj] Unknown object version.</span><br></pre></td></tr></table></figure>
+<p>版本的问题。只需要用Xcode打开项目，修改项目Project Format为XX即可,或者更新pod<br><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231541671.png" alt="image.png"></p>
 
       
     </div>
@@ -1185,6 +1252,9 @@
 
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
 
 
 
@@ -1249,20 +1319,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">35</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

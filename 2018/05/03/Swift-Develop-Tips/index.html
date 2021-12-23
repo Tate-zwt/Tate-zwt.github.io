@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tate-zwt.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Xcode12模板位置:1&#x2F;Applications&#x2F;Xcode.app&#x2F;Contents&#x2F;Developer&#x2F;Platforms&#x2F;iPhoneOS.platform&#x2F;Developer&#x2F;Library&#x2F;Xcode&#x2F;Templates&#x2F;File Templates&#x2F;iOS&#x2F;Source&#x2F;Cocoa Touch Class.xctemplate  1、设置导航栏为透明123self.navigati">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift Develop Tips">
+<meta property="og:url" content="https://tate-zwt.github.io/2018/05/03/Swift-Develop-Tips/index.html">
+<meta property="og:site_name" content="Tate Blog">
+<meta property="og:description" content="Xcode12模板位置:1&#x2F;Applications&#x2F;Xcode.app&#x2F;Contents&#x2F;Developer&#x2F;Platforms&#x2F;iPhoneOS.platform&#x2F;Developer&#x2F;Library&#x2F;Xcode&#x2F;Templates&#x2F;File Templates&#x2F;iOS&#x2F;Source&#x2F;Cocoa Touch Class.xctemplate  1、设置导航栏为透明123self.navigati">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-05-03T09:37:12.000Z">
+<meta property="article:modified_time" content="2021-12-23T07:19:06.162Z">
+<meta property="article:author" content="番茄炒蛋">
+<meta property="article:tag" content="Swift">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tate-zwt.github.io/2018/05/03/Swift-Develop-Tips/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Swift Develop Tips | Tate Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tate Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2018/05/03/Swift-Develop-Tips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Swift Develop Tips
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-03 17:37:12" itemprop="dateCreated datePublished" datetime="2018-05-03T17:37:12+08:00">2018-05-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-23 15:19:06" itemprop="dateModified" datetime="2021-12-23T15:19:06+08:00">2021-12-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h5 id="Xcode12模板位置"><a href="#Xcode12模板位置" class="headerlink" title="Xcode12模板位置:"></a>Xcode12模板位置:</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Templates/File Templates/iOS/Source/Cocoa Touch Class.xctemplate</span><br></pre></td></tr></table></figure>
+
+<h2 id="1、设置导航栏为透明"><a href="#1、设置导航栏为透明" class="headerlink" title="1、设置导航栏为透明"></a>1、设置导航栏为透明</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">self.navigationBar.setBackgroundImage(UIImage(), for: .default)</span><br><span class="line">self.navigationBar.shadowImage = UIImage()</span><br><span class="line">self.navigationBar.isTranslucent = true</span><br></pre></td></tr></table></figure>
+
+<h2 id="2、bridging-header是swift刚出的时候，官方提供一种混编的方式。现在cocoapods-的版本已经支持swift-了，当你在安装pods的时候，添加下面这句话"><a href="#2、bridging-header是swift刚出的时候，官方提供一种混编的方式。现在cocoapods-的版本已经支持swift-了，当你在安装pods的时候，添加下面这句话" class="headerlink" title="2、bridging-header是swift刚出的时候，官方提供一种混编的方式。现在cocoapods 的版本已经支持swift 了，当你在安装pods的时候，添加下面这句话."></a>2、bridging-header是swift刚出的时候，官方提供一种混编的方式。现在cocoapods 的版本已经支持swift 了，当你在安装pods的时候，添加下面这句话.</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Uncomment this line if you&#x27;re using Swift</span><br><span class="line">use_frameworks!</span><br></pre></td></tr></table></figure>
+<p>它在cocoa pods中已经对Swift进行了配置，所以可以直接使用,不需要创建bridging-header。</p>
+<p>推荐swift项目学习：<br> <a target="_blank" rel="noopener" href="https://github.com/spicyShrimp/U17">U17</a><br> <a target="_blank" rel="noopener" href="https://github.com/lb2281075105/LBXMLYFM-Swift">LBXMLYFM-Swift</a></p>
+<h2 id="3、必要构造器"><a href="#3、必要构造器" class="headerlink" title="3、必要构造器"></a>3、必要构造器</h2><p>我们可以通过required关键字来实现必要构造器，子类必须实现父类的必要构造器。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Animal &#123;</span><br><span class="line">    var name: String</span><br><span class="line">    required init(name: String) &#123;</span><br><span class="line">        self.name = name</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Dog: Animal &#123;</span><br><span class="line">    var foot: Int</span><br><span class="line">    //在重写父类必要构造器的时候不需要加override</span><br><span class="line">    required init(name: String) &#123;</span><br><span class="line">        foot = 4</span><br><span class="line">        super.init(name: name)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Dog(name: &quot;dog&quot;)</span><br></pre></td></tr></table></figure>
+<p>有一点需要注意的就是：如果子类继承的构造器能满足必要构造器的要求，则无须在子类中显式提供必要构造器的实现。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class Animal &#123;</span><br><span class="line">    var name: String</span><br><span class="line">    required init(name: String) &#123;</span><br><span class="line">        self.name = name</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Dog: Animal &#123;</span><br><span class="line">    var foot = 2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Dog(name: &quot;dog&quot;)</span><br></pre></td></tr></table></figure>
+<p>在我们日常开发中，我们会经常自定义UITableViewCell的子类来实现我们定制化的需求，如果我们没有实现required init?(coder aDecoder: NSCoder)方法的话，我们的代码是编译报错的。查看文档我们发现该方法为NSCoding的方法，且该方法为UIView 必要构造器，所以它的子类必须实现该方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class CustomTableViewCell: UITableViewCell &#123;</span><br><span class="line">    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) &#123;</span><br><span class="line">        super.init(style: style, reuseIdentifier: reuseIdentifier)</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    required init?(coder aDecoder: NSCoder) &#123;</span><br><span class="line">        fatalError(&quot;init(coder:) has not been implemented&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4、访问级别"><a href="#4、访问级别" class="headerlink" title="4、访问级别"></a>4、访问级别</h2><p>Swift 为代码中的实体提供了五种不同的<em>访问级别</em>。这些访问级别不仅与源文件中定义的实体相关，同时也与源文件所属的模块相关。</p>
+<ul>
+<li><p>  <em>open</em> 和 <em>public</em> 级别可以让实体被同一模块源文件中的所有实体访问，在模块外也可以通过导入该模块来访问源文件里的所有实体。通常情况下，你会使用 open 或 public 级别来指定框架的外部接口。open 和 public 的区别在后面会提到。</p>
+</li>
+<li><p>  <em>internal</em> 级别让实体被同一模块源文件中的任何实体访问，但是不能被模块外的实体访问。通常情况下，如果某个接口只在应用程序或框架内部使用，就可以将其设置为 internal 级别。</p>
+</li>
+<li><p>  <em>fileprivate</em> 限制实体只能在其定义的文件内部访问。如果功能的部分实现细节只需要在文件内使用时，可以使用 fileprivate 来将其隐藏。</p>
+</li>
+<li><p>  <em>private</em> 限制实体只能在其定义的作用域，以及同一文件内的 extension 访问。如果功能的部分细节只需要在当前作用域内使用时，可以使用 private 来将其隐藏。</p>
+</li>
+</ul>
+<p>open 为最高访问级别（限制最少），private 为最低访问级别（限制最多）。</p>
+<p>open 只能作用于类和类的成员，它和 public 的区别主要在于 open 限定的类和成员能够在模块外能被继承和重写，在下面的 子类 这一节中有详解。将类的访问级别显示指定为 <code>open</code> 表明你已经设计好了类的代码，并且充分考虑过这个类在其他模块中用作父类时的影响。</p>
+<h2 id="5、pod不重新安装已有的库"><a href="#5、pod不重新安装已有的库" class="headerlink" title="5、pod不重新安装已有的库"></a>5、pod不重新安装已有的库</h2><p><code>pod install --no-repo-update</code></p>
+<h2 id="6、swift-闭包-循环引用"><a href="#6、swift-闭包-循环引用" class="headerlink" title="6、swift 闭包 循环引用"></a>6、swift 闭包 循环引用</h2><p>参考链接：<br><a href="/p/36ecc33df9c9">Swift闭包循环引用</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/bf2b8f278a81">Swift与OC真正去理解Block解决循环引用的技巧</a></p>
+<h2 id="7、Swift-5-1-字符串"><a href="#7、Swift-5-1-字符串" class="headerlink" title="7、Swift 5.1  - 字符串"></a>7、Swift 5.1  - 字符串</h2><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/7af97cd7b501">Swift 5.1 (3) - 字符串</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/623f5fce25af">iOS Swift中String的常用操作以及数据转化</a></p>
+<h2 id="8、tableView-deselectRow-at-indexPath-animated-true-注意事项"><a href="#8、tableView-deselectRow-at-indexPath-animated-true-注意事项" class="headerlink" title="8、tableView.deselectRow(at: indexPath, animated: true) 注意事项"></a>8、tableView.deselectRow(at: indexPath, animated: true) 注意事项</h2><p>这里不单单取消选中，还会把cell所有的子控件设置为选中或者高亮</p>
+<h2 id="9、VC的便利构造方法"><a href="#9、VC的便利构造方法" class="headerlink" title="9、VC的便利构造方法"></a>9、VC的便利构造方法</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">convenience init(type: ContentType) &#123;</span><br><span class="line">        // 便利构造函数中 一定不会有super 对于属性的赋值 一般在self.init()之后 只有self被初始化后,才能对其进行赋值, 不能使用let修饰属性 var 并且告诉编译器其强制解包 一定有值</span><br><span class="line">        self.init()</span><br><span class="line">        self.type = type</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) &#123;</span><br><span class="line">        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    required init?(coder aDecoder: NSCoder) &#123;</span><br><span class="line">        fatalError(&quot;init(coder:) has not been implemented&quot;)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="10、实现TableView下拉关闭"><a href="#10、实现TableView下拉关闭" class="headerlink" title="10、实现TableView下拉关闭"></a>10、实现TableView下拉关闭</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">let cv:CGFloat = -150 //下拉关闭数值</span><br><span class="line">func scrollViewDidScroll(_ scrollView: UIScrollView) &#123;</span><br><span class="line">        let offset = tableView.contentOffset.y;</span><br><span class="line">        print(message: offset)</span><br><span class="line">        if (offset &lt; cv) &#123;</span><br><span class="line">             close()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="11、关于UILabel设置AttributedString以后末尾…不出现的问题"><a href="#11、关于UILabel设置AttributedString以后末尾…不出现的问题" class="headerlink" title="11、关于UILabel设置AttributedString以后末尾…不出现的问题"></a>11、关于UILabel设置AttributedString以后末尾…不出现的问题</h2><p>需要重新设置一次label的lineBreakMode属性</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">editLabel.attributedText = PublicTools.load_attributedString(model.editor_note.trimmingCharacters(in: .newlines), font: FMFont13, color: CFontColor8, alignment: .left, lineSpacing: kLabelSpace)</span><br><span class="line">editLabel.lineBreakMode = .byTruncatingTail</span><br></pre></td></tr></table></figure>
+<h2 id="12、当两个UILabel并排显示时，如何设置约束，让A或者B能显示你想要的需求，就需要用到下面两个约束"><a href="#12、当两个UILabel并排显示时，如何设置约束，让A或者B能显示你想要的需求，就需要用到下面两个约束" class="headerlink" title="12、当两个UILabel并排显示时，如何设置约束，让A或者B能显示你想要的需求，就需要用到下面两个约束"></a>12、当两个UILabel并排显示时，如何设置约束，让A或者B能显示你想要的需求，就需要用到下面两个约束</h2><p> ContentHuggingPriority                         ==&gt; 表示当前的Label的内容不想被拉伸</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">playCountLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)</span><br></pre></td></tr></table></figure>
+<p> ContentCompressionResistancePriority   ==&gt; 表示当前的Label的内容不想被收缩</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">playCountLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)</span><br></pre></td></tr></table></figure>
+
+
+<p>默认情况下: HuggingPriority == 250,  CompressionResistancePriority == 750</p>
+<h2 id="12、-discardableResult的作用"><a href="#12、-discardableResult的作用" class="headerlink" title="12、@discardableResult的作用"></a>12、@discardableResult的作用</h2><p>在Swift中，当有返回值的方法未得到接收和使用时通常会出现警告<br>在正式编译中不会影响编译结果，但是也妨碍代码的美观整洁，在方法上加上“@discardableResult”就可以取消这个警告</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@discardableResult</span><br><span class="line"> public func handleUrl(url: String, completion: </span><br></pre></td></tr></table></figure>
+<p>还有一种取消警告的方法，不加@discardableResult直接加通配符接收方法返回值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_ = XX</span><br></pre></td></tr></table></figure>
+
+<h2 id="13、dynamic关键字"><a href="#13、dynamic关键字" class="headerlink" title="13、dynamic关键字"></a>13、dynamic关键字</h2><p>如果您有过OC的开发经验，那一定会对OC中@dynamic关键字比较熟悉，它告诉编译器不要为属性合成getter和setter方法。<br>Swift中也有dynamic关键字，它可以用于修饰变量或函数，它的意思也与OC完全不同。它告诉编译器使用动态分发而不是静态分发。OC区别于其他语言的一个特点在于它的动态性，任何方法调用实际上都是消息分发，而Swift则尽可能做到静态分发。<br>因此，标记为dynamic的变量/函数会隐式的加上@objc关键字，它会使用OC的runtime机制。<br>虽然静态分发在效率上可能更好，不过一些app分析统计的库需要依赖动态分发的特性，动态的添加一些统计代码，这一点在Swift的静态分发机制下很难完成。这种情况下，虽然使用dynamic关键字会牺牲因为使用静态分发而获得的一些性能优化，但也依然是值得的。<br>使用动态分发，您可以更好的与OC中runtime的一些特性（如CoreData，KVC/KVO）进行交互，不过如果您不能确定变量或函数会被动态的修改、添加或使用了Method-Swizzle，那么就不应该使用dynamic关键字，否则有可能程序崩溃。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Swift/" rel="tag"># Swift</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/04/04/Restful-API%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" rel="prev" title="Restful API学习总结">
+      <i class="fa fa-chevron-left"></i> Restful API学习总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/05/21/Mac-Nginx-php%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%EF%BC%8C%E7%9C%8B%E6%88%91%E5%B0%B1%E5%A4%9F%E4%BA%86/" rel="next" title="Mac Nginx+php环境配置，看我就够了">
+      Mac Nginx+php环境配置，看我就够了 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#Xcode12%E6%A8%A1%E6%9D%BF%E4%BD%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">Xcode12模板位置:</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E8%AE%BE%E7%BD%AE%E5%AF%BC%E8%88%AA%E6%A0%8F%E4%B8%BA%E9%80%8F%E6%98%8E"><span class="nav-number"></span> <span class="nav-text">1、设置导航栏为透明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81bridging-header%E6%98%AFswift%E5%88%9A%E5%87%BA%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E5%AE%98%E6%96%B9%E6%8F%90%E4%BE%9B%E4%B8%80%E7%A7%8D%E6%B7%B7%E7%BC%96%E7%9A%84%E6%96%B9%E5%BC%8F%E3%80%82%E7%8E%B0%E5%9C%A8cocoapods-%E7%9A%84%E7%89%88%E6%9C%AC%E5%B7%B2%E7%BB%8F%E6%94%AF%E6%8C%81swift-%E4%BA%86%EF%BC%8C%E5%BD%93%E4%BD%A0%E5%9C%A8%E5%AE%89%E8%A3%85pods%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E6%B7%BB%E5%8A%A0%E4%B8%8B%E9%9D%A2%E8%BF%99%E5%8F%A5%E8%AF%9D"><span class="nav-number"></span> <span class="nav-text">2、bridging-header是swift刚出的时候，官方提供一种混编的方式。现在cocoapods 的版本已经支持swift 了，当你在安装pods的时候，添加下面这句话.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E5%BF%85%E8%A6%81%E6%9E%84%E9%80%A0%E5%99%A8"><span class="nav-number"></span> <span class="nav-text">3、必要构造器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81%E8%AE%BF%E9%97%AE%E7%BA%A7%E5%88%AB"><span class="nav-number"></span> <span class="nav-text">4、访问级别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5%E3%80%81pod%E4%B8%8D%E9%87%8D%E6%96%B0%E5%AE%89%E8%A3%85%E5%B7%B2%E6%9C%89%E7%9A%84%E5%BA%93"><span class="nav-number"></span> <span class="nav-text">5、pod不重新安装已有的库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6%E3%80%81swift-%E9%97%AD%E5%8C%85-%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8"><span class="nav-number"></span> <span class="nav-text">6、swift 闭包 循环引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7%E3%80%81Swift-5-1-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number"></span> <span class="nav-text">7、Swift 5.1  - 字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8%E3%80%81tableView-deselectRow-at-indexPath-animated-true-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number"></span> <span class="nav-text">8、tableView.deselectRow(at: indexPath, animated: true) 注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9%E3%80%81VC%E7%9A%84%E4%BE%BF%E5%88%A9%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="nav-number"></span> <span class="nav-text">9、VC的便利构造方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10%E3%80%81%E5%AE%9E%E7%8E%B0TableView%E4%B8%8B%E6%8B%89%E5%85%B3%E9%97%AD"><span class="nav-number"></span> <span class="nav-text">10、实现TableView下拉关闭</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11%E3%80%81%E5%85%B3%E4%BA%8EUILabel%E8%AE%BE%E7%BD%AEAttributedString%E4%BB%A5%E5%90%8E%E6%9C%AB%E5%B0%BE%E2%80%A6%E4%B8%8D%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number"></span> <span class="nav-text">11、关于UILabel设置AttributedString以后末尾…不出现的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12%E3%80%81%E5%BD%93%E4%B8%A4%E4%B8%AAUILabel%E5%B9%B6%E6%8E%92%E6%98%BE%E7%A4%BA%E6%97%B6%EF%BC%8C%E5%A6%82%E4%BD%95%E8%AE%BE%E7%BD%AE%E7%BA%A6%E6%9D%9F%EF%BC%8C%E8%AE%A9A%E6%88%96%E8%80%85B%E8%83%BD%E6%98%BE%E7%A4%BA%E4%BD%A0%E6%83%B3%E8%A6%81%E7%9A%84%E9%9C%80%E6%B1%82%EF%BC%8C%E5%B0%B1%E9%9C%80%E8%A6%81%E7%94%A8%E5%88%B0%E4%B8%8B%E9%9D%A2%E4%B8%A4%E4%B8%AA%E7%BA%A6%E6%9D%9F"><span class="nav-number"></span> <span class="nav-text">12、当两个UILabel并排显示时，如何设置约束，让A或者B能显示你想要的需求，就需要用到下面两个约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12%E3%80%81-discardableResult%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number"></span> <span class="nav-text">12、@discardableResult的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13%E3%80%81dynamic%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number"></span> <span class="nav-text">13、dynamic关键字</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">番茄炒蛋</p>
+  <div class="site-description" itemprop="description">「 少点虚的，多点实践，持续学习，终身学习」</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Tate-zwt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Tate-zwt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tate_zhangweiting@163.com" title="E-Mail → mailto:tate_zhangweiting@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">番茄炒蛋</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

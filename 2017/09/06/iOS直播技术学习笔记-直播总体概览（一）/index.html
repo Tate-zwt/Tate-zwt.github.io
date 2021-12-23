@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tate-zwt.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="概述 直播的现状  2016年，是一个直播年。直播行业快速发展，同时也滋生了大大小小上千家相关的公司。 中国互联网络信息中心发布的报告显示，截至今年6月，我国网络直播用户规模达到3.25亿，占网民总体的45.8%。   直播的技术  直播技术概况来说，可以分为 采集，前处理，编码，传输，解码，渲染 这几个环节 技术整体概览   图例：   分步解析音视频采集 音视频的采集是直播架构的第一个环节，也">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS直播技术学习笔记-直播总体概览（一）">
+<meta property="og:url" content="https://tate-zwt.github.io/2017/09/06/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%9B%B4%E6%92%AD%E6%80%BB%E4%BD%93%E6%A6%82%E8%A7%88%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="Tate Blog">
+<meta property="og:description" content="概述 直播的现状  2016年，是一个直播年。直播行业快速发展，同时也滋生了大大小小上千家相关的公司。 中国互联网络信息中心发布的报告显示，截至今年6月，我国网络直播用户规模达到3.25亿，占网民总体的45.8%。   直播的技术  直播技术概况来说，可以分为 采集，前处理，编码，传输，解码，渲染 这几个环节 技术整体概览   图例：   分步解析音视频采集 音视频的采集是直播架构的第一个环节，也">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231446819.png">
+<meta property="article:published_time" content="2017-09-06T13:01:11.000Z">
+<meta property="article:modified_time" content="2021-12-23T06:47:32.088Z">
+<meta property="article:author" content="番茄炒蛋">
+<meta property="article:tag" content="音视频">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231446819.png">
+
+<link rel="canonical" href="https://tate-zwt.github.io/2017/09/06/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%9B%B4%E6%92%AD%E6%80%BB%E4%BD%93%E6%A6%82%E8%A7%88%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>iOS直播技术学习笔记-直播总体概览（一） | Tate Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tate Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2017/09/06/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%9B%B4%E6%92%AD%E6%80%BB%E4%BD%93%E6%A6%82%E8%A7%88%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS直播技术学习笔记-直播总体概览（一）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-09-06 21:01:11" itemprop="dateCreated datePublished" datetime="2017-09-06T21:01:11+08:00">2017-09-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-23 14:47:32" itemprop="dateModified" datetime="2021-12-23T14:47:32+08:00">2021-12-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><ul>
+<li><p>直播的现状</p>
+<ul>
+<li>2016年，是一个直播年。直播行业快速发展，同时也滋生了大大小小上千家相关的公司。</li>
+<li>中国互联网络信息中心发布的报告显示，截至今年6月，我国网络直播用户规模达到3.25亿，占网民总体的45.8%。</li>
+</ul>
+</li>
+<li><p>直播的技术</p>
+<ul>
+<li><p>直播技术概况来说，可以分为 采集，前处理，编码，传输，解码，渲染 这几个环节</p>
+<h4 id="技术整体概览"><a href="#技术整体概览" class="headerlink" title="技术整体概览"></a>技术整体概览</h4></li>
+</ul>
+</li>
+<li><p>图例：<br><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231446819.png" alt="技术整体总结.png"></p>
+</li>
+</ul>
+<h4 id="分步解析"><a href="#分步解析" class="headerlink" title="分步解析"></a>分步解析</h4><h5 id="音视频采集"><a href="#音视频采集" class="headerlink" title="音视频采集"></a>音视频采集</h5><ul>
+<li><p>音视频的采集是直播架构的第一个环节，也是直播的视频来源</p>
+</li>
+<li><p>采集的来源包括：</p>
+<ul>
+<li><p>PC端：屏幕摄像头（摄像头驱动适配）</p>
+</li>
+<li><p>iOS端：摄像头采集（屏幕采集？）</p>
+</li>
+<li><p>Android端：屏幕摄像头采集（硬件过多，适配一堆坑）</p>
+<h5 id="前处理"><a href="#前处理" class="headerlink" title="前处理"></a>前处理</h5></li>
+</ul>
+</li>
+<li><p>使用美颜相机&amp;美图秀秀已经是网络发照片&amp;发视频必备技能了</p>
+<ul>
+<li>80%的主播没有美颜简直不能看（当然还是有美女的）</li>
+<li>不能看如何吸引用户&amp;观众</li>
+<li>对视频进行美颜，已成标配</li>
+</ul>
+</li>
+<li><p>处理主要包括，美颜、模糊效果、水印等</p>
+<ul>
+<li>总之就是让人变美、变帅</li>
+</ul>
+</li>
+<li><p>各个平台处理方式</p>
+<ul>
+<li><p>PC端：美颜镜头、一些美颜软件</p>
+</li>
+<li><p>iOS端：图像处理库是GPUImage，提供了丰富的预处理效果，也可利用该库自定义设计</p>
+</li>
+<li><p>Android端：Google开源的grafika，是一个非常强大的图形处理库</p>
+<h5 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h5></li>
+</ul>
+</li>
+<li><p>不经编码的视频非常庞大，存储起来都麻烦，更何况网络传输</p>
+<ul>
+<li>编码通过压缩音视频数据来减少数据体积，方便音视频数据的推流，拉流和存储，能大大提高存储传输效率</li>
+<li>音视频必须经过压缩编码才能进行存储和传输</li>
+</ul>
+</li>
+<li><p>编码方式：</p>
+<ul>
+<li>硬编码：使用非CPU进行编码，如显卡GPU、专用的DSP芯片等</li>
+<li>软编码：使用CPU进行编码（手机容易发热）</li>
+</ul>
+</li>
+<li><p>各个平台处理：</p>
+<ul>
+<li>iOS端：硬件兼容性较好，可以直接进行硬编码</li>
+<li>Android端：硬编码较难，难找到统一的库兼容各个平台（推荐使用软编）</li>
+</ul>
+</li>
+<li><p>编码标准：</p>
+<ul>
+<li><p>视频编码：H.265、H.264、VP8、VP9等</p>
+</li>
+<li><p>音频编码：AAC、Opus</p>
+<h5 id="传输"><a href="#传输" class="headerlink" title="传输"></a>传输</h5></li>
+</ul>
+</li>
+<li><p>从推流端到服务端</p>
+<ul>
+<li>数据经过推流端采集和预处理，编码之后推流到服务端</li>
+<li>流传输就涉及到相应的传输协议，最常用的协议是RTMP、RTSP、HLS</li>
+</ul>
+</li>
+<li><p>搭建nginx+rtmp服务器进行推流演示</p>
+<h5 id="流分发"><a href="#流分发" class="headerlink" title="流分发"></a>流分发</h5></li>
+<li><p>音频流推到服务器后，为了适配各个平台端各种不同协议，需要在服务端做一些流处理工作，比如转码成不同格式支持不同协议如 RTMP、HLS 和 FLV，以适应各个平台</p>
+<ul>
+<li>比如：iOS、Android、PC、网页</li>
+</ul>
+</li>
+<li><p>甚至，为了配合一些运营需求，比如一些监管部门的要求，我们在服务端也提供了内容识别如鉴黄的功能</p>
+<h5 id="播放"><a href="#播放" class="headerlink" title="播放"></a>播放</h5></li>
+<li><p>拉流获取音视频数据后，需要通过解码器解码，渲染才能在播放器上播放</p>
+</li>
+<li><p>总体步骤概览：</p>
+<ul>
+<li>解协议：取出网络传输过程中一些无用信息</li>
+<li>解封装：获取到的是音频&amp;视频放在一起的封装文件</li>
+<li>音视频解码：音视频都是经过压缩编码的内容，解码后才能进行播放</li>
+<li>音视频同步：视频&amp;音频文件需要通过播放</li>
+<li>音视频播放：声卡&amp;显卡等对音视频进行播放</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/" rel="tag"># 音视频</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/08/25/Swift%E5%BC%80%E5%8F%91%E4%B9%8B%E7%B2%92%E5%AD%90%E5%8A%A8%E7%94%BB%E7%9A%84%E5%AE%9E%E7%8E%B0/" rel="prev" title="Swift开发之粒子动画的实现">
+      <i class="fa fa-chevron-left"></i> Swift开发之粒子动画的实现
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/09/08/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E9%87%87%E9%9B%86%E8%A7%86%E9%A2%91%EF%BC%88%E4%BA%8C%EF%BC%89/" rel="next" title="iOS直播技术学习笔记-采集视频（二）">
+      iOS直播技术学习笔记-采集视频（二） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E6%95%B4%E4%BD%93%E6%A6%82%E8%A7%88"><span class="nav-number">2.</span> <span class="nav-text">技术整体概览</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E6%AD%A5%E8%A7%A3%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">分步解析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%9F%B3%E8%A7%86%E9%A2%91%E9%87%87%E9%9B%86"><span class="nav-number">3.1.</span> <span class="nav-text">音视频采集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%89%8D%E5%A4%84%E7%90%86"><span class="nav-number">3.2.</span> <span class="nav-text">前处理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BC%96%E7%A0%81"><span class="nav-number">3.3.</span> <span class="nav-text">编码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93"><span class="nav-number">3.4.</span> <span class="nav-text">传输</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%81%E5%88%86%E5%8F%91"><span class="nav-number">3.5.</span> <span class="nav-text">流分发</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%92%AD%E6%94%BE"><span class="nav-number">3.6.</span> <span class="nav-text">播放</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">番茄炒蛋</p>
+  <div class="site-description" itemprop="description">「 少点虚的，多点实践，持续学习，终身学习」</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Tate-zwt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Tate-zwt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tate_zhangweiting@163.com" title="E-Mail → mailto:tate_zhangweiting@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">番茄炒蛋</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tate-zwt.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="从输入URL（www.google.com）到页面加载发生了什么？1234561.DNS解析（网址 -&gt; IP地址）：DNS缓存：浏览器和操作系统。分级查询：本地DNF服务器，根域名服务器，com顶级域名服务器，google.com域名服务器 2.TCP连接（三次握手）-&gt; 为什么两次不可以？3.发送HTTP请求4.服务器处理请求，并且返回HTTP报文5.浏览器解析和渲染页面6.连接结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络相关知识">
+<meta property="og:url" content="https://tate-zwt.github.io/2020/07/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:site_name" content="Tate Blog">
+<meta property="og:description" content="从输入URL（www.google.com）到页面加载发生了什么？1234561.DNS解析（网址 -&gt; IP地址）：DNS缓存：浏览器和操作系统。分级查询：本地DNF服务器，根域名服务器，com顶级域名服务器，google.com域名服务器 2.TCP连接（三次握手）-&gt; 为什么两次不可以？3.发送HTTP请求4.服务器处理请求，并且返回HTTP报文5.浏览器解析和渲染页面6.连接结">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231538618.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231538323.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231538517.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231538343.png">
+<meta property="article:published_time" content="2020-07-15T14:00:53.000Z">
+<meta property="article:modified_time" content="2021-12-23T07:40:08.626Z">
+<meta property="article:author" content="番茄炒蛋">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231538618.png">
+
+<link rel="canonical" href="https://tate-zwt.github.io/2020/07/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>计算机网络相关知识 | Tate Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tate Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2020/07/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机网络相关知识
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-07-15 22:00:53" itemprop="dateCreated datePublished" datetime="2020-07-15T22:00:53+08:00">2020-07-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-23 15:40:08" itemprop="dateModified" datetime="2021-12-23T15:40:08+08:00">2021-12-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="从输入URL（www-google-com）到页面加载发生了什么？"><a href="#从输入URL（www-google-com）到页面加载发生了什么？" class="headerlink" title="从输入URL（www.google.com）到页面加载发生了什么？"></a>从输入URL（<a href="http://www.google.com）到页面加载发生了什么？">www.google.com）到页面加载发生了什么？</a></h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1.DNS解析（网址 -&gt; IP地址）：DNS缓存：浏览器和操作系统。分级查询：本地DNF服务器，根域名服务器，com顶级域名服务器，google.com域名服务器 </span><br><span class="line">2.TCP连接（三次握手）-&gt; 为什么两次不可以？</span><br><span class="line">3.发送HTTP请求</span><br><span class="line">4.服务器处理请求，并且返回HTTP报文</span><br><span class="line">5.浏览器解析和渲染页面</span><br><span class="line">6.连接结束（四次挥手）-&gt; 为什么三次不可以？</span><br></pre></td></tr></table></figure>
+
+<p>DNS解析流程：<br><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231538618.png" alt="6055764-8ca1c59f8c2da535.png"></p>
+<h1 id="DNS-解析安全问题"><a href="#DNS-解析安全问题" class="headerlink" title="DNS 解析安全问题"></a>DNS 解析安全问题</h1><p>1、DNS 劫持<br><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231538323.png" alt="DNS 劫持.png"><br>一种可能的域名劫持方式即黑客侵入了宽带路由器并对终端用户的本地 DNS 服务器进行篡改，指向黑客自 己伪造的本地 DNS 服务器，进而通过控制本地 DNS 服务器的逻辑返回错误的 IP 信息进行域名劫持。 另一方面，由于 DNS 解析主要是基于 UDP 协议，除了上述攻击行为外，攻击者还可以监听终端用户的域名 解析请求，并在本地 DNS 服务器返回正确结果之前将伪造的 DNS 解析响应传递给终端用户，进而控制终端 用户的域名访问行为。</p>
+<p>2、缓存污染（DNS 污染）。<br> 我们知道在接收到域名解析请求时，本地 DNS 服务器首先会查找缓存，如果缓存命中就会直接返回缓存结 果，不再进行递归 DNS 查询。这时候如果本地 DNS 服务器针对部分域名的缓存进行更改，比如将缓存结果 指向第三方的广告页，就会导致用户的访问请求被引导到这些广告页地址上。<br> 3、如何解决 DNS 劫持？<br> DNS 解析发生在 HTTP 协议之前，DNS 解析和 DNS 劫持和 HTTP 没有关系，DNS 协议使用的是 UDP 协议向服 务器的 53 端口进行请求。 要想解决 DNS 劫持： </p>
+<blockquote>
+<p>可以使用 HttpDNS 的方案：使用 HTTP 协议向 DNS 服务器的 80 端口进行请求,来规避 DNS 劫持 比如：<a target="_blank" rel="noopener" href="http://119.29.29.29/d?dn=domain&amp;ip=clientIp">http://119.29.29.29/d?dn=domain&amp;ip=clientIp</a><br>在终端上，可以更换 DNS 服务器，不管手机还是电脑，都能手动配置 DNS</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231538517.png"></p>
+<p>三次握手：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">第一次握手：客户端 -&gt; 服务端：发送SYN=1（请求建立连接），seq=n（序列号）</span><br><span class="line">第二次握手：服务端 -&gt; 客户端：SYN=1（同意建立连接），服务器收到客户端的seq序列号，它会给它发送ack字段=n+1(序列号加1，确认收到信息)和seq=x（服务端序列号）</span><br><span class="line">第三次握手：客户端 -&gt; 服务端：SYN=0（开始发送信息）,发送ack字段=x+1(序列号加1，确认收到信息)和seq=n+1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>第一次握手表示：客户端具有发送信息的能力<br>第二次握手表示：服务端具有接收信息的能力和发送信息的能力<br>第三次握手表示：客户端具有接收信息的能力</p>
+</blockquote>
+<p>TCP三次握手过程<br>第一次握手：主机A通过向主机B 发送一个含有同步序列号的标志位的数据段给主机B，向主机B 请求建立连接，通过这个数据段， 主机A告诉主机B 两件事：我想要和你通信；你可以用哪个序列号作为起始数据段来回应我。</p>
+<p>第二次握手：主机B 收到主机A的请求后，用一个带有确认应答（ACK）和同步序列号（SYN）标志位的数据段响应主机A，也告诉主机A两件事：我已经收到你的请求了，你可以传输数据了；你要用那个序列号作为起始数据段来回应我</p>
+<p>第三次握手：主机A收到这个数据段后，再发送一个确认应答，确认已收到主机B 的数据段：”我已收到回复，我现在要开始传输实际数据了，这样3次握手就完成了，主机A和主机B 就可以传输数据了。</p>
+<p>三次握手原因<br>避免资源被浪费掉。如果在第二步握手时，由于网络延迟导致确认包不能及时到达客户端，那么客户端会认为第一次握手失败，再次发送连接请求，服务端收到后再次发送确认包。在这种情况下，服务端已经创建了两次连接，等待两个客户端发送数据，而实际却只有一个客户端发送数据。</p>
+<p>三次握手的特点<br>没有应用层的数据 ,SYN这个标志位只有在TCP建立连接时才会被置1 ,握手完成后SYN标志位被置0。</p>
+<p>四次挥手：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">第一次挥手：客户端 -&gt; 服务端：发完了</span><br><span class="line">第二次挥手：服务端 -&gt; 客户端：知道发完了</span><br><span class="line">第三次挥手：服务端 -&gt; 客户端：收完了</span><br><span class="line">第四次挥手：客户端 -&gt; 服务端：知道收完了</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>第一次:发完了，第二次：知道发完了，第三次:收完了，第四次:知道收完了</p>
+</blockquote>
+<p>TCP建立连接要进行3次握手，而断开连接要进行4次<br>第一次： 当主机A完成数据传输后,将控制位FIN置1，提出停止TCP连接的请求 ；</p>
+<p>第二次： 主机B收到FIN后对其作出响应，确认这一方向上的TCP连接将关闭,将ACK置1；</p>
+<p>第三次： 由B 端再提出反方向的关闭请求,将FIN置1 ；</p>
+<p>第四次： 主机A对主机B的请求进行确认，将ACK置1，双方向的关闭结束.。</p>
+<p>由TCP的三次握手和四次断开可以看出，TCP使用面向连接的通信方式， 大大提高了数据通信的可靠性，使发送数据端和接收端在数据正式传输前就有了交互， 为数据正式传输打下了可靠的基础。</p>
+<p>四次挥手原因<br>由于TCP的连接是全双工，双方都可以主动传输数据，一方的断开需要告知对方，让对方可以相关操作，负责任的表现。</p>
+<p>使用TCP协议有：FTP（文件传输协议）、Telnet（远程登录协议）、SMTP（简单邮件传输协议）、POP3（和SMTP相对，用于接收邮件）、HTTP协议等</p>
+<p>浏览器解析和渲染页面：</p>
+<blockquote>
+<p>自上而下 下载||渲染  css并行  图片异步请求下载 js挂起<br>html -&gt; dom + css -&gt; cssom = render渲染树（不渲染：head，display:none）4.布局 5.绘制</p>
+</blockquote>
+<h1 id="影响一个HTTP网络请求的因素"><a href="#影响一个HTTP网络请求的因素" class="headerlink" title="影响一个HTTP网络请求的因素"></a>影响一个HTTP网络请求的因素</h1><blockquote>
+<p>1.网络波动或者网络延迟；这种情况最常见，导致的原因是由服务器之间网络的连通情况和心跳包的容纳情况决定的<br>2.跨域请求；这种情况一般出现在做外贸或者金融类的公司，比如，美国的服务器，访问上海的服务器，异地处理，请求需要跨越VPN和国际传输，在加上三次握手协议，再加上国际信息传输的特殊渠道供给和波动，会大大延迟数据的响应时间<br>3.服务器转发次数过多；比如A服务器给B服务请发起请求，B服务器在转发给C由C处理结果之后在依次返回，最后又A收到结果，请求时效加倍，响应时效加倍，服务的可用率就降低了<br>4.服务器本身的原因：网卡不够完善（多网卡划分，网卡部分缺失），内存供给不足等等都会导致各种各样的响应慢<br>5.网段划分不一致：如A服务器10M带宽，B服务器10K带宽（分流），1秒一次的心跳，最终决定响应时间的一定是最慢的那个B，因为B的慢，会拖累整个服务集群交互;再比如阿里云华南地区和华北地区两台服务器之间的交互也没有两台华北地区服务器交互来得快<br>…<br>简单说，要想服务器交互的尽可能的快，尽量保证服务器的部署网段尽可能一致，带宽没有短板，尽量减少多次转发和跨域的可能性…</p>
+</blockquote>
+<p>更多原因：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/ae4f288136dd">HTTP慢的原因和解决方式</a></p>
+<h1 id="HTTP和HTTPS的区别"><a href="#HTTP和HTTPS的区别" class="headerlink" title="HTTP和HTTPS的区别"></a>HTTP和HTTPS的区别</h1><p>HTTPS：HTTP -&gt; SSL（加密）/TLS（解密）包括对称加密和非对称加密，公钥和私钥代表非对称加密，只有密钥就是对称加密</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.HTTPS需要CA请求证书（付费的）</span><br><span class="line">2.HTTP传输都是明文传送的可以截获，HTTPS传输都是客户端通过SSL加密，服务端通过TLS解密</span><br><span class="line">3.连接方式，端口不同，HTTP端口80，HTTPS端口443</span><br><span class="line">4.HTTPS防止运营商劫持</span><br></pre></td></tr></table></figure>
+<p>证书机制</p>
+<blockquote>
+<p>1.作为服务端的小红，首先把自己的公钥发给证书颁发机构，向证书颁发机构申请证书。<br>2.证书颁发机构自己也有一对公钥私钥。机构利用自己的私钥来加密Key1，并且通过服务端网址等信息生成一个证书签名，证书签名同样经过机构的私钥加密。证书制作完成后，机构把证书发送给了服务端小红。<br>3.当小灰向小红请求通信的时候，小红不再直接返回自己的公钥，而是把自己申请的证书返回给小灰。<br>4.小灰收到证书以后，要做的第一件事情是验证证书的真伪。需要说明的是，各大浏览器和操作系统已经维护了所有权威证书机构的名称和公钥。所以小灰只需要知道是哪个机构颁布的证书，就可以从本地找到对应的机构公钥，解密出证书签名。</p>
+</blockquote>
+<p>参考链接:<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/jiangshangchunjiezi/article/details/88545263">https://blog.csdn.net/jiangshangchunjiezi/article/details/88545263</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/sunzhao/p/9081272.html">Https单向认证和双向认证</a><br>app客户端不需要处理证书就属于单向认证，双向认证app客户端是属要处理证书的。</p>
+<h1 id="Get、Post区别"><a href="#Get、Post区别" class="headerlink" title="Get、Post区别"></a>Get、Post区别</h1><p>(1). 从功能上讲<br>GET一般用来从服务器上获取资源，POST一般用来更新服务器上的资源；</p>
+<p>(2). 从REST服务（REST软件架构）角度上说，GET是幂等的，即读取同一个资源，总是得到相同的数据，而POST不是幂等的，因为每次请求对资源的改变并不是相同的；进一步地，GET不会改变服务器上的资源，而POST会对服务器资源进行改变；</p>
+<p>(3). 从请求参数形式上看<br>GET请求的数据会附在URL之后，即将请求数据放置在HTTP报文的 请求头 中，以?分割URL和传输数据，参数之间以&amp;相连。特别地，如果数据是英文字母/数字，原样发送；否则，会将其编码为 application/x-www-form-urlencoded MIME 字符串(如果是空格，转换为+，如果是中文/其他字符，则直接把字符串用BASE64加密，得出如：%E4%BD%A0%E5%A5%BD，其中％XX中的XX为该符号以16进制表示的ASCII)；<br>而POST请求会把提交的数据则放置在是HTTP请求报文的 请求体 中。</p>
+<p>(4). 就安全性而言<br>POST的安全性要比GET的安全性高，因为GET请求提交的数据将明文出现在URL上，而且POST请求参数则被包装到请求体中，相对更安全。</p>
+<p>(5). 从请求的大小看<br>GET请求的长度受限于浏览器或服务器对URL长度的限制，允许发送的数据量比较小，而POST请求则是没有大小限制的。</p>
+<p>参考链接:<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/jiangshangchunjiezi/java/article/details/88546010">https://blog.csdn.net/jiangshangchunjiezi/java/article/details/88546010</a></p>
+<h1 id="Cookie、Session区别"><a href="#Cookie、Session区别" class="headerlink" title="Cookie、Session区别"></a>Cookie、Session区别</h1><p>cookie 和session 的区别：</p>
+<p>1、存放位置：cookie数据存放在客户的浏览器上，session数据放在服务器上。</p>
+<p>2、安全性：cookie不是很安全，别人可以分析存放在本地的COOKIE并进行COOKIE欺骗<br>   考虑到安全应当使用session。</p>
+<p>3、性能：session会在一定时间内保存在服务器上。当访问增多，会比较占用你服务器的性能<br>   考虑到减轻服务器性能方面，应当使用COOKIE。</p>
+<p>4、大小限制：单个cookie保存的数据不能超过4K，很多浏览器都限制一个站点最多保存20个cookie。Session没有大小限制，理论上只与服务器的内存大小有关；</p>
+<p>5、所以个人建议：<br>   将登陆信息等重要信息存放为SESSION<br>   其他信息如果需要保留，可以放在COOKIE中</p>
+<h1 id="TCP、UDP-区别"><a href="#TCP、UDP-区别" class="headerlink" title="TCP、UDP 区别"></a>TCP、UDP 区别</h1><p>TCP（Transmission Control Protocol 传输控制协议）是一种面向连接的、可靠的、基于字节流的传输层通信协议</p>
+<p>TCP的优点<br>可靠，稳定<br>TCP的可靠体现在TCP在传递数据之前，会有三次握手来建立连接，而且在数据传递时，有确认、窗口、重传、拥塞控制机制，在数据传完后，还会断开连接用来节约系统资源。</p>
+<p>TCP的缺点<br>慢，效率低，占用系统资源高，易被攻击<br>TCP在传递数据之前，要先建连接，这会消耗时间，而且在数据传递时，确认机制、重传机制、拥塞控制机制等都会消耗大量的时间，而且要在每台设备上维护所有的传输连接，事实上，每个连接都会占用系统的CPU、内存等硬件资源。</p>
+<p>由于TCP存在确认机制和三次握手机制，这些是导致TCP容易被人利用，实现DOS、DDOS、CC等攻击。</p>
+<p>TCP应用场景<br>当对网络通讯质量有要求的时候，比如：整个数据要准确无误的传递给对方，这往往用于一些要求可靠的应用，比如HTTP、HTTPS、FTP等传输文件的协议，POP、SMTP等邮件传输的协议。</p>
+<p>在日常生活中，常见使用TCP协议的应用比如：浏览器使用HTTP，Outlook使用POP、SMTP，QQ文件传输等。</p>
+<p>UDP协议<br>UDP 是User Datagram Protocol的简称， 中文名是用户数据报协议，是OSI（Open System Interconnection，开放式系统互联） 参考模型中一种无连接的传输层协议，提供面向事务的简单不可靠信息传送服务，IETF RFC 768是UDP的正式规范。UDP在IP报文的协议号是17。</p>
+<p>UDP的优点<br>快，比TCP稍安全<br>UDP没有TCP的握手、确认、窗口、重传、拥塞控制等机制，UDP是一个无状态的传输协议，所以它在传递数据时非常快。没有TCP的这些机制，UDP较TCP被攻击者利用的漏洞就要少一些。但UDP也是无法避免攻击的，比如：UDP Flood攻击……</p>
+<p>UDP的缺点<br>不可靠，不稳定<br>因为UDP没有TCP那些可靠的机制，在数据传递时，如果网络质量不好，就会很容易丢包。</p>
+<p>UDP应用场景<br>当对网络通讯质量要求不高的时候，要求网络通讯速度能尽量的快，这时就可以使用UDP。在日常生活中，常见使用UDP协议的应用比如：QQ语音、QQ视频、TFTP等。</p>
+<p>Socekt 类似SDK ，就是封装了TCP和 UDP 这些协议的东西，方便程序员调用</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/nieliangcai/p/10362751.html">说说TCP,UDP和socket,Http之间联系和区别</a></p>
+<h1 id="HTTP-的请求方式"><a href="#HTTP-的请求方式" class="headerlink" title="HTTP 的请求方式"></a>HTTP 的请求方式</h1><p>根据 HTTP 标准，HTTP 请求可以使用多种请求方法。<br>HTTP1.0 定义了三种请求方法： GET, POST 和 HEAD方法。<br>HTTP1.1 新增了六种请求方法：OPTIONS、PUT、PATCH、DELETE、TRACE 和 CONNECT 方法。<br><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231538343.png" alt="image.png"></p>
+<p>1、GET<br>向特定的资源发出请求。注意：GET方法不应当被用于产生“副作用”的操作中，例如在Web Application中，其中一个原因是GET可能会被网络蜘蛛等随意访问。Loadrunner中对应get请求函数：web_link和web_url<br>2、HEAD<br>向服务器索与GET请求相一致的响应，只不过响应体将不会被返回。这一方法可以再不必传输整个响应内容的情况下，就可以获取包含在响应小消息头中的元信息。<br>3、POST<br>向指定资源提交数据进行处理请求（例如提交表单或者上传文件）。数据被包含在请求体中。POST请求可能会导致新的资源的建立和/或已有资源的修改。 Loadrunner中对应POST请求函数：web_submit_data,web_submit_form<br>4、PUT<br>向指定资源位置上传其最新内容<br>5、DELETE<br>请求服务器删除Request-URL所标识的资源<br>6、CONNECT<br>HTTP/1.1协议中预留给能够将连接改为管道方式的代理服务器。<br>7、OPTIONS<br>返回服务器针对特定资源所支持的HTTP请求方法，也可以利用向web服务器发送‘*’的请求来测试服务器的功能性<br>8、TRACE<br>回显服务器收到的请求，主要用于测试或诊断<br>9、PATCH<br>是对PUT方法的补充，用来对已知资源进行局部更新。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/06/06/iOS%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6%E7%9A%84%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6/" rel="prev" title="iOS特殊字符的转义字符">
+      <i class="fa fa-chevron-left"></i> iOS特殊字符的转义字符
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/03/Python-Develop-Tips/" rel="next" title="Python Develop Tips">
+      Python Develop Tips <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8E%E8%BE%93%E5%85%A5URL%EF%BC%88www-google-com%EF%BC%89%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%8A%A0%E8%BD%BD%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">从输入URL（www.google.com）到页面加载发生了什么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DNS-%E8%A7%A3%E6%9E%90%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">DNS 解析安全问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E4%B8%80%E4%B8%AAHTTP%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E7%9A%84%E5%9B%A0%E7%B4%A0"><span class="nav-number">3.</span> <span class="nav-text">影响一个HTTP网络请求的因素</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP%E5%92%8CHTTPS%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">4.</span> <span class="nav-text">HTTP和HTTPS的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Get%E3%80%81Post%E5%8C%BA%E5%88%AB"><span class="nav-number">5.</span> <span class="nav-text">Get、Post区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cookie%E3%80%81Session%E5%8C%BA%E5%88%AB"><span class="nav-number">6.</span> <span class="nav-text">Cookie、Session区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP%E3%80%81UDP-%E5%8C%BA%E5%88%AB"><span class="nav-number">7.</span> <span class="nav-text">TCP、UDP 区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-%E7%9A%84%E8%AF%B7%E6%B1%82%E6%96%B9%E5%BC%8F"><span class="nav-number">8.</span> <span class="nav-text">HTTP 的请求方式</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">番茄炒蛋</p>
+  <div class="site-description" itemprop="description">「 少点虚的，多点实践，持续学习，终身学习」</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Tate-zwt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Tate-zwt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tate_zhangweiting@163.com" title="E-Mail → mailto:tate_zhangweiting@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">番茄炒蛋</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

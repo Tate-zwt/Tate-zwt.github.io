@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tate-zwt.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="iOS硬编码实现前言   在上一篇中，我们已经知道iOS编码的一些概念知识，从现在开始，我们可以正式对采集到的视频进行编码   这里我们重点介绍硬编码的使用方式，也就是VideoToolBox框架的使用   编码的流程：采集–&gt; 获取到视频帧–&gt; 对视频帧进行编码 –&gt; 获取到视频帧信息 –&gt; 将编码后的数据以NALU方式写入到文件  视频采集   视频采集我们已经在前面进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS直播技术学习笔记-硬编码&amp;软编码实现（五）">
+<meta property="og:url" content="https://tate-zwt.github.io/2017/09/13/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%A1%AC%E7%BC%96%E7%A0%81-%E8%BD%AF%E7%BC%96%E7%A0%81%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%BA%94%EF%BC%89/index.html">
+<meta property="og:site_name" content="Tate Blog">
+<meta property="og:description" content="iOS硬编码实现前言   在上一篇中，我们已经知道iOS编码的一些概念知识，从现在开始，我们可以正式对采集到的视频进行编码   这里我们重点介绍硬编码的使用方式，也就是VideoToolBox框架的使用   编码的流程：采集–&gt; 获取到视频帧–&gt; 对视频帧进行编码 –&gt; 获取到视频帧信息 –&gt; 将编码后的数据以NALU方式写入到文件  视频采集   视频采集我们已经在前面进">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231509594.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231509614.png">
+<meta property="article:published_time" content="2017-09-13T11:08:55.000Z">
+<meta property="article:modified_time" content="2021-12-23T07:10:23.753Z">
+<meta property="article:author" content="番茄炒蛋">
+<meta property="article:tag" content="音视频">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231509594.png">
+
+<link rel="canonical" href="https://tate-zwt.github.io/2017/09/13/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%A1%AC%E7%BC%96%E7%A0%81-%E8%BD%AF%E7%BC%96%E7%A0%81%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%BA%94%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>iOS直播技术学习笔记-硬编码&软编码实现（五） | Tate Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tate Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2017/09/13/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%A1%AC%E7%BC%96%E7%A0%81-%E8%BD%AF%E7%BC%96%E7%A0%81%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%BA%94%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS直播技术学习笔记-硬编码&软编码实现（五）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-09-13 19:08:55" itemprop="dateCreated datePublished" datetime="2017-09-13T19:08:55+08:00">2017-09-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-23 15:10:23" itemprop="dateModified" datetime="2021-12-23T15:10:23+08:00">2021-12-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="iOS硬编码实现"><a href="#iOS硬编码实现" class="headerlink" title="iOS硬编码实现"></a>iOS硬编码实现</h1><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><ul>
+<li>  在上一篇中，我们已经知道iOS编码的一些概念知识，从现在开始，我们可以正式对采集到的视频进行编码</li>
+<li>  这里我们重点介绍硬编码的使用方式，也就是VideoToolBox框架的使用</li>
+<li>  编码的流程：采集–&gt; 获取到视频帧–&gt; 对视频帧进行编码 –&gt; 获取到视频帧信息 –&gt; 将编码后的数据以NALU方式写入到文件</li>
+</ul>
+<h3 id="视频采集"><a href="#视频采集" class="headerlink" title="视频采集"></a>视频采集</h3><ul>
+<li>  视频采集我们已经在前面进行了介绍和学习，所有这里就直接贴代码，只是我对采集过程进行了一些简单的封装</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231509594.png" alt="视频采集.png"></p>
+<h3 id="视频硬件编码"><a href="#视频硬件编码" class="headerlink" title="视频硬件编码"></a>视频硬件编码</h3><ul>
+<li>初始化压缩编码会话（VTCompressionSessionRef）<ul>
+<li>  在VideoToolbox框架的使用过程中，基本都是C语言函数</li>
+</ul>
+</li>
+<li>初始化后通过<code>VTSessionSetProperty</code>设置对象属性<ul>
+<li>  编码方式：H.264编码</li>
+<li>  帧率：每秒钟多少帧画面</li>
+<li>  码率：单位时间内保存的数据量</li>
+<li>  关键帧（GOPsize)间隔：多少帧为一个GOP</li>
+</ul>
+</li>
+<li>  准备编码</li>
+<li>  代码如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">- (void)setupVideoSession &#123;</span><br><span class="line">    // 1.用于记录当前是第几帧数据(画面帧数非常多)</span><br><span class="line">    self.frameID = 0;</span><br><span class="line"></span><br><span class="line">    // 2.录制视频的宽度&amp;高度</span><br><span class="line">    int width = [UIScreen mainScreen].bounds.size.width;</span><br><span class="line">    int height = [UIScreen mainScreen].bounds.size.height;</span><br><span class="line"></span><br><span class="line">    // 3.创建CompressionSession对象,该对象用于对画面进行编码</span><br><span class="line">    // kCMVideoCodecType_H264 : 表示使用h.264进行编码</span><br><span class="line">    // didCompressH264 : 当一次编码结束会在该函数进行回调,可以在该函数中将数据,写入文件中</span><br><span class="line">    VTCompressionSessionCreate(NULL, width, height, kCMVideoCodecType_H264, NULL, NULL, NULL, didCompressH264, (__bridge void *)(self),  &amp;_compressionSession);</span><br><span class="line"></span><br><span class="line">    // 4.设置实时编码输出（直播必然是实时输出,否则会有延迟）</span><br><span class="line">    VTSessionSetProperty(self.compressionSession, kVTCompressionPropertyKey_RealTime, kCFBooleanTrue);</span><br><span class="line"></span><br><span class="line">    // 5.设置期望帧率(每秒多少帧,如果帧率过低,会造成画面卡顿)</span><br><span class="line">    int fps = 30;</span><br><span class="line">    CFNumberRef  fpsRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &amp;fps);</span><br><span class="line">    VTSessionSetProperty(self.compressionSession, kVTCompressionPropertyKey_ExpectedFrameRate, fpsRef);</span><br><span class="line"></span><br><span class="line">    // 6.设置码率(码率: 编码效率, 码率越高,则画面越清晰, 如果码率较低会引起马赛克 --&gt; 码率高有利于还原原始画面,但是也不利于传输)</span><br><span class="line">    int bitRate = 800*1024;</span><br><span class="line">    CFNumberRef bitRateRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &amp;bitRate);</span><br><span class="line">    VTSessionSetProperty(self.compressionSession, kVTCompressionPropertyKey_AverageBitRate, bitRateRef);</span><br><span class="line">    NSArray *limit = @[@(bitRate * 1.5/8), @(1)];</span><br><span class="line">    VTSessionSetProperty(self.compressionSession, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFArrayRef)limit);</span><br><span class="line"></span><br><span class="line">    // 7.设置关键帧（GOPsize)间隔</span><br><span class="line">    int frameInterval = 30;</span><br><span class="line">    CFNumberRef  frameIntervalRef = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &amp;frameInterval);</span><br><span class="line">    VTSessionSetProperty(self.compressionSession, kVTCompressionPropertyKey_MaxKeyFrameInterval, frameIntervalRef);</span><br><span class="line"></span><br><span class="line">    // 8.基本设置结束, 准备进行编码</span><br><span class="line">    VTCompressionSessionPrepareToEncodeFrames(self.compressionSession);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将输入的帧进行编码<ul>
+<li>  将CMSampleBufferRef转成CVImageBufferRef</li>
+<li>  开始对CVImageBufferRef进行编码</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">- (void)encodeSampleBuffer:(CMSampleBufferRef)sampleBuffer &#123;</span><br><span class="line">    // 1.将sampleBuffer转成imageBuffer</span><br><span class="line">    CVImageBufferRef imageBuffer = (CVImageBufferRef)CMSampleBufferGetImageBuffer(sampleBuffer);</span><br><span class="line"></span><br><span class="line">    // 2.根据当前的帧数,创建CMTime的时间</span><br><span class="line">    CMTime presentationTimeStamp = CMTimeMake(self.frameID++, 1000);</span><br><span class="line">    VTEncodeInfoFlags flags;</span><br><span class="line"></span><br><span class="line">    // 3.开始编码该帧数据</span><br><span class="line">    OSStatus statusCode = VTCompressionSessionEncodeFrame(self.compressionSession,</span><br><span class="line">                                                          imageBuffer,</span><br><span class="line">                                                          presentationTimeStamp,</span><br><span class="line">                                                          kCMTimeInvalid,</span><br><span class="line">                                                          NULL, (__bridge void * _Nullable)(self), &amp;flags);</span><br><span class="line">    if (statusCode == noErr) &#123;</span><br><span class="line">        NSLog(@&quot;H264: VTCompressionSessionEncodeFrame Success&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>当编码成功后，将编码后的码流写入文件<ul>
+<li>  编码成功后会回调之前输入的函数</li>
+<li>1&gt; 先判断是否是关键帧：<ul>
+<li>  如果是关键帧，则需要在写入关键帧之前，先写入PPS、SPS的NALU</li>
+<li>  取出PPS、SPS数据，并且封装成NALU单元，写入文件</li>
+</ul>
+</li>
+<li>  2&gt; 将I帧、P帧、B帧分别封装成NALU单元写入文件</li>
+<li>  写入后，数据存储方式：</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231509614.png" alt="数据存储方式.png"></p>
+<ul>
+<li>  代码如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line">// 编码完成回调</span><br><span class="line">void didCompressH264(void *outputCallbackRefCon, void *sourceFrameRefCon, OSStatus status, VTEncodeInfoFlags infoFlags, CMSampleBufferRef sampleBuffer) &#123;</span><br><span class="line"></span><br><span class="line">    // 1.判断状态是否等于没有错误</span><br><span class="line">    if (status != noErr) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 2.根据传入的参数获取对象</span><br><span class="line">    VideoEncoder* encoder = (__bridge VideoEncoder*)outputCallbackRefCon;</span><br><span class="line"></span><br><span class="line">    // 3.判断是否是关键帧</span><br><span class="line">    bool isKeyframe = !CFDictionaryContainsKey( (CFArrayGetValueAtIndex(CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, true), 0)), kCMSampleAttachmentKey_NotSync);</span><br><span class="line">    // 判断当前帧是否为关键帧</span><br><span class="line">    // 获取sps &amp; pps数据</span><br><span class="line">    if (isKeyframe)</span><br><span class="line">    &#123;</span><br><span class="line">        // 获取编码后的信息（存储于CMFormatDescriptionRef中）</span><br><span class="line">        CMFormatDescriptionRef format = CMSampleBufferGetFormatDescription(sampleBuffer);</span><br><span class="line"></span><br><span class="line">        // 获取SPS信息</span><br><span class="line">        size_t sparameterSetSize, sparameterSetCount;</span><br><span class="line">        const uint8_t *sparameterSet;</span><br><span class="line">        CMVideoFormatDescriptionGetH264ParameterSetAtIndex(format, 0, &amp;sparameterSet, &amp;sparameterSetSize, &amp;sparameterSetCount, 0 );</span><br><span class="line"></span><br><span class="line">        // 获取PPS信息</span><br><span class="line">        size_t pparameterSetSize, pparameterSetCount;</span><br><span class="line">        const uint8_t *pparameterSet;</span><br><span class="line">        CMVideoFormatDescriptionGetH264ParameterSetAtIndex(format, 1, &amp;pparameterSet, &amp;pparameterSetSize, &amp;pparameterSetCount, 0 );</span><br><span class="line"></span><br><span class="line">        // 装sps/pps转成NSData，以方便写入文件</span><br><span class="line">        NSData *sps = [NSData dataWithBytes:sparameterSet length:sparameterSetSize];</span><br><span class="line">        NSData *pps = [NSData dataWithBytes:pparameterSet length:pparameterSetSize];</span><br><span class="line"></span><br><span class="line">        // 写入文件</span><br><span class="line">        [encoder gotSpsPps:sps pps:pps];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 获取数据块</span><br><span class="line">    CMBlockBufferRef dataBuffer = CMSampleBufferGetDataBuffer(sampleBuffer);</span><br><span class="line">    size_t length, totalLength;</span><br><span class="line">    char *dataPointer;</span><br><span class="line">    OSStatus statusCodeRet = CMBlockBufferGetDataPointer(dataBuffer, 0, &amp;length, &amp;totalLength, &amp;dataPointer);</span><br><span class="line">    if (statusCodeRet == noErr) &#123;</span><br><span class="line">        size_t bufferOffset = 0;</span><br><span class="line">        static const int AVCCHeaderLength = 4; // 返回的nalu数据前四个字节不是0001的startcode，而是大端模式的帧长度length</span><br><span class="line"></span><br><span class="line">        // 循环获取nalu数据</span><br><span class="line">        while (bufferOffset &lt; totalLength - AVCCHeaderLength) &#123;</span><br><span class="line">            uint32_t NALUnitLength = 0;</span><br><span class="line">            // Read the NAL unit length</span><br><span class="line">            memcpy(&amp;NALUnitLength, dataPointer + bufferOffset, AVCCHeaderLength);</span><br><span class="line"></span><br><span class="line">            // 从大端转系统端</span><br><span class="line">            NALUnitLength = CFSwapInt32BigToHost(NALUnitLength);</span><br><span class="line"></span><br><span class="line">            NSData* data = [[NSData alloc] initWithBytes:(dataPointer + bufferOffset + AVCCHeaderLength) length:NALUnitLength];</span><br><span class="line">            [encoder gotEncodedData:data isKeyFrame:isKeyframe];</span><br><span class="line"></span><br><span class="line">            // 移动到写一个块，转成NALU单元</span><br><span class="line">            // Move to the next NAL unit in the block buffer</span><br><span class="line">            bufferOffset += AVCCHeaderLength + NALUnitLength;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)gotSpsPps:(NSData*)sps pps:(NSData*)pps</span><br><span class="line">&#123;</span><br><span class="line">    // 1.拼接NALU的header</span><br><span class="line">    const char bytes[] = &quot;\x00\x00\x00\x01&quot;;</span><br><span class="line">    size_t length = (sizeof bytes) - 1;</span><br><span class="line">    NSData *ByteHeader = [NSData dataWithBytes:bytes length:length];</span><br><span class="line"></span><br><span class="line">    // 2.将NALU的头&amp;NALU的体写入文件</span><br><span class="line">    [self.fileHandle writeData:ByteHeader];</span><br><span class="line">    [self.fileHandle writeData:sps];</span><br><span class="line">    [self.fileHandle writeData:ByteHeader];</span><br><span class="line">    [self.fileHandle writeData:pps];</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">- (void)gotEncodedData:(NSData*)data isKeyFrame:(BOOL)isKeyFrame</span><br><span class="line">&#123;</span><br><span class="line">    NSLog(@&quot;gotEncodedData %d&quot;, (int)[data length]);</span><br><span class="line">    if (self.fileHandle != NULL)</span><br><span class="line">    &#123;</span><br><span class="line">        const char bytes[] = &quot;\x00\x00\x00\x01&quot;;</span><br><span class="line">        size_t length = (sizeof bytes) - 1; //string literals have implicit trailing &#x27;\0&#x27;</span><br><span class="line">        NSData *ByteHeader = [NSData dataWithBytes:bytes length:length];</span><br><span class="line">        [self.fileHandle writeData:ByteHeader];</span><br><span class="line">        [self.fileHandle writeData:data];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="iOS视频软编码"><a href="#iOS视频软编码" class="headerlink" title="iOS视频软编码"></a>iOS视频软编码</h1><h3 id="软编码介绍"><a href="#软编码介绍" class="headerlink" title="软编码介绍"></a>软编码介绍</h3><ul>
+<li>  软编码主要是利用CPU进行编码的过程, 具体的编码通常会用FFmpeg+x264</li>
+<li>FFmpeg<ul>
+<li>  FFmpeg是一个非常强大的音视频处理库,包括视频采集功能、视频格式转换、视频抓图、给视频加水印等。</li>
+<li>  FFmpeg在Linux平台下开发，但它同样也可以在其它操作系统环境中编译运行，包括Windows、Mac OS X等。</li>
+</ul>
+</li>
+<li>X264<ul>
+<li>  H.264是ITU制定的视频编码标准</li>
+<li>  而x264是一个开源的H.264/MPEG-4 AVC视频编码函数库[1] ，是最好的有损视频编码器,里面集成了非常多优秀的算法用于视频编码.</li>
+</ul>
+</li>
+<li>关于软编码推荐博客(雷霄骅)<ul>
+<li>  <a target="_blank" rel="noopener" href="http://blog.csdn.net/leixiaohua1020">http://blog.csdn.net/leixiaohua1020</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="Mac安装-使用FFmpeg"><a href="#Mac安装-使用FFmpeg" class="headerlink" title="Mac安装/使用FFmpeg"></a>Mac安装/使用FFmpeg</h3><ul>
+<li>安装<ul>
+<li>  ruby -e “$(curl -fsSkL raw.github.com/mxcl/homebrew/go)”</li>
+<li>  brew install ffmpeg</li>
+</ul>
+</li>
+<li>简单使用<ul>
+<li>  转化格式: ffmpeg -i story.webm story.mp4</li>
+<li>  分离视频: ffmpeg -i story.mp4 -vcodec copy -an demo.mp4</li>
+<li>  分离音频: ffmpeg -i story.mp4 -acodec copy -vn demo.aac</li>
+</ul>
+</li>
+</ul>
+<h3 id="编译FFmpeg-iOS"><a href="#编译FFmpeg-iOS" class="headerlink" title="编译FFmpeg(iOS)"></a>编译FFmpeg(iOS)</h3><ul>
+<li>下载编译FFmpeg所需要的脚本文件gas-preprocessor.pl<ul>
+<li>  下载地址: <a target="_blank" rel="noopener" href="https://github.com/mansr/gas-preprocessor">https://github.com/mansr/gas-preprocessor</a></li>
+<li>  复制gas-preprocessor.pl到/usr/sbin下，（这个应该是复制到/usr/local/bin）</li>
+<li>  修改文件权限：chmod 777 /usr/local/bin/gas-preprocessor.pl</li>
+</ul>
+</li>
+<li>下载脚本FFmpeg脚本<ul>
+<li>  地址: <a target="_blank" rel="noopener" href="https://github.com/kewlbear/FFmpeg-iOS-build-script">https://github.com/kewlbear/FFmpeg-iOS-build-script</a></li>
+<li>  解压，找到文件 build-ffmpeg.sh</li>
+<li>  执行服本文件：./build-ffmpeg.sh</li>
+</ul>
+</li>
+</ul>
+<h3 id="编译X264"><a href="#编译X264" class="headerlink" title="编译X264"></a>编译X264</h3><ul>
+<li>下载x264<ul>
+<li>  x264官网 下载x264源码，将其文件夹名称改为x264</li>
+<li>  <a target="_blank" rel="noopener" href="http://www.videolan.org/developers/x264.html">http://www.videolan.org/developers/x264.html</a></li>
+</ul>
+</li>
+<li>  下载gas-preprocessor(FFmpeg编译时已经下载过)</li>
+<li>下载x264 build shell<ul>
+<li>  下载build-x264.sh 将文件build-x264.sh放在x264同一级目录里面，注意不是放在x264文件夹里面。</li>
+<li>  <a target="_blank" rel="noopener" href="https://github.com/kewlbear/x264-ios">https://github.com/kewlbear/x264-ios</a></li>
+</ul>
+</li>
+<li>修改权限/执行脚本<ul>
+<li>  sudo chmod u+x build-x264.sh</li>
+<li>  sudo ./build-x264.sh</li>
+</ul>
+</li>
+</ul>
+<h3 id="iOS项目中集成FFmpeg"><a href="#iOS项目中集成FFmpeg" class="headerlink" title="iOS项目中集成FFmpeg"></a>iOS项目中集成FFmpeg</h3><ul>
+<li>  将编译好的文件夹拖入到工程中</li>
+<li>  添加依赖库: libiconv.dylib/libz.dylib/libbz2.dylib/CoreMedia.framework/AVFoundation.framework</li>
+<li>  初始化编码器</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line"> *  设置X264</span><br><span class="line"> */</span><br><span class="line">- (int)setX264ResourceWithVideoWidth:(int)width height:(int)height bitrate:(int)bitrate</span><br><span class="line">&#123;</span><br><span class="line">    // 1.默认从第0帧开始(记录当前的帧数)</span><br><span class="line">    framecnt = 0;</span><br><span class="line"></span><br><span class="line">    // 2.记录传入的宽度&amp;高度</span><br><span class="line">    encoder_h264_frame_width = width;</span><br><span class="line">    encoder_h264_frame_height = height;</span><br><span class="line"></span><br><span class="line">    // 3.注册FFmpeg所有编解码器(无论编码还是解码都需要该步骤)</span><br><span class="line">    av_register_all();</span><br><span class="line"></span><br><span class="line">    // 4.初始化AVFormatContext: 用作之后写入视频帧并编码成 h264，贯穿整个工程当中(释放资源时需要销毁)</span><br><span class="line">    pFormatCtx = avformat_alloc_context();</span><br><span class="line"></span><br><span class="line">    // 5.设置输出文件的路径</span><br><span class="line">    fmt = av_guess_format(NULL, out_file, NULL);</span><br><span class="line">    pFormatCtx-&gt;oformat = fmt;</span><br><span class="line"></span><br><span class="line">    // 6.打开文件的缓冲区输入输出，flags 标识为  AVIO_FLAG_READ_WRITE ，可读写</span><br><span class="line">    if (avio_open(&amp;pFormatCtx-&gt;pb, out_file, AVIO_FLAG_READ_WRITE) &lt; 0)&#123;</span><br><span class="line">        printf(&quot;Failed to open output file! \n&quot;);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 7.创建新的输出流, 用于写入文件</span><br><span class="line">    video_st = avformat_new_stream(pFormatCtx, 0);</span><br><span class="line"></span><br><span class="line">    // 8.设置 20 帧每秒 ，也就是 fps 为 20</span><br><span class="line">    video_st-&gt;time_base.num = 1;</span><br><span class="line">    video_st-&gt;time_base.den = 25;</span><br><span class="line"></span><br><span class="line">    if (video_st==NULL)&#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 9.pCodecCtx 用户存储编码所需的参数格式等等</span><br><span class="line">    // 9.1.从媒体流中获取到编码结构体，他们是一一对应的关系，一个 AVStream 对应一个  AVCodecContext</span><br><span class="line">    pCodecCtx = video_st-&gt;codec;</span><br><span class="line"></span><br><span class="line">    // 9.2.设置编码器的编码格式(是一个id)，每一个编码器都对应着自己的 id，例如 h264 的编码 id 就是 AV_CODEC_ID_H264</span><br><span class="line">    pCodecCtx-&gt;codec_id = fmt-&gt;video_codec;</span><br><span class="line"></span><br><span class="line">    // 9.3.设置编码类型为 视频编码</span><br><span class="line">    pCodecCtx-&gt;codec_type = AVMEDIA_TYPE_VIDEO;</span><br><span class="line"></span><br><span class="line">    // 9.4.设置像素格式为 yuv 格式</span><br><span class="line">    pCodecCtx-&gt;pix_fmt = PIX_FMT_YUV420P;</span><br><span class="line"></span><br><span class="line">    // 9.5.设置视频的宽高</span><br><span class="line">    pCodecCtx-&gt;width = encoder_h264_frame_width;</span><br><span class="line">    pCodecCtx-&gt;height = encoder_h264_frame_height;</span><br><span class="line"></span><br><span class="line">    // 9.6.设置帧率</span><br><span class="line">    pCodecCtx-&gt;time_base.num = 1;</span><br><span class="line">    pCodecCtx-&gt;time_base.den = 15;</span><br><span class="line"></span><br><span class="line">    // 9.7.设置码率（比特率）</span><br><span class="line">    pCodecCtx-&gt;bit_rate = bitrate;</span><br><span class="line"></span><br><span class="line">    // 9.8.视频质量度量标准(常见qmin=10, qmax=51)</span><br><span class="line">    pCodecCtx-&gt;qmin = 10;</span><br><span class="line">    pCodecCtx-&gt;qmax = 51;</span><br><span class="line"></span><br><span class="line">    // 9.9.设置图像组层的大小(GOP--&gt;两个I帧之间的间隔)</span><br><span class="line">    pCodecCtx-&gt;gop_size = 250;</span><br><span class="line"></span><br><span class="line">    // 9.10.设置 B 帧最大的数量，B帧为视频图片空间的前后预测帧， B 帧相对于 I、P 帧来说，压缩率比较大，也就是说相同码率的情况下，</span><br><span class="line">    // 越多 B 帧的视频，越清晰，现在很多打视频网站的高清视频，就是采用多编码 B 帧去提高清晰度，</span><br><span class="line">    // 但同时对于编解码的复杂度比较高，比较消耗性能与时间</span><br><span class="line">    pCodecCtx-&gt;max_b_frames = 5;</span><br><span class="line"></span><br><span class="line">    // 10.可选设置</span><br><span class="line">    AVDictionary *param = 0;</span><br><span class="line">    // H.264</span><br><span class="line">    if(pCodecCtx-&gt;codec_id == AV_CODEC_ID_H264) &#123;</span><br><span class="line">        // 通过--preset的参数调节编码速度和质量的平衡。</span><br><span class="line">        av_dict_set(&amp;param, &quot;preset&quot;, &quot;slow&quot;, 0);</span><br><span class="line"></span><br><span class="line">        // 通过--tune的参数值指定片子的类型，是和视觉优化的参数，或有特别的情况。</span><br><span class="line">        // zerolatency: 零延迟，用在需要非常低的延迟的情况下，比如视频直播的编码</span><br><span class="line">        av_dict_set(&amp;param, &quot;tune&quot;, &quot;zerolatency&quot;, 0);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 11.输出打印信息，内部是通过printf函数输出（不需要输出可以注释掉该局）</span><br><span class="line">    av_dump_format(pFormatCtx, 0, out_file, 1);</span><br><span class="line"></span><br><span class="line">    // 12.通过 codec_id 找到对应的编码器</span><br><span class="line">    pCodec = avcodec_find_encoder(pCodecCtx-&gt;codec_id);</span><br><span class="line">    if (!pCodec) &#123;</span><br><span class="line">        printf(&quot;Can not find encoder! \n&quot;);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 13.打开编码器，并设置参数 param</span><br><span class="line">    if (avcodec_open2(pCodecCtx, pCodec,&amp;param) &lt; 0) &#123;</span><br><span class="line">        printf(&quot;Failed to open encoder! \n&quot;);</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 13.初始化原始数据对象: AVFrame</span><br><span class="line">    pFrame = av_frame_alloc();</span><br><span class="line"></span><br><span class="line">    // 14.通过像素格式(这里为 YUV)获取图片的真实大小，例如将 480 * 720 转换成 int 类型</span><br><span class="line">    avpicture_fill((AVPicture *)pFrame, picture_buf, pCodecCtx-&gt;pix_fmt, pCodecCtx-&gt;width, pCodecCtx-&gt;height);</span><br><span class="line"></span><br><span class="line">    // 15.h264 封装格式的文件头部，基本上每种编码都有着自己的格式的头部，想看具体实现的同学可以看看 h264 的具体实现</span><br><span class="line">    avformat_write_header(pFormatCtx, NULL);</span><br><span class="line"></span><br><span class="line">    // 16.创建编码后的数据 AVPacket 结构体来存储 AVFrame 编码后生成的数据</span><br><span class="line">    av_new_packet(&amp;pkt, picture_size);</span><br><span class="line"></span><br><span class="line">    // 17.设置 yuv 数据中 y 图的宽高</span><br><span class="line">    y_size = pCodecCtx-&gt;width * pCodecCtx-&gt;height;</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  编码每一帧数据</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line"> * 将CMSampleBufferRef格式的数据编码成h264并写入文件</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">- (void)encoderToH264:(CMSampleBufferRef)sampleBuffer</span><br><span class="line">&#123;</span><br><span class="line">    // 1.通过CMSampleBufferRef对象获取CVPixelBufferRef对象</span><br><span class="line">    CVPixelBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);</span><br><span class="line"></span><br><span class="line">    // 2.锁定imageBuffer内存地址开始进行编码</span><br><span class="line">    if (CVPixelBufferLockBaseAddress(imageBuffer, 0) == kCVReturnSuccess) &#123;</span><br><span class="line">        // 3.从CVPixelBufferRef读取YUV的值</span><br><span class="line">        // NV12和NV21属于YUV格式，是一种two-plane模式，即Y和UV分为两个Plane，但是UV（CbCr）为交错存储，而不是分为三个plane</span><br><span class="line">        // 3.1.获取Y分量的地址</span><br><span class="line">        UInt8 *bufferPtr = (UInt8 *)CVPixelBufferGetBaseAddressOfPlane(imageBuffer,0);</span><br><span class="line">        // 3.2.获取UV分量的地址</span><br><span class="line">        UInt8 *bufferPtr1 = (UInt8 *)CVPixelBufferGetBaseAddressOfPlane(imageBuffer,1);</span><br><span class="line"></span><br><span class="line">        // 3.3.根据像素获取图片的真实宽度&amp;高度</span><br><span class="line">        size_t width = CVPixelBufferGetWidth(imageBuffer);</span><br><span class="line">        size_t height = CVPixelBufferGetHeight(imageBuffer);</span><br><span class="line">        // 获取Y分量长度</span><br><span class="line">        size_t bytesrow0 = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer,0);</span><br><span class="line">        size_t bytesrow1  = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer,1);</span><br><span class="line">        UInt8 *yuv420_data = (UInt8 *)malloc(width * height *3/2);</span><br><span class="line"></span><br><span class="line">        /* convert NV12 data to YUV420*/</span><br><span class="line">        // 3.4.将NV12数据转成YUV420数据</span><br><span class="line">        UInt8 *pY = bufferPtr ;</span><br><span class="line">        UInt8 *pUV = bufferPtr1;</span><br><span class="line">        UInt8 *pU = yuv420_data + width*height;</span><br><span class="line">        UInt8 *pV = pU + width*height/4;</span><br><span class="line">        for(int i =0;i&lt;height;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            memcpy(yuv420_data+i*width,pY+i*bytesrow0,width);</span><br><span class="line">        &#125;</span><br><span class="line">        for(int j = 0;j&lt;height/2;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            for(int i =0;i&lt;width/2;i++)</span><br><span class="line">            &#123;</span><br><span class="line">                *(pU++) = pUV[i&lt;&lt;1];</span><br><span class="line">                *(pV++) = pUV[(i&lt;&lt;1) + 1];</span><br><span class="line">            &#125;</span><br><span class="line">            pUV+=bytesrow1;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 3.5.分别读取YUV的数据</span><br><span class="line">        picture_buf = yuv420_data;</span><br><span class="line">        pFrame-&gt;data[0] = picture_buf;              // Y</span><br><span class="line">        pFrame-&gt;data[1] = picture_buf+ y_size;      // U</span><br><span class="line">        pFrame-&gt;data[2] = picture_buf+ y_size*5/4;  // V</span><br><span class="line"></span><br><span class="line">        // 4.设置当前帧</span><br><span class="line">        pFrame-&gt;pts = framecnt;</span><br><span class="line">        int got_picture = 0;</span><br><span class="line"></span><br><span class="line">        // 4.设置宽度高度以及YUV各式</span><br><span class="line">        pFrame-&gt;width = encoder_h264_frame_width;</span><br><span class="line">        pFrame-&gt;height = encoder_h264_frame_height;</span><br><span class="line">        pFrame-&gt;format = PIX_FMT_YUV420P;</span><br><span class="line"></span><br><span class="line">        // 5.对编码前的原始数据(AVFormat)利用编码器进行编码，将 pFrame 编码后的数据传入pkt 中</span><br><span class="line">        int ret = avcodec_encode_video2(pCodecCtx, &amp;pkt, pFrame, &amp;got_picture);</span><br><span class="line">        if(ret &lt; 0) &#123;</span><br><span class="line">            printf(&quot;Failed to encode! \n&quot;);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 6.编码成功后写入 AVPacket 到 输入输出数据操作着 pFormatCtx 中，当然，记得释放内存</span><br><span class="line">        if (got_picture==1) &#123;</span><br><span class="line">            framecnt++;</span><br><span class="line">            pkt.stream_index = video_st-&gt;index;</span><br><span class="line">            ret = av_write_frame(pFormatCtx, &amp;pkt);</span><br><span class="line">            av_free_packet(&amp;pkt);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 7.释放yuv数据</span><br><span class="line">        free(yuv420_data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    CVPixelBufferUnlockBaseAddress(imageBuffer, 0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  释放资源</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line"> * 释放资源</span><br><span class="line"> */</span><br><span class="line">- (void)freeX264Resource</span><br><span class="line">&#123;</span><br><span class="line">    // 1.释放AVFormatContext</span><br><span class="line">    int ret = flush_encoder(pFormatCtx,0);</span><br><span class="line">    if (ret &lt; 0) &#123;</span><br><span class="line">        printf(&quot;Flushing encoder failed\n&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 2.将还未输出的AVPacket输出出来</span><br><span class="line">    av_write_trailer(pFormatCtx);</span><br><span class="line"></span><br><span class="line">    // 3.关闭资源</span><br><span class="line">    if (video_st)&#123;</span><br><span class="line">        avcodec_close(video_st-&gt;codec);</span><br><span class="line">        av_free(pFrame);</span><br><span class="line">    &#125;</span><br><span class="line">    avio_close(pFormatCtx-&gt;pb);</span><br><span class="line">    avformat_free_context(pFormatCtx);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int flush_encoder(AVFormatContext *fmt_ctx,unsigned int stream_index)</span><br><span class="line">&#123;</span><br><span class="line">    int ret;</span><br><span class="line">    int got_frame;</span><br><span class="line">    AVPacket enc_pkt;</span><br><span class="line">    if (!(fmt_ctx-&gt;streams[stream_index]-&gt;codec-&gt;codec-&gt;capabilities &amp;</span><br><span class="line">          CODEC_CAP_DELAY))</span><br><span class="line">        return 0;</span><br><span class="line"></span><br><span class="line">    while (1) &#123;</span><br><span class="line">        enc_pkt.data = NULL;</span><br><span class="line">        enc_pkt.size = 0;</span><br><span class="line">        av_init_packet(&amp;enc_pkt);</span><br><span class="line">        ret = avcodec_encode_video2 (fmt_ctx-&gt;streams[stream_index]-&gt;codec, &amp;enc_pkt,</span><br><span class="line">                                     NULL, &amp;got_frame);</span><br><span class="line">        av_frame_free(NULL);</span><br><span class="line">        if (ret &lt; 0)</span><br><span class="line">            break;</span><br><span class="line">        if (!got_frame)&#123;</span><br><span class="line">            ret=0;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">        ret = av_write_frame(fmt_ctx, &amp;enc_pkt);</span><br><span class="line">        if (ret &lt; 0)</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">    return ret;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/" rel="tag"># 音视频</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/09/12/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81%E4%BB%8B%E7%BB%8D%EF%BC%88%E5%9B%9B%EF%BC%89/" rel="prev" title="iOS直播技术学习笔记-视频编码介绍（四）">
+      <i class="fa fa-chevron-left"></i> iOS直播技术学习笔记-视频编码介绍（四）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/09/15/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-YUV%E9%A2%9C%E8%89%B2%E7%A9%BA%E9%97%B4%EF%BC%88%E5%85%AD%EF%BC%89/" rel="next" title="iOS直播技术学习笔记-YUV颜色空间（六）">
+      iOS直播技术学习笔记-YUV颜色空间（六） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#iOS%E7%A1%AC%E7%BC%96%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.</span> <span class="nav-text">iOS硬编码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.0.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%86%E9%A2%91%E9%87%87%E9%9B%86"><span class="nav-number">1.0.2.</span> <span class="nav-text">视频采集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%86%E9%A2%91%E7%A1%AC%E4%BB%B6%E7%BC%96%E7%A0%81"><span class="nav-number">1.0.3.</span> <span class="nav-text">视频硬件编码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#iOS%E8%A7%86%E9%A2%91%E8%BD%AF%E7%BC%96%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">iOS视频软编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E7%BC%96%E7%A0%81%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.0.1.</span> <span class="nav-text">软编码介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mac%E5%AE%89%E8%A3%85-%E4%BD%BF%E7%94%A8FFmpeg"><span class="nav-number">2.0.2.</span> <span class="nav-text">Mac安装&#x2F;使用FFmpeg</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91FFmpeg-iOS"><span class="nav-number">2.0.3.</span> <span class="nav-text">编译FFmpeg(iOS)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91X264"><span class="nav-number">2.0.4.</span> <span class="nav-text">编译X264</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS%E9%A1%B9%E7%9B%AE%E4%B8%AD%E9%9B%86%E6%88%90FFmpeg"><span class="nav-number">2.0.5.</span> <span class="nav-text">iOS项目中集成FFmpeg</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">番茄炒蛋</p>
+  <div class="site-description" itemprop="description">「 少点虚的，多点实践，持续学习，终身学习」</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Tate-zwt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Tate-zwt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tate_zhangweiting@163.com" title="E-Mail → mailto:tate_zhangweiting@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">番茄炒蛋</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

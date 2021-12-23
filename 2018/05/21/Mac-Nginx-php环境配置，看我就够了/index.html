@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tate-zwt.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="写在最前面通过Google搜索了很多资料，可是都并不完善，我还是遇到好多问题，特此写这篇文章总结！ 正文一、通过brew安装 Nginx终端执行：brew search nginxbrew install nginx当前版本 1.6.2安装完以后，可以在终端输出的信息里看到一些配置路径：&#x2F;usr&#x2F;local&#x2F;etc&#x2F;nginx&#x2F;nginx.conf （配置文件路径）&#x2F;usr&#x2F;local&#x2F;var&#x2F;w">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mac Nginx+php环境配置，看我就够了">
+<meta property="og:url" content="https://tate-zwt.github.io/2018/05/21/Mac-Nginx-php%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%EF%BC%8C%E7%9C%8B%E6%88%91%E5%B0%B1%E5%A4%9F%E4%BA%86/index.html">
+<meta property="og:site_name" content="Tate Blog">
+<meta property="og:description" content="写在最前面通过Google搜索了很多资料，可是都并不完善，我还是遇到好多问题，特此写这篇文章总结！ 正文一、通过brew安装 Nginx终端执行：brew search nginxbrew install nginx当前版本 1.6.2安装完以后，可以在终端输出的信息里看到一些配置路径：&#x2F;usr&#x2F;local&#x2F;etc&#x2F;nginx&#x2F;nginx.conf （配置文件路径）&#x2F;usr&#x2F;local&#x2F;var&#x2F;w">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231522659.png">
+<meta property="article:published_time" content="2018-05-21T12:21:33.000Z">
+<meta property="article:modified_time" content="2021-12-23T07:23:17.447Z">
+<meta property="article:author" content="番茄炒蛋">
+<meta property="article:tag" content="PHP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231522659.png">
+
+<link rel="canonical" href="https://tate-zwt.github.io/2018/05/21/Mac-Nginx-php%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%EF%BC%8C%E7%9C%8B%E6%88%91%E5%B0%B1%E5%A4%9F%E4%BA%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Mac Nginx+php环境配置，看我就够了 | Tate Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tate Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2018/05/21/Mac-Nginx-php%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%EF%BC%8C%E7%9C%8B%E6%88%91%E5%B0%B1%E5%A4%9F%E4%BA%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Mac Nginx+php环境配置，看我就够了
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-21 20:21:33" itemprop="dateCreated datePublished" datetime="2018-05-21T20:21:33+08:00">2018-05-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-23 15:23:17" itemprop="dateModified" datetime="2021-12-23T15:23:17+08:00">2021-12-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%90%8E%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">后端</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="写在最前面"><a href="#写在最前面" class="headerlink" title="写在最前面"></a>写在最前面</h4><p>通过Google搜索了很多资料，可是都并不完善，我还是遇到好多问题，特此写这篇文章总结！</p>
+<h4 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h4><h5 id="一、通过brew安装-Nginx"><a href="#一、通过brew安装-Nginx" class="headerlink" title="一、通过brew安装 Nginx"></a>一、通过<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/aa8550abcb2e">brew</a>安装 Nginx</h5><p>终端执行：<br><code>brew search nginxbrew install nginx</code><br>当前版本 1.6.2<br>安装完以后，可以在终端输出的信息里看到一些配置路径：<br><code>/usr/local/etc/nginx/nginx.conf</code> （配置文件路径）<br><code>/usr/local/var/www</code> （服务器默认路径）<br><code>/usr/local/Cellar/nginx/1.6.2</code> （貌似是安装路径）</p>
+<h5 id="二、访问localhost-8080"><a href="#二、访问localhost-8080" class="headerlink" title="二、访问localhost:8080"></a>二、访问localhost:8080</h5><p>Nginx 默认8080端口，这时已经可以访问了：<br><code>localhost:8080</code><br>会有一个默认欢迎界面。</p>
+<h5 id="三、修改-php-fpm-配置文件"><a href="#三、修改-php-fpm-配置文件" class="headerlink" title="三、修改 php-fpm 配置文件"></a>三、修改 php-fpm 配置文件</h5><p>1.执行命令：<br><code>sudo cp /private/etc/php-fpm.conf.default /private/etc/php-fpm.conf</code><br>2.找到目录下的 php-fpm 文件<br><code>/private/etc/php-fpm.conf</code><br>3.找到24行的 error_log ，改为（整行替换，注意 ‘;’ 和空格，就是要把‘;’也删除掉，这里我掉坑了）<br><code>error_log = /usr/local/var/log/php-fpm.log</code><br>否则 php-fpm 时会报错：<br><code>ERROR: failed to open error_log (/usr/var/log/php-fpm.log): No such file or directory</code></p>
+<h5 id="四、修改-Nginx-配置"><a href="#四、修改-Nginx-配置" class="headerlink" title="四、修改 Nginx 配置"></a>四、修改 Nginx 配置</h5><p>1.打开 nginx.config 文件<br><code>/usr/local/etc/nginx/nginx.conf</code><br>2.找到 server 的 location 配置，给 index 加一个 index.php</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">root html;</span><br><span class="line">index index.html index.htm index.php;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.并打开 server 下被注释的 location ~.php$（即删除代码前面的 ‘#’），如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">location ~ .php$ &#123;</span><br><span class="line">root html;</span><br><span class="line">fastcgi_pass 127.0.0.1:9000;</span><br><span class="line">fastcgi_index index.php;</span><br><span class="line">fastcgi_param SCRIPT_FILENAME /scripts$fastcgi_script_name;</span><br><span class="line">include fastcgi_params;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4.并修改 fastcgi_param 参数<br><code>fastcgi_param SCRIPT_FILENAME /scripts$fastcgi_script_name;</code><br>改为<br><code>fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;</code></p>
+<h5 id="五、创建-index-php"><a href="#五、创建-index-php" class="headerlink" title="五、创建 index.php"></a>五、创建 index.php</h5><p>在 /usr/local/var/www 目录下，删除 index.html，创建 index.php，输入<br><code>&lt;?php phpinfo(); ?&gt;</code></p>
+<h5 id="六、启动相关服务"><a href="#六、启动相关服务" class="headerlink" title="六、启动相关服务"></a>六、启动相关服务</h5><p><code>sudo php-fpm </code><br>然后访问localhost:8080，看到 php 配置信息，就说明 ok 了</p>
+<h5 id="七、nginx常用命令"><a href="#七、nginx常用命令" class="headerlink" title="七、nginx常用命令"></a>七、nginx常用命令</h5><p>sudo nginx  #启动nginx<br>sudo nginx -s quit  #快速停止nginx<br>sudo nginx -V #查看版本，以及配置文件地址<br>sudo nginx -v #查看版本<br>sudo nginx -s reload|reopen|stop|quit   #重新加载配置|重启|快速停止|安全关闭nginx<br>sudo nginx -h #帮助</p>
+<p>修改 nginx.conf 后，重载配置文件<br><code>sudo nginx -s reload</code><br>停止 nginx 服务器<br><code>sudo nginx -s stop</code><br>停止 php-fpm可以直接在 Activity Monitor 中停止。也可以使用脚本来停。</p>
+<h5 id="八、可能出现的问题"><a href="#八、可能出现的问题" class="headerlink" title="八、可能出现的问题"></a>八、可能出现的问题</h5><p>1.访问 index.php 报 403 Forbidden.查看（四.2）步骤中，是否在 index 后添加 index.php。<br>2.访问 index.php 报 File not found.查看（四.4）中，fastcgi_param 参数是否修改。</p>
+<h4 id="以上是我搜索资料大部分的内容（也纠正了一些地方），接下来我记录下我遇到的问题"><a href="#以上是我搜索资料大部分的内容（也纠正了一些地方），接下来我记录下我遇到的问题" class="headerlink" title="!!!以上是我搜索资料大部分的内容（也纠正了一些地方），接下来我记录下我遇到的问题"></a>!!!以上是我搜索资料大部分的内容（也纠正了一些地方），接下来我记录下我遇到的问题</h4><p>1、首先，每个人的mac目录地址都不一样，需要看清楚，还有版本问题，nginx版本不同路径都会有相应的变化，配置文件的代码位置也是，上面我已修改。我用的nginx版本是<code>nginx version: nginx/1.13.12</code><br>2、问题：<code>2018/05/18 18:21:43 [error] 85581#0: *4 kevent() reported about an closed connection (54: Connection reset by peer) while reading response header from upstream, client: 127.0.0.1, server: localhost, request: &quot;GET / HTTP/1.1&quot;, upstream: &quot;fastcgi://127.0.0.1:9000&quot;, host: &quot;localhost:8088&quot;</code><br>出错的原因是php-fpm未启动。<br>解决：<code>sudo php-fpm </code><br>3、可能使用<code>sudo php-fpm </code>会报路径出错问题<br>那就是代表你配置路径那里没有修改，具体可以看上面的 <code>三、修改 php-fpm 配置文件</code><br>4、sudo nginx -s reload 报错<code> nginx: [alert] could not open error log file: open() &quot;/usr/local/nginx/logs/error.log&quot; failed</code><br>这个问题我纠结了好久，路径没有错误为啥就找不到，后来才知道是权限问题：<br>原因：当前用户对该位置没有写入权限<br>解决办法：<br>1.使用命令：<code>sudo /usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf</code> 以root权限启动<br>2.使用命令：<code>sudo chmod -R a+rw /usr/local/nginx</code> 给所有用户赋权限（个人学习，不考虑安全问题）<br>                   <code>/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf</code> 启动Nginx<br>5、sudo nginx 启动错误<code>/usr/local/var/run/nginx.pid failed</code><br>解决方案:<br><code>sudo nginx -c /usr/local/etc/nginx/nginx.conf</code><br><code>sudo nginx -s reload</code></p>
+<p>6、 unable to bind listening socket for address ‘127.0.0.1:9000’: Address already in use<br>启动php-fpm报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">zhangweitingdeMacBook-Pro:PHP Tate$ sudo php-fpm</span><br><span class="line">[23-May-2018 10:24:02] ERROR: unable to bind listening socket for address &#x27;127.0.0.1:9000&#x27;: Address already in use (48)</span><br><span class="line">[23-May-2018 10:24:02] ERROR: FPM initialization failed</span><br></pre></td></tr></table></figure>
+<p>原因是9000端口已经被占用,停止原先的php-fpm：<br><code>zhangweitingdeMacBook-Pro:PHP Tate$ sudo killall php-fpm</code><br><code>zhangweitingdeMacBook-Pro:PHP Tate$ sudo php-fpm</code><br>这样就能重启了~</p>
+<p>7、访问报403权限问题<br>ls -l 查看nginx的配置文件发现用户名是root 用户组是wheel ， 修改配置文件第一行加上 user root wheel;（这里具体要看你的权限，我是这个） 重启nginx就好了~<br><code>sudo nginx -s reload</code><br><code>sudo killall php-fpm</code><br><code>sudo php-fpm</code></p>
+<p>8、访问路径目录权限问题<br>chmod -R 777 ./PHP2/ (PS 这里为目录结构) 给目录所有权限</p>
+<p>补上一张成功的图片，看到之后好欣慰，这是打开了浏览器看到的PHP配置信息<br><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231522659.png" alt="image.png"></p>
+<p>9、让Nginx访问URL,兼容//模式</p>
+<p>在Nginx低版本中，是不支持PATHINFO的，但是可以通过在Nginx.conf中配置转发规则实现：</p>
+<figure class="highlight plaintext"><figcaption><span>/ &#123;</span><a href="//">…..省略部分代码</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  if (!-e $request_filename) &#123;</span><br><span class="line">  rewrite  ^(.*)$  /index.php?s=/$1  last;</span><br><span class="line">  break;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h4><p><a target="_blank" rel="noopener" href="http://www.cnblogs.com/cheemon/p/5638394.html">Mac下Nginx环境配置</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/255889464b2f">Mac 平台搭建PHP开发环境:Nginx、PHP、MySQL.md</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/026d67cc6cb1">mac下nginx的安装和配置</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PHP/" rel="tag"># PHP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/05/03/Swift-Develop-Tips/" rel="prev" title="Swift Develop Tips">
+      <i class="fa fa-chevron-left"></i> Swift Develop Tips
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/07/06/%E4%B8%8D%E5%AE%8C%E7%BE%8E%E4%BA%BA%E7%94%9F%E7%9A%84%E8%A7%A3%E7%AD%94%E4%B9%A6-%E8%AF%BB%E3%80%8A%E5%B9%B8%E7%A6%8F%E8%AF%BE%E3%80%8B/" rel="next" title="不完美人生的解答书 - 读《幸福课》">
+      不完美人生的解答书 - 读《幸福课》 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%89%8D%E9%9D%A2"><span class="nav-number">1.</span> <span class="nav-text">写在最前面</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E9%80%9A%E8%BF%87brew%E5%AE%89%E8%A3%85-Nginx"><span class="nav-number">2.1.</span> <span class="nav-text">一、通过brew安装 Nginx</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E8%AE%BF%E9%97%AElocalhost-8080"><span class="nav-number">2.2.</span> <span class="nav-text">二、访问localhost:8080</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E4%BF%AE%E6%94%B9-php-fpm-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.3.</span> <span class="nav-text">三、修改 php-fpm 配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%BF%AE%E6%94%B9-Nginx-%E9%85%8D%E7%BD%AE"><span class="nav-number">2.4.</span> <span class="nav-text">四、修改 Nginx 配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%88%9B%E5%BB%BA-index-php"><span class="nav-number">2.5.</span> <span class="nav-text">五、创建 index.php</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%90%AF%E5%8A%A8%E7%9B%B8%E5%85%B3%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.6.</span> <span class="nav-text">六、启动相关服务</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%83%E3%80%81nginx%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">2.7.</span> <span class="nav-text">七、nginx常用命令</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">2.8.</span> <span class="nav-text">八、可能出现的问题</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A5%E4%B8%8A%E6%98%AF%E6%88%91%E6%90%9C%E7%B4%A2%E8%B5%84%E6%96%99%E5%A4%A7%E9%83%A8%E5%88%86%E7%9A%84%E5%86%85%E5%AE%B9%EF%BC%88%E4%B9%9F%E7%BA%A0%E6%AD%A3%E4%BA%86%E4%B8%80%E4%BA%9B%E5%9C%B0%E6%96%B9%EF%BC%89%EF%BC%8C%E6%8E%A5%E4%B8%8B%E6%9D%A5%E6%88%91%E8%AE%B0%E5%BD%95%E4%B8%8B%E6%88%91%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">!!!以上是我搜索资料大部分的内容（也纠正了一些地方），接下来我记录下我遇到的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">番茄炒蛋</p>
+  <div class="site-description" itemprop="description">「 少点虚的，多点实践，持续学习，终身学习」</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Tate-zwt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Tate-zwt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tate_zhangweiting@163.com" title="E-Mail → mailto:tate_zhangweiting@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">番茄炒蛋</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
