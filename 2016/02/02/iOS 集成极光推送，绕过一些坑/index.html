@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tate-zwt.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言最近公司要求把维护期的项目都集成极光推送，集成期间遇到一些小坑，特此在这总结！ 极光推送能干嘛？ 1.为 JPush Server 上报 Device Token，免除开发者管理 Device Token 的麻烦2.支持iOS APNs推送3.前台运行时，可接收由JPush下发的（透传的）自定义消息4.灵活管理接收用户：Tag（标签分组）、Alias（用户别名）、RegistrationID（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 集成极光推送，绕过一些坑">
+<meta property="og:url" content="https://tate-zwt.github.io/2016/02/02/iOS%20%E9%9B%86%E6%88%90%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81%EF%BC%8C%E7%BB%95%E8%BF%87%E4%B8%80%E4%BA%9B%E5%9D%91/index.html">
+<meta property="og:site_name" content="Tate Blog">
+<meta property="og:description" content="前言最近公司要求把维护期的项目都集成极光推送，集成期间遇到一些小坑，特此在这总结！ 极光推送能干嘛？ 1.为 JPush Server 上报 Device Token，免除开发者管理 Device Token 的麻烦2.支持iOS APNs推送3.前台运行时，可接收由JPush下发的（透传的）自定义消息4.灵活管理接收用户：Tag（标签分组）、Alias（用户别名）、RegistrationID（">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221627687.jpeg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221627678.jpg">
+<meta property="article:published_time" content="2016-02-02T13:23:54.000Z">
+<meta property="article:modified_time" content="2021-12-22T09:06:10.483Z">
+<meta property="article:author" content="番茄炒蛋">
+<meta property="article:tag" content="OC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221627687.jpeg">
+
+<link rel="canonical" href="https://tate-zwt.github.io/2016/02/02/iOS%20%E9%9B%86%E6%88%90%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81%EF%BC%8C%E7%BB%95%E8%BF%87%E4%B8%80%E4%BA%9B%E5%9D%91/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>iOS 集成极光推送，绕过一些坑 | Tate Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tate Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2016/02/02/iOS%20%E9%9B%86%E6%88%90%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81%EF%BC%8C%E7%BB%95%E8%BF%87%E4%B8%80%E4%BA%9B%E5%9D%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS 集成极光推送，绕过一些坑
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-02-02 21:23:54" itemprop="dateCreated datePublished" datetime="2016-02-02T21:23:54+08:00">2016-02-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-22 17:06:10" itemprop="dateModified" datetime="2021-12-22T17:06:10+08:00">2021-12-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近公司要求把维护期的项目都集成极光推送，集成期间遇到一些小坑，特此在这总结！</p>
+<h4 id="极光推送能干嘛？"><a href="#极光推送能干嘛？" class="headerlink" title="极光推送能干嘛？"></a>极光推送能干嘛？</h4><blockquote>
+<p>1.为 JPush Server 上报 Device Token，免除开发者管理 Device Token 的麻烦<br>2.支持iOS APNs推送<br>3.前台运行时，可接收由JPush下发的（透传的）自定义消息<br>4.灵活管理接收用户：Tag（标签分组）、Alias（用户别名）、RegistrationID（设备注册ID）</p>
+</blockquote>
+<span id="more"></span>
+<p>知道能干嘛了那就开始动手集成👌</p>
+<h4 id="配push证书："><a href="#配push证书：" class="headerlink" title="配push证书："></a>配push证书：</h4><p>此步骤直接看极光的 <a target="_blank" rel="noopener" href="http://docs.jpush.io/client/ios_tutorials/#ios_1">文档</a>即可,写得很详细😄</p>
+<h4 id="导入必要的框架"><a href="#导入必要的框架" class="headerlink" title="导入必要的框架"></a>导入必要的框架</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">CFNetwork.framework</span><br><span class="line">CoreFoundation.framework</span><br><span class="line">CoreTelephony.framework</span><br><span class="line">SystemConfiguration.framework</span><br><span class="line">CoreGraphics.framework</span><br><span class="line">Foundation.framework</span><br><span class="line">UIKit.framework</span><br><span class="line">Security.framework</span><br><span class="line">Xcode7需要的是libz.tbd；Xcode7以下版本是libz.dylib</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="创建并配置PushConfig-plist文件"><a href="#创建并配置PushConfig-plist文件" class="headerlink" title="创建并配置PushConfig.plist文件"></a>创建并配置PushConfig.plist文件</h4><blockquote>
+<p>在你的工程中创建一个新的Property List文件，并将其命名为PushConfig.plist，文件所含字段如下：<br>CHANNEL<br>指明应用程序包的下载渠道，为方便分渠道统计，具体值由你自行定义，如：App Store。<br>APP_KEY<br>填写管理Portal上创建应用后自动生成的AppKey值。请确保应用内配置的 AppKey 与第1步在 Portal 上创建应用后生成的 AppKey 一致。<br>APS_FOR_PRODUCTION<br>1.3.1版本新增，用于标识当前应用所使用的APNs证书环境。<br>0 (默认值)表示采用的是开发证书，1 表示采用生产证书发布应用。<br>注：此字段的值要与Build Settings的Code Signing配置的证书环境一致。<br>在1.2.2或之前版本的配置文件中，有 TEST_MODE 这个键，新版的SDK不再使用，可以将它删除。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221627687.jpeg" alt="PushConfig"></p>
+<h4 id="核心代码"><a href="#核心代码" class="headerlink" title="核心代码"></a>核心代码</h4><p>首先在<br>AppDelegate.m<br>导入<br>#import “JPUSHService.h”<br>在对应的方法<br>didFinishLaunchingWithOptions<br>里贴上核心代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//极光推送</span><br><span class="line">if ([[UIDevice currentDevice].systemVersion floatValue] &gt;= 8.0) &#123;</span><br><span class="line">//可以添加自定义categories</span><br><span class="line">[JPUSHService registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge |</span><br><span class="line">UIUserNotificationTypeSound |</span><br><span class="line">UIUserNotificationTypeAlert)</span><br><span class="line">categories:nil];</span><br><span class="line">&#125; else &#123;</span><br><span class="line">//categories 必须为nil</span><br><span class="line">[JPUSHService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |</span><br><span class="line">UIRemoteNotificationTypeSound |</span><br><span class="line">UIRemoteNotificationTypeAlert)</span><br><span class="line">categories:nil];</span><br><span class="line">&#125;</span><br><span class="line">//JAppKey : 是你在极光推送申请下来的appKey Jchannel : 可以直接设置默认值即可 Publish channel</span><br><span class="line">[JPUSHService setupWithOption:launchOptions appKey:JAppKey</span><br><span class="line">channel:Jchannel apsForProduction:NO]; //如果是生产环境应该设置为YES</span><br></pre></td></tr></table></figure>
+<p>之后还需要加入以下方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken &#123;</span><br><span class="line">// Required</span><br><span class="line">[JPUSHService registerDeviceToken:deviceToken];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo&#123;</span><br><span class="line"></span><br><span class="line">NSString *alert = [[userInfo objectForKey:@&quot;aps&quot;] objectForKey:@&quot;alert&quot;];</span><br><span class="line"></span><br><span class="line">if (application.applicationState == UIApplicationStateActive) &#123;</span><br><span class="line"></span><br><span class="line">UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@&quot;推送消息&quot;</span><br><span class="line">message:alert</span><br><span class="line">delegate:self</span><br><span class="line">cancelButtonTitle:@&quot;OK&quot;</span><br><span class="line">otherButtonTitles:nil];</span><br><span class="line">[alertView show];</span><br><span class="line">&#125;</span><br><span class="line">[application setApplicationIconBadgeNumber:0];</span><br><span class="line"></span><br><span class="line">[JPUSHService handleRemoteNotification:userInfo];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们还能监听极光推送生命周期通知：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">API里面提供了下面 5 种类型的通知：</span><br><span class="line"></span><br><span class="line">extern NSString * const kJPFNetworkDidSetupNotification; // 建立连接</span><br><span class="line"></span><br><span class="line">extern NSString * const kJPFNetworkDidCloseNotification; // 关闭连接</span><br><span class="line"></span><br><span class="line">extern NSString * const kJPFNetworkDidRegisterNotification; // 注册成功</span><br><span class="line"></span><br><span class="line">extern NSString * const kJPFNetworkDidLoginNotification; // 登录成功</span><br><span class="line"></span><br><span class="line">温馨提示： </span><br><span class="line">Registration id 需要在执行到kJPFNetworkDidLoginNotification的方法里获取</span><br><span class="line"></span><br><span class="line">extern NSString * const kJPFNetworkDidReceiveMessageNotification; // 收到自定义消息(非APNS)</span><br><span class="line"></span><br><span class="line">其中，kJPFNetworkDidReceiveMessageNotification传递的数据可以通过NSNotification中的userInfo方法获取，包括标题、内容、extras信息等</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h4><h6 id="Tag（标签分组）-amp-Alias（用户别名）"><a href="#Tag（标签分组）-amp-Alias（用户别名）" class="headerlink" title="Tag（标签分组）&amp; Alias（用户别名）"></a>Tag（标签分组）&amp; Alias（用户别名）</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//用于绑定Tag的 根据自己想要的Tag加入，值得注意的是这里Tag需要用到NSSet</span><br><span class="line">[JPUSHService setTags:[NSSet set]callbackSelector:nil object:self];</span><br><span class="line">//用于绑定Alias的  使用NSString 即可</span><br><span class="line">[JPUSHService setAlias:@&quot;&quot; callbackSelector:nil object:self];</span><br></pre></td></tr></table></figure>
+<p>如果想要即要绑定Alias也要绑定Tag,必须使用以下方法，已被坑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//用于同时绑定Tag与Alias的</span><br><span class="line">[JPUSHService setTags:[NSSet set] alias:@&quot;&quot; callbackSelector:nil target:self];</span><br></pre></td></tr></table></figure>
+<h6 id="一般在项目哪里绑定呢？"><a href="#一般在项目哪里绑定呢？" class="headerlink" title="一般在项目哪里绑定呢？"></a>一般在项目哪里绑定呢？</h6><p>我主要是在项目的登录成功或者自动登录后，使用用户的唯一标示进行绑定，或者根据需求添加一些前缀</p>
+<h6 id="去除绑定"><a href="#去除绑定" class="headerlink" title="去除绑定"></a>去除绑定</h6><p>用户进行退出登录的方法里添加去除绑定即可，值得注意的是用到即时通讯的话，被挤下线也要去除绑定，已被坑，贴代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//没有值就代表去除</span><br><span class="line">[JPUSHService setTags:[NSSet set]callbackSelector:nil object:self];</span><br><span class="line">[JPUSHService setAlias:@&quot;&quot; callbackSelector:nil object:self];</span><br><span class="line">[JPUSHService setTags:[NSSet set] alias:@&quot;&quot; callbackSelector:nil target:self];</span><br></pre></td></tr></table></figure>
+
+<h4 id="测试是否集成成功"><a href="#测试是否集成成功" class="headerlink" title="测试是否集成成功"></a>测试是否集成成功</h4><p>到极光<a target="_blank" rel="noopener" href="https://www.jpush.cn/push/apps/c8d9798cc63b93bf2c1ed834/push/notification/">平台</a>测试推送：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221627678.jpg" alt="测试推送"><br>只要推送成功，剩下的由后台根据Alias或者Tag来推送就可以了😄</p>
+<h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><p>关于推送来的小红点角标，简称<code>badge</code>。默认是极光推送过来一次角标<code>+1</code>，这个值<code>badge</code>是由后台推送过来的消息传的值，但是当用户看了，角标会默认被清除，如果你没有去告诉后台的话，后台下次推送过来，你的<code>badge</code>显示的值还是你上一次的值加一，那如何解决这个问题呢？<br>细心的开发者会去查看极光推送的API文档，但是我觉得看文档就有点麻烦了，所以我直接去看<code>JPUSHService.h</code>文件，所以我发现极光为这个问题提供了解决的方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">/*!</span><br><span class="line">* @abstract 设置角标(到服务器)</span><br><span class="line">*</span><br><span class="line">* @param value 新的值. 会覆盖服务器上保存的值(这个用户)</span><br><span class="line">*</span><br><span class="line">* @discussion 本接口不会改变应用本地的角标值.</span><br><span class="line">* 本地仍须调用 UIApplication:setApplicationIconBadgeNumber 函数来设置脚标.</span><br><span class="line">*</span><br><span class="line">* 本接口用于配合 JPush 提供的服务器端角标功能.</span><br><span class="line">* 该功能解决的问题是, 服务器端推送 APNs 时, 并不知道客户端原来已经存在的角标是多少, 指定一个固定的数字不太合理.</span><br><span class="line">*</span><br><span class="line">* JPush 服务器端脚标功能提供:</span><br><span class="line">*</span><br><span class="line">* - 通过本 API 把当前客户端(当前这个用户的) 的实际 badge 设置到服务器端保存起来;</span><br><span class="line">* - 调用服务器端 API 发 APNs 时(通常这个调用是批量针对大量用户),</span><br><span class="line">*   使用 &quot;+1&quot; 的语义, 来表达需要基于目标用户实际的 badge 值(保存的) +1 来下发通知时带上新的 badge 值;</span><br><span class="line">*/</span><br><span class="line">+ (BOOL)setBadge:(NSInteger)value;</span><br></pre></td></tr></table></figure>
+<p>而且我还发现极光推送也能收集Crash日志,之前只知道友盟与听云</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/*!</span><br><span class="line">* @abstract 开启Crash日志收集</span><br><span class="line">*</span><br><span class="line">* @discussion 默认是关闭状态.</span><br><span class="line">*/</span><br><span class="line">+ (void)crashLogON;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如何改变推送过来的提示音呢？<br>只需要让服务端设置<code>sound</code>字段就可以了。</p>
+<blockquote>
+<p>iOS 通知声音 (sound)<br>APNs通知，通过这个字段指定声音。默认为default，即系统默认声音。<br>如果设置为空值，则为静音。<br>如果设置为特殊的名称，则需要你的App里配置了该声音才可以正常。</p>
+</blockquote>
+<h4 id="JPushSDK资源下载"><a href="#JPushSDK资源下载" class="headerlink" title="JPushSDK资源下载"></a><a target="_blank" rel="noopener" href="http://docs.jpush.io/resources/">JPushSDK资源下载</a></h4>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OC/" rel="tag"># OC</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2015/12/05/%E8%A7%A3%E5%86%B3%20iOS%20View%20Controller%20Push%E3%80%81Pop%20%E6%97%B6%E7%9A%84%E9%BB%91%E5%BD%B1/" rel="prev" title="解决 iOS View Controller Push/Pop 时的黑影">
+      <i class="fa fa-chevron-left"></i> 解决 iOS View Controller Push/Pop 时的黑影
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/03/02/iOS%E6%92%AD%E6%94%BEGIF%E5%8A%A8%E7%94%BB%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/" rel="next" title="iOS播放GIF动画的几种方式">
+      iOS播放GIF动画的几种方式 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81%E8%83%BD%E5%B9%B2%E5%98%9B%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">极光推送能干嘛？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8Dpush%E8%AF%81%E4%B9%A6%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">配push证书：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5%E5%BF%85%E8%A6%81%E7%9A%84%E6%A1%86%E6%9E%B6"><span class="nav-number">4.</span> <span class="nav-text">导入必要的框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%B9%B6%E9%85%8D%E7%BD%AEPushConfig-plist%E6%96%87%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">创建并配置PushConfig.plist文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81"><span class="nav-number">6.</span> <span class="nav-text">核心代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">7.</span> <span class="nav-text">使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Tag%EF%BC%88%E6%A0%87%E7%AD%BE%E5%88%86%E7%BB%84%EF%BC%89-amp-Alias%EF%BC%88%E7%94%A8%E6%88%B7%E5%88%AB%E5%90%8D%EF%BC%89"><span class="nav-number">7.0.1.</span> <span class="nav-text">Tag（标签分组）&amp; Alias（用户别名）</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E5%9C%A8%E9%A1%B9%E7%9B%AE%E5%93%AA%E9%87%8C%E7%BB%91%E5%AE%9A%E5%91%A2%EF%BC%9F"><span class="nav-number">7.0.2.</span> <span class="nav-text">一般在项目哪里绑定呢？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8E%BB%E9%99%A4%E7%BB%91%E5%AE%9A"><span class="nav-number">7.0.3.</span> <span class="nav-text">去除绑定</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%98%AF%E5%90%A6%E9%9B%86%E6%88%90%E6%88%90%E5%8A%9F"><span class="nav-number">8.</span> <span class="nav-text">测试是否集成成功</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%A5%E5%85%85"><span class="nav-number">9.</span> <span class="nav-text">补充</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JPushSDK%E8%B5%84%E6%BA%90%E4%B8%8B%E8%BD%BD"><span class="nav-number">10.</span> <span class="nav-text">JPushSDK资源下载</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">番茄炒蛋</p>
+  <div class="site-description" itemprop="description">「 少点虚的，多点实践，持续学习，终身学习」</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Tate-zwt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Tate-zwt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tate_zhangweiting@163.com" title="E-Mail → mailto:tate_zhangweiting@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">番茄炒蛋</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

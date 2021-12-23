@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tate-zwt.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="二分查找算法(非递归)： 二分查找算法有递归和非递归方式，下面我们讲解二分查找算法的非递归方式  二分查找法只适用于从有序的数列中进行查找(比如数字和字母等)，将数列排序后再进行查找 二分查找法的运行时间为对数时间 O(㏒₂n) ，即查找到需要的目标位置最多只需要㏒₂n 步，假设从[0,99]的 队列(100 个数，即 n&#x3D;100)中寻到目标数 30，则需要查找步数为㏒₂100 , 即最多需要查找">
+<meta property="og:type" content="article">
+<meta property="og:title" content="十大常见算法核心思想">
+<meta property="og:url" content="https://tate-zwt.github.io/2021/10/17/%E5%8D%81%E5%A4%A7%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3/index.html">
+<meta property="og:site_name" content="Tate Blog">
+<meta property="og:description" content="二分查找算法(非递归)： 二分查找算法有递归和非递归方式，下面我们讲解二分查找算法的非递归方式  二分查找法只适用于从有序的数列中进行查找(比如数字和字母等)，将数列排序后再进行查找 二分查找法的运行时间为对数时间 O(㏒₂n) ，即查找到需要的目标位置最多只需要㏒₂n 步，假设从[0,99]的 队列(100 个数，即 n&#x3D;100)中寻到目标数 30，则需要查找步数为㏒₂100 , 即最多需要查找">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221634844.png">
+<meta property="article:published_time" content="2021-10-17T06:13:37.000Z">
+<meta property="article:modified_time" content="2021-12-22T09:07:57.363Z">
+<meta property="article:author" content="番茄炒蛋">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221634844.png">
+
+<link rel="canonical" href="https://tate-zwt.github.io/2021/10/17/%E5%8D%81%E5%A4%A7%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>十大常见算法核心思想 | Tate Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tate Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2021/10/17/%E5%8D%81%E5%A4%A7%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          十大常见算法核心思想
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-17 14:13:37" itemprop="dateCreated datePublished" datetime="2021-10-17T14:13:37+08:00">2021-10-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-22 17:07:57" itemprop="dateModified" datetime="2021-12-22T17:07:57+08:00">2021-12-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="二分查找算法-非递归-："><a href="#二分查找算法-非递归-：" class="headerlink" title="二分查找算法(非递归)："></a>二分查找算法(非递归)：</h3><ol>
+<li>二分查找算法有递归和非递归方式，下面我们讲解二分查找算法的非递归方式 </li>
+<li>二分查找法只适用于从有序的数列中进行查找(比如数字和字母等)，将数列排序后再进行查找</li>
+<li>二分查找法的运行时间为对数时间 O(㏒₂n) ，即查找到需要的目标位置最多只需要㏒₂n 步，假设从[0,99]的 队列(100 个数，即 n=100)中寻到目标数 30，则需要查找步数为㏒₂100 , 即最多需要查找 7 次( 2^6 &lt; 100 &lt; 2^7)</li>
+</ol>
+<h3 id="分治算法："><a href="#分治算法：" class="headerlink" title="分治算法："></a>分治算法：</h3><ol>
+<li>分治法是一种很重要的算法。字面上的解释是“分而治之”，就是把一个复杂的问题分成两个或更多的相同或 相似的子问题，再把子问题分成更小的子问题……直到最后子问题可以简单的直接求解，原问题的解即子问题 的解的合并。这个技巧是很多高效算法的基础，如排序算法(快速排序，归并排序)，傅立叶变换(快速傅立叶变 换)…… </li>
+<li>分治算法可以求解的一些经典问题</li>
+</ol>
+<ul>
+<li>二分搜索 </li>
+<li>大整数乘法 </li>
+<li>棋盘覆盖 </li>
+<li>合并排序 </li>
+<li>快速排序 </li>
+<li>线性时间选择</li>
+<li>最接近点对问题 </li>
+<li>循环赛日程表 </li>
+<li>汉诺塔</li>
+</ul>
+<h3 id="动态规划算法："><a href="#动态规划算法：" class="headerlink" title="动态规划算法："></a>动态规划算法：</h3><ol>
+<li>动态规划(Dynamic Programming)算法的核心思想是：将大问题划分为小问题进行解决，从而一步步获取最优解 的处理算法 </li>
+<li>动态规划算法与分治算法类似，其基本思想也是将待求解问题分解成若干个子问题，先求解子问题，然后从这 些子问题的解得到原问题的解。</li>
+<li>与分治法不同的是，适合于用动态规划求解的问题，经分解得到子问题往往不是互相独立的。 ( 即下一个子 阶段的求解是建立在上一个子阶段的解的基础上，进行进一步的求解 ) </li>
+<li>动态规划可以通过填表的方式来逐步推进，得到最优解.</li>
+</ol>
+<h3 id="KMP-算法："><a href="#KMP-算法：" class="headerlink" title="KMP 算法："></a>KMP 算法：</h3><ol>
+<li><p>KMP 是一个解决模式串在文本串是否出现过，如果出现过，最早出现的位置的经典算法 </p>
+</li>
+<li><p>Knuth-Morris-Pratt 字符串查找算法，简称为 “KMP 算法”，常用于在一个文本串 S 内查找一个模式串 P 的 出现位置，这个算法由 Donald Knuth、Vaughan Pratt、James H. Morris 三人于 1977 年联合发表，故取这 3 人的 姓氏命名此算法. </p>
+</li>
+<li><p>KMP 方法算法就利用之前判断过信息，通过一个 next 数组，保存模式串中前后最长公共子序列的长度，每次 回溯时，通过 next 数组找到，前面匹配过的位置，省去了大量的计算时间。参考资料：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/ZuoAndFutureGirl/p/9028287.html">https://www.cnblogs.com/ZuoAndFutureGirl/p/9028287.html</a></p>
+</li>
+<li><p>暴力匹配算法：如果用暴力匹配的思路，并假设现在 str1 匹配到 i 位置，子串 str2 匹配到 j 位置，则有: - 如果当前字符匹配成功（即 str1[i] == str2[j]），则 i++，j++，继续匹配下一个字符</p>
+</li>
+</ol>
+<ul>
+<li>如果失配（即 str1[i]! = str2[j]），令 i = i - (j - 1)，j = 0。相当于每次匹配失败时，i 回溯，j 被置为 0。 </li>
+<li>用暴力方法解决的话就会有大量的回溯，每次只移动一位，若是不匹配，移动到下一位接着判断，浪费了大量 的时间。(不可行!)</li>
+<li>暴力匹配算法实现.</li>
+</ul>
+<h3 id="贪心算法："><a href="#贪心算法：" class="headerlink" title="贪心算法："></a>贪心算法：</h3><ol>
+<li>婪算法(贪心算法)是指在对问题进行求解时，在每一步选择中都采取最好或者最优(即最有利)的选择，从而 希望能够导致结果是最好或者最优的算法2) 贪婪算法所得到的结果不一定是最优的结果(有时候会是最优解)，但是都是相对近似(接近)最优解的结果</li>
+</ol>
+<h3 id="普里姆算法："><a href="#普里姆算法：" class="headerlink" title="普里姆算法："></a>普里姆算法：</h3><p>普利姆(Prim)算法求最小生成树，也就是在包含 n 个顶点的连通图中，找出只有(n-1)条边包含所有 n 个顶点的 连通子图，也就是所谓的极小连通子图 普利姆的算法如下: </p>
+<ol>
+<li>设 G=(V,E)是连通网，T=(U,D)是最小生成树，V,U 是顶点集合，E,D 是边的集合 </li>
+<li>若从顶点 u 开始构造最小生成树，则从集合 V 中取出顶点 u 放入集合 U 中，标记顶点 v 的 visited[u]=1 </li>
+<li>若集合 U 中顶点 ui 与集合 V-U 中的顶点 vj 之间存在边，则寻找这些边中权值最小的边，但不能构成回路，将 顶点 vj 加入集合 U 中，将边（ui,vj）加入集合 D 中，标记 visited[vj]=1 </li>
+<li>重复步骤②，直到 U 与 V 相等，即所有顶点都被标记为访问过，此时 D 中有 n-1 条边 </li>
+<li>提示: 单独看步骤很难理解，我们通过代码来讲解，比较好理解. </li>
+<li>图解普利姆算法如图：<br><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221634844.png" alt="普利姆算法的图解分析"></li>
+</ol>
+<h3 id="克鲁斯卡尔算法"><a href="#克鲁斯卡尔算法" class="headerlink" title="克鲁斯卡尔算法:"></a>克鲁斯卡尔算法:</h3><ol>
+<li>克鲁斯卡尔(Kruskal)算法，是用来求加权连通图的最小生成树的算法。</li>
+<li>基本思想：按照权值从小到大的顺序选择 n-1 条边，并保证这 n-1 条边不构成回路</li>
+<li>具体做法：首先构造一个只含 n 个顶点的森林，然后依权值从小到大从连通网中选择边加入到森林中，并使森 林中不产生回路，直至森林变成一棵树为止</li>
+<li>迪杰斯特拉算法：迪杰斯特拉(Dijkstra)算法是典型最短路径算法，用于计算一个结点到其他结点的最短路径。它的主要特点是以 起始点为中心向外层层扩展(广度优先搜索思想)，直到扩展到终点为止。</li>
+</ol>
+<h3 id="弗洛伊德算法："><a href="#弗洛伊德算法：" class="headerlink" title="弗洛伊德算法："></a>弗洛伊德算法：</h3><ol>
+<li>和 Dijkstra 算法一样，弗洛伊德(Floyd)算法也是一种用于寻找给定的加权图中顶点间最短路径的算法。该算法 名称以创始人之一、1978 年图灵奖获得者、斯坦福大学计算机科学系教授罗伯特·弗洛伊德命名 </li>
+<li>弗洛伊德算法(Floyd)计算图中各个顶点之间的最短路径</li>
+<li>迪杰斯特拉算法用于计算图中某一个顶点到其他顶点的最短路径。</li>
+<li>弗洛伊德算法 VS 迪杰斯特拉算法：迪杰斯特拉算法通过选定的被访问顶点，求出从出发访问顶点到其他顶点 的最短路径；弗洛伊德算法中每一个顶点都是出发访问点，所以需要将每一个顶点看做被访问顶点，求出从每 一个顶点到其他顶点的最短路径。</li>
+</ol>
+<h3 id="马踏棋盘算法"><a href="#马踏棋盘算法" class="headerlink" title="马踏棋盘算法:"></a>马踏棋盘算法:</h3><ol>
+<li>马踏棋盘算法也被称为骑士周游问题</li>
+<li>将马随机放在国际象棋的 8×8 棋盘 Board[0～7][0～7]的某个方格中，马按走棋规则(马走日字)进行移动。要求 每个方格只进入一次，走遍棋盘上全部 64 个方格 3) 游戏演示: <a target="_blank" rel="noopener" href="http://www.4399.com/flash/146267_2.htm/">http://www.4399.com/flash/146267_2.htm\</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/09/01/%E3%80%8C%20iOS%E5%B9%B2%E8%B4%A7%20%E3%80%8D%E6%8F%90%E9%AB%98%E4%BB%A3%E7%A0%81%E7%AE%80%E6%B4%81%E7%9A%84%E6%96%B9%E6%B3%95/" rel="prev" title="「 iOS干货 」提高代码简洁的方法">
+      <i class="fa fa-chevron-left"></i> 「 iOS干货 」提高代码简洁的方法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/12/17/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="next" title="小程序">
+      小程序 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95-%E9%9D%9E%E9%80%92%E5%BD%92-%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">二分查找算法(非递归)：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">分治算法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">动态规划算法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KMP-%E7%AE%97%E6%B3%95%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">KMP 算法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95%EF%BC%9A"><span class="nav-number">5.</span> <span class="nav-text">贪心算法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%AE%E9%87%8C%E5%A7%86%E7%AE%97%E6%B3%95%EF%BC%9A"><span class="nav-number">6.</span> <span class="nav-text">普里姆算法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%8B%E9%B2%81%E6%96%AF%E5%8D%A1%E5%B0%94%E7%AE%97%E6%B3%95"><span class="nav-number">7.</span> <span class="nav-text">克鲁斯卡尔算法:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%97%E6%B4%9B%E4%BC%8A%E5%BE%B7%E7%AE%97%E6%B3%95%EF%BC%9A"><span class="nav-number">8.</span> <span class="nav-text">弗洛伊德算法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A9%AC%E8%B8%8F%E6%A3%8B%E7%9B%98%E7%AE%97%E6%B3%95"><span class="nav-number">9.</span> <span class="nav-text">马踏棋盘算法:</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">番茄炒蛋</p>
+  <div class="site-description" itemprop="description">「 少点虚的，多点实践，持续学习，终身学习」</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Tate-zwt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Tate-zwt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tate_zhangweiting@163.com" title="E-Mail → mailto:tate_zhangweiting@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">番茄炒蛋</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tate-zwt.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="初识作为一个移动端iOS开发，小程序也是有必要学习的，学好小程序的基本流程，会发现跟iOS原生开发很多都相似的，比如每个界面都有它的生命周期，数据绑定，响应事件等等，而且微信团队把它封装得非常易用，只要看文档，补充下CSS的知识就可以上手开发。 CSS布局知识clssname .clssname 12345.clssname .clssname&amp;#123;  float:left;  height">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小程序">
+<meta property="og:url" content="https://tate-zwt.github.io/2021/12/17/%E5%B0%8F%E7%A8%8B%E5%BA%8F/index.html">
+<meta property="og:site_name" content="Tate Blog">
+<meta property="og:description" content="初识作为一个移动端iOS开发，小程序也是有必要学习的，学好小程序的基本流程，会发现跟iOS原生开发很多都相似的，比如每个界面都有它的生命周期，数据绑定，响应事件等等，而且微信团队把它封装得非常易用，只要看文档，补充下CSS的知识就可以上手开发。 CSS布局知识clssname .clssname 12345.clssname .clssname&amp;#123;  float:left;  height">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221629139.jpg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221632948.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221630365.png">
+<meta property="article:published_time" content="2021-12-17T09:31:00.000Z">
+<meta property="article:modified_time" content="2021-12-22T09:06:57.073Z">
+<meta property="article:author" content="番茄炒蛋">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221629139.jpg">
+
+<link rel="canonical" href="https://tate-zwt.github.io/2021/12/17/%E5%B0%8F%E7%A8%8B%E5%BA%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>小程序 | Tate Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tate Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2021/12/17/%E5%B0%8F%E7%A8%8B%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          小程序
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-12-17 17:31:00" itemprop="dateCreated datePublished" datetime="2021-12-17T17:31:00+08:00">2021-12-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-22 17:06:57" itemprop="dateModified" datetime="2021-12-22T17:06:57+08:00">2021-12-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" itemprop="url" rel="index"><span itemprop="name">小程序</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="初识"><a href="#初识" class="headerlink" title="初识"></a>初识</h2><p>作为一个移动端iOS开发，小程序也是有必要学习的，学好小程序的基本流程，会发现跟iOS原生开发很多都相似的，比如每个界面都有它的生命周期，数据绑定，响应事件等等，而且微信团队把它封装得非常易用，只要看文档，补充下CSS的知识就可以上手开发。</p>
+<h3 id="CSS布局知识"><a href="#CSS布局知识" class="headerlink" title="CSS布局知识"></a>CSS布局知识</h3><p>clssname .clssname</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.clssname</span> <span class="selector-class">.clssname</span>&#123;</span><br><span class="line">  <span class="attribute">float</span><span class="selector-pseudo">:left</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100</span>rpx;</span><br><span class="line">  <span class="attribute">line-height</span>: <span class="number">100</span>rpx;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代表 clssname 里的clssname样式更改</p>
+<p>clssname view</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.clssname</span> view&#123;</span><br><span class="line">  <span class="attribute">flex</span>:<span class="number">1</span>;</span><br><span class="line">  <span class="attribute">color</span>:white;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代表 clssname 里所有的view样式更改</p>
+<h3 id="float-浮动布局"><a href="#float-浮动布局" class="headerlink" title="float 浮动布局"></a>float 浮动布局</h3><p>主要让只能竖着排列，变成横着排列，还可以不占位，如果清除浮动就会占位了</p>
+<ol>
+<li>可以写固定高度</li>
+<li>清浮动 clear:none/left,right,both </li>
+<li>当前浮动元素后面补一个盒子，不设置宽高，clear:both</li>
+<li>overflow:hidden，让浮动元素计算高度</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221629139.jpg" alt="float"></p>
+<h3 id="溢出属性"><a href="#溢出属性" class="headerlink" title="溢出属性"></a>溢出属性</h3><h5 id="1、溢出属性（容器的）"><a href="#1、溢出属性（容器的）" class="headerlink" title="1、溢出属性（容器的）"></a>1、溢出属性（容器的）</h5><p>说明：</p>
+<p>overflow：visible/hidden(隐藏)/scroll/auto(自动)/inherit</p>
+<p>visible:默认值，溢出内容会显示在元素之外</p>
+<p>hidden:溢出内容隐藏</p>
+<p>scroll:滚动，溢出内容以滚动方式显示</p>
+<p>auto：如果有溢出会添加滚动条，没有溢出正常系显示</p>
+<p>inherit:规定应该遵从父元素继承overflow属性的值。</p>
+<p>overflow-x:X轴溢出</p>
+<p>overflow-y:Y轴溢出</p>
+<h5 id="2、空余空间"><a href="#2、空余空间" class="headerlink" title="2、空余空间"></a>2、空余空间</h5><p>说明：</p>
+<p>white-space:normal/nowrap/pre/pre-wrap/pre-line/inherit该属性用来设置如何处理元素内的空白</p>
+<p>normal:默认值，空白会被浏览器忽略</p>
+<p>nowrap:文本不会换行，文本会在同一行上继续显示，只要遇到换行标签br/为止</p>
+<p>3、省略号显示</p>
+<p>说明：</p>
+<p>text-overflow:clip/ellipsis</p>
+<p>clip:默认值，不显示省略号…<br>ellipsis:显示省略号…</p>
+<p>当单行文本溢出显示省略号需要同时设置以下声明：</p>
+<ol>
+<li><p>容器宽度：width:200px</p>
+</li>
+<li><p>强制文本在一行内显示：white-space:nowrap</p>
+</li>
+<li><p>溢出内容为隐藏：overflow:hidden</p>
+</li>
+<li><p>溢出文本显示省略号：text-overflow:ellipsis</p>
+</li>
+</ol>
+<h3 id="定位属性（position）"><a href="#定位属性（position）" class="headerlink" title="定位属性（position）"></a>定位属性（position）</h3><table>
+<thead>
+<tr>
+<th>定位 position</th>
+<th></th>
+<th></th>
+<th align="left"></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>个数</td>
+<td>书写语法</td>
+<td>说明</td>
+<td align="left">文档流</td>
+<td>偏移位置（top left right bottom）时候的参照物</td>
+<td>层叠顺序（z-index）</td>
+</tr>
+<tr>
+<td>1</td>
+<td>position：static；</td>
+<td>默认值</td>
+<td align="left">默认</td>
+<td>默认</td>
+<td>z-index属性是不带单位的，并且可以给负值，没有设置z-index时，最后写的对象优先显示在上层，设置后，数值越大，层越靠上；</td>
+</tr>
+<tr>
+<td>2</td>
+<td>position：absolute；</td>
+<td>绝对定位</td>
+<td align="left">脱离</td>
+<td>A）当没有父元素或者父元素没有定位，参照物是浏览器窗口的第一屏B）有父元素且父元素有定位，父元素</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>position：relative；</td>
+<td>相对定位</td>
+<td align="left">不脱离</td>
+<td>自己的初始位置</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>position：fixed；</td>
+<td>固定定位</td>
+<td align="left">脱离</td>
+<td>浏览器的当前窗口</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>position: sticky;</td>
+<td>粘性定位</td>
+<td align="left">可以做吸顶效果，粘性定位是css3.0新增加的，兼容不好</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="浮动与定位属性的区别"><a href="#浮动与定位属性的区别" class="headerlink" title="浮动与定位属性的区别"></a>浮动与定位属性的区别</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span>&#123;</span><br><span class="line">            <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">            <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">            <span class="attribute">background-color</span>: red;</span><br><span class="line">            <span class="attribute">float</span>: left;</span><br><span class="line"></span><br><span class="line">            <span class="comment">/* position: absolute; */</span></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221632948.png" alt="float文字环绕"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.box1&#123;</span><br><span class="line">            width: 200px;</span><br><span class="line">            height: 200px;</span><br><span class="line">            background-color: red;</span><br><span class="line">           /*  float: left;*/</span><br><span class="line">            position: absolute; </span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221630365.png" alt="position"></p>
+<p>float: 半脱离，文字环绕<br>absolute: 全脱离，不会出现文字环绕效果</p>
+<h3 id="dispaly弹性布局"><a href="#dispaly弹性布局" class="headerlink" title="dispaly弹性布局"></a>dispaly弹性布局</h3><p>弹性盒是一种新的布局方式， 特别适合移动端布局</p>
+<p>影响：</p>
+<pre><code>  1. 子元素默认横向排列 
+  2. 行内元素， 变成了块级元素 
+  3. 只有一个元素的时候， margin:auto 自动居中
+</code></pre>
+<p>未完待续。。。</p>
+<h2 id="微信授权流程"><a href="#微信授权流程" class="headerlink" title="微信授权流程"></a>微信授权流程</h2><ol>
+<li><p>判断本地存储是否有手机号信息，如果有直接加入</p>
+</li>
+<li><p>没有手机号，判断是否有token信息，如果有，引导调整手机号绑定</p>
+</li>
+<li><p>没有token授权信息， 我们引导用户授权页面</p>
+</li>
+<li><p>获取授权代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">handleAuth</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    wx.getUserProfile(&#123;</span><br><span class="line">      <span class="attr">desc</span>: <span class="string">&#x27;用于完善会员资料&#x27;</span>,</span><br><span class="line">      <span class="attr">success</span>: <span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(res.userInfo)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/17/%E5%8D%81%E5%A4%A7%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3/" rel="prev" title="十大常见算法核心思想">
+      <i class="fa fa-chevron-left"></i> 十大常见算法核心思想
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">初识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS%E5%B8%83%E5%B1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.1.</span> <span class="nav-text">CSS布局知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#float-%E6%B5%AE%E5%8A%A8%E5%B8%83%E5%B1%80"><span class="nav-number">1.2.</span> <span class="nav-text">float 浮动布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BA%A2%E5%87%BA%E5%B1%9E%E6%80%A7"><span class="nav-number">1.3.</span> <span class="nav-text">溢出属性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1%E3%80%81%E6%BA%A2%E5%87%BA%E5%B1%9E%E6%80%A7%EF%BC%88%E5%AE%B9%E5%99%A8%E7%9A%84%EF%BC%89"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">1、溢出属性（容器的）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2%E3%80%81%E7%A9%BA%E4%BD%99%E7%A9%BA%E9%97%B4"><span class="nav-number">1.3.0.2.</span> <span class="nav-text">2、空余空间</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%BD%8D%E5%B1%9E%E6%80%A7%EF%BC%88position%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">定位属性（position）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%AE%E5%8A%A8%E4%B8%8E%E5%AE%9A%E4%BD%8D%E5%B1%9E%E6%80%A7%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.5.</span> <span class="nav-text">浮动与定位属性的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dispaly%E5%BC%B9%E6%80%A7%E5%B8%83%E5%B1%80"><span class="nav-number">1.6.</span> <span class="nav-text">dispaly弹性布局</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E4%BF%A1%E6%8E%88%E6%9D%83%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">微信授权流程</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">番茄炒蛋</p>
+  <div class="site-description" itemprop="description">「 少点虚的，多点实践，持续学习，终身学习」</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Tate-zwt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Tate-zwt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tate_zhangweiting@163.com" title="E-Mail → mailto:tate_zhangweiting@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">番茄炒蛋</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
