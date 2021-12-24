@@ -158,6 +158,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2018/12/23/CocoaPods-Tips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/12/23/CocoaPods-Tips/" class="post-title-link" itemprop="url">CocoaPods Tips</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-12-23 15:40:32" itemprop="dateCreated datePublished" datetime="2018-12-23T15:40:32+08:00">2018-12-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-23 15:41:26" itemprop="dateModified" datetime="2021-12-23T15:41:26+08:00">2021-12-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>1、使用缓存更新命令行<br>pod update –verbose –no-repo-update</p>
+<p>2、解决 The sandbox is not in sync with the Podfile.lock. Run ‘pod install’ or update your CocoaPods install<br>方案一：<br>command+Q 退出 Xcode，重新执行pod install，之后再重新打开Xcode运行。</p>
+<p>正常 方案一: 即可解决问题.</p>
+<p>方案二：<br>稍微麻烦一点，删除以下文件：<br>xcworkspace<br>Podfile.lock<br>Pods文件夹<br>~/Library/Developer/Xcode/DerivedData路径下对应工程的文件夹<br>之后重新执行pod install –verbose –no-repo-update</p>
+<p>方案三:（最简单）<br>1.找到项目根目录下的Podfile.lock文件,和Pods文件夹下的Manifest.lock文件<br>2.然后复制Podfile.lock文件的内容替换掉Manifest.lock文件内的内容,好啦,至此问题解决</p>
+<p>3、pod 单独安装一个新添加的库<br>这将安装新项目而不更新现有的repos<br><code>pod install --no-repo-update</code></p>
+<p>4、升级Xcode12.5,报错Showing All Errors Only Command PhaseScriptExecution failed with a nonzero exit code<br>原因：Xcode12淘汰了VALID_ARCHS,但是有些集成进来的第三方库还是有这个key,Xcode12模拟器已经用arm架构来编译项目,而link链接的还是x86架构，pod之前集成的还是以前的，直接重新集成，clean project</p>
+<p>解除集成cocoapods<br><code>pod deintegrate</code><br>重新集成cocoapods<br><code>pod install</code><br>clean project<br>run project</p>
+<p>注意，项目配置有<code>VALID_ARCHS</code>需要删除，不然真机没法编译过</p>
+<p>5、Cocoapods报错:RuntimeError - [Xcodeproj] Unknown object version.解决办法<br>注意其中的错误提示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">### Error</span><br><span class="line">RuntimeError - [Xcodeproj] Unknown object version.</span><br></pre></td></tr></table></figure>
+<p>版本的问题。只需要用Xcode打开项目，修改项目Project Format为XX即可,或者更新pod<br><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231541671.png" alt="image.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2018/08/07/Python-%E7%9A%84%E7%AE%80%E5%8D%95%E7%88%AC%E8%99%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1159,110 +1244,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2017/09/15/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-YUV%E9%A2%9C%E8%89%B2%E7%A9%BA%E9%97%B4%EF%BC%88%E5%85%AD%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tate Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/09/15/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-YUV%E9%A2%9C%E8%89%B2%E7%A9%BA%E9%97%B4%EF%BC%88%E5%85%AD%EF%BC%89/" class="post-title-link" itemprop="url">iOS直播技术学习笔记-YUV颜色空间（六）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2017-09-15 20:10:48" itemprop="dateCreated datePublished" datetime="2017-09-15T20:10:48+08:00">2017-09-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-23 15:11:36" itemprop="dateModified" datetime="2021-12-23T15:11:36+08:00">2021-12-23</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="为什么学习YUV颜色空间"><a href="#为什么学习YUV颜色空间" class="headerlink" title="为什么学习YUV颜色空间"></a>为什么学习YUV颜色空间</h3><ul>
-<li>  使用系统提供的接口获取到的音视频数据都保存在CMSampleBufferRef中, 使用GPUImamge获取到的音频数据为CMSampleBufferRef</li>
-<li>CMSampleBufferRef<ul>
-<li>  这个结构在iOS中表示一帧音频/视频数据</li>
-<li>  它里面包含了这一帧数据的内容和格式, 我们可以把它的内容取出来，提取出/转换成 我们想要的数据</li>
-<li>  代表视频的CMSampleBufferRef中保存的数据是yuv420格式的视频帧(我们在视频输出设置中将输出格式设为：kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)</li>
-<li>  代表音频的CMSampleBufferRef中保存的数据是PCM格式的音频帧</li>
-</ul>
-</li>
-</ul>
-<h3 id="yuv是什么？"><a href="#yuv是什么？" class="headerlink" title="yuv是什么？"></a>yuv是什么？</h3><ul>
-<li>  视频是由一帧一帧的数据连接而成，而一帧视频数据其实就是一张图片。</li>
-<li>yuv是一种图片储存格式，跟RGB格式类似。<ul>
-<li>  RGB格式的图片很好理解，计算机中的大多数图片，都是以RGB格式存储的。</li>
-<li>  yuv中，y表示亮度，单独只有y数据就可以形成一张图片，只不过这张图片是灰色的。u和v表示色差(u和v也被称为：Cb－蓝色差，Cr－红色差)</li>
-</ul>
-</li>
-<li>为什么要yuv？<ul>
-<li>  有一定历史原因，最早的电视信号，为了兼容黑白电视，采用的就是yuv格式。</li>
-<li>  一张yuv的图像，去掉uv，只保留y，这张图片就是黑白的。</li>
-<li>  而且yuv可以通过抛弃色差来进行带宽优化。</li>
-<li>  比如yuv420格式图像相比RGB来说，要节省一半的字节大小，抛弃相邻的色差对于人眼来说，差别不大。</li>
-</ul>
-</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231511553.jpeg" alt="YUV颜色空间.jpg"></p>
-<h3 id="YUV颜色存储格式"><a href="#YUV颜色存储格式" class="headerlink" title="YUV颜色存储格式"></a>YUV颜色存储格式</h3><ul>
-<li>  常用的I420(YUV420P),NV12(YUV420SP),YV12（YUV420P）,NV21(YUV420SP)等都是属于YUV420，NV12是一种两平面存储方式，Y为一个平面，交错的UV为另一个平面</li>
-<li>  通常，用来远程传输的是I420数据，而本地摄像头采集的是NV12数据。（iOS）</li>
-<li>  所有在真正编码的过程中, 需要将NV12数据转成I420数据进行编码</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1332,7 +1313,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

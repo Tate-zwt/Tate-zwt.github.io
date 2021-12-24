@@ -158,6 +158,110 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2017/09/15/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-YUV%E9%A2%9C%E8%89%B2%E7%A9%BA%E9%97%B4%EF%BC%88%E5%85%AD%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/09/15/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-YUV%E9%A2%9C%E8%89%B2%E7%A9%BA%E9%97%B4%EF%BC%88%E5%85%AD%EF%BC%89/" class="post-title-link" itemprop="url">iOS直播技术学习笔记-YUV颜色空间（六）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-09-15 20:10:48" itemprop="dateCreated datePublished" datetime="2017-09-15T20:10:48+08:00">2017-09-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-23 15:11:36" itemprop="dateModified" datetime="2021-12-23T15:11:36+08:00">2021-12-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="为什么学习YUV颜色空间"><a href="#为什么学习YUV颜色空间" class="headerlink" title="为什么学习YUV颜色空间"></a>为什么学习YUV颜色空间</h3><ul>
+<li>  使用系统提供的接口获取到的音视频数据都保存在CMSampleBufferRef中, 使用GPUImamge获取到的音频数据为CMSampleBufferRef</li>
+<li>CMSampleBufferRef<ul>
+<li>  这个结构在iOS中表示一帧音频/视频数据</li>
+<li>  它里面包含了这一帧数据的内容和格式, 我们可以把它的内容取出来，提取出/转换成 我们想要的数据</li>
+<li>  代表视频的CMSampleBufferRef中保存的数据是yuv420格式的视频帧(我们在视频输出设置中将输出格式设为：kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)</li>
+<li>  代表音频的CMSampleBufferRef中保存的数据是PCM格式的音频帧</li>
+</ul>
+</li>
+</ul>
+<h3 id="yuv是什么？"><a href="#yuv是什么？" class="headerlink" title="yuv是什么？"></a>yuv是什么？</h3><ul>
+<li>  视频是由一帧一帧的数据连接而成，而一帧视频数据其实就是一张图片。</li>
+<li>yuv是一种图片储存格式，跟RGB格式类似。<ul>
+<li>  RGB格式的图片很好理解，计算机中的大多数图片，都是以RGB格式存储的。</li>
+<li>  yuv中，y表示亮度，单独只有y数据就可以形成一张图片，只不过这张图片是灰色的。u和v表示色差(u和v也被称为：Cb－蓝色差，Cr－红色差)</li>
+</ul>
+</li>
+<li>为什么要yuv？<ul>
+<li>  有一定历史原因，最早的电视信号，为了兼容黑白电视，采用的就是yuv格式。</li>
+<li>  一张yuv的图像，去掉uv，只保留y，这张图片就是黑白的。</li>
+<li>  而且yuv可以通过抛弃色差来进行带宽优化。</li>
+<li>  比如yuv420格式图像相比RGB来说，要节省一半的字节大小，抛弃相邻的色差对于人眼来说，差别不大。</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231511553.jpeg" alt="YUV颜色空间.jpg"></p>
+<h3 id="YUV颜色存储格式"><a href="#YUV颜色存储格式" class="headerlink" title="YUV颜色存储格式"></a>YUV颜色存储格式</h3><ul>
+<li>  常用的I420(YUV420P),NV12(YUV420SP),YV12（YUV420P）,NV21(YUV420SP)等都是属于YUV420，NV12是一种两平面存储方式，Y为一个平面，交错的UV为另一个平面</li>
+<li>  通常，用来远程传输的是I420数据，而本地摄像头采集的是NV12数据。（iOS）</li>
+<li>  所有在真正编码的过程中, 需要将NV12数据转成I420数据进行编码</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2017/09/13/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%A1%AC%E7%BC%96%E7%A0%81-%E8%BD%AF%E7%BC%96%E7%A0%81%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%BA%94%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1593,87 +1697,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2016/04/17/iOS%20Runtime%E7%89%B9%E6%80%A7%E4%B9%8B%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tate Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/04/17/iOS%20Runtime%E7%89%B9%E6%80%A7%E4%B9%8B%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1/" class="post-title-link" itemprop="url">iOS Runtime特性之关联对象</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2016-04-17 22:38:28" itemprop="dateCreated datePublished" datetime="2016-04-17T22:38:28+08:00">2016-04-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-22 17:05:43" itemprop="dateModified" datetime="2021-12-22T17:05:43+08:00">2021-12-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>现在你准备用一个系统的类或者是你写的类，但是这个类并不能满足你的需求，你需要额外添加一个属性。<br>一般解决办法要么是 <code>extends(继承)</code>，要么使用 <code>category(类别)</code>。<br>而我并不推荐使用 <code>extends</code> ，主要是耦合性太强，一般我使用 <code>category</code> 。<br>我们都知道，分类中是无法设置属性的，如果在分类的声明中写<code>@property</code> 只能为其生成<code>get</code> 和 <code>set</code> 方法的声明，<br>但是有时候使用类别也需要增加一个额外属性，<br>那么怎么办呢？<br>这个时候，<code>runtime</code>的关联属性就能发挥它的作用了。<br>一般都是<code>key value</code> 的存在。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/04/17/iOS%20Runtime%E7%89%B9%E6%80%A7%E4%B9%8B%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1743,7 +1766,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

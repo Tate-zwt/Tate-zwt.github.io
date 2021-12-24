@@ -158,6 +158,87 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2016/04/17/iOS%20Runtime%E7%89%B9%E6%80%A7%E4%B9%8B%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/04/17/iOS%20Runtime%E7%89%B9%E6%80%A7%E4%B9%8B%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1/" class="post-title-link" itemprop="url">iOS Runtime特性之关联对象</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-04-17 22:38:28" itemprop="dateCreated datePublished" datetime="2016-04-17T22:38:28+08:00">2016-04-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-22 17:05:43" itemprop="dateModified" datetime="2021-12-22T17:05:43+08:00">2021-12-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>现在你准备用一个系统的类或者是你写的类，但是这个类并不能满足你的需求，你需要额外添加一个属性。<br>一般解决办法要么是 <code>extends(继承)</code>，要么使用 <code>category(类别)</code>。<br>而我并不推荐使用 <code>extends</code> ，主要是耦合性太强，一般我使用 <code>category</code> 。<br>我们都知道，分类中是无法设置属性的，如果在分类的声明中写<code>@property</code> 只能为其生成<code>get</code> 和 <code>set</code> 方法的声明，<br>但是有时候使用类别也需要增加一个额外属性，<br>那么怎么办呢？<br>这个时候，<code>runtime</code>的关联属性就能发挥它的作用了。<br>一般都是<code>key value</code> 的存在。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2016/04/17/iOS%20Runtime%E7%89%B9%E6%80%A7%E4%B9%8B%E5%85%B3%E8%81%94%E5%AF%B9%E8%B1%A1/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2016/03/20/iOS%20Develop%20Tips/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -760,7 +841,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
