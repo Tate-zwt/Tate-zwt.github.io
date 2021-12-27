@@ -158,6 +158,128 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2017/09/16/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%B5%81%E5%AA%92%E4%BD%93%E5%8D%8F%E8%AE%AE%EF%BC%88%E4%B8%83%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/09/16/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%B5%81%E5%AA%92%E4%BD%93%E5%8D%8F%E8%AE%AE%EF%BC%88%E4%B8%83%EF%BC%89/" class="post-title-link" itemprop="url">iOS直播技术学习笔记-流媒体协议（七）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-09-16 22:00:54" itemprop="dateCreated datePublished" datetime="2017-09-16T22:00:54+08:00">2017-09-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-23 15:12:47" itemprop="dateModified" datetime="2021-12-23T15:12:47+08:00">2021-12-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="常见的流媒体协议"><a href="#常见的流媒体协议" class="headerlink" title="常见的流媒体协议"></a>常见的流媒体协议</h3><ul>
+<li>常见的流媒体协议有很多比如:<ul>
+<li>  RTP(Real-time Transport Protocol), 常用语电话会议, 网络电话等场景, 但是缺点是不提供网络保障</li>
+<li>  RTCP(Real-time Transport Control Protocol), 是实时传输协议（RTP）的一个姐妹协议, 也常用于语电话会议, 网络电话等场景.</li>
+<li>  RTMP(Real Time Streaming Protocol), RTMP是Adobe开发的协议</li>
+<li>  HLS(HTTP Live Streaming)是苹果公司(Apple Inc.)实现的基于HTTP的流媒体传输协议，可实现流媒体的直播和点播</li>
+</ul>
+</li>
+</ul>
+<h3 id="HLS-HTTP-Live-Streaming"><a href="#HLS-HTTP-Live-Streaming" class="headerlink" title="HLS(HTTP Live Streaming)"></a>HLS(HTTP Live Streaming)</h3><ul>
+<li>HTTP Live Streaming（HLS）是苹果公司实现的基于HTTP的流媒体传输协议，可实现流媒体的直播和点播。原理上是将视频流分片成一系列HTTP下载文件。所以，HLS比RTMP有较高的延迟。HLS基于HTTP协议实现，传输内容包括两部分，一是M3U8描述文件，二是TS媒体文件<ul>
+<li>  相对于常见的流媒体直播协议，例如RTMP协议、RTSP协议、MMS协议等，HLS直播最大的不同在于，直播客户端获取到的，并不是一个完整的数据流。HLS协议在服务器端将直播数据流存储为连续的、很短时长的媒体文件（MPEG-TS格式），而客户端则不断的下载并播放这些小文件，因为服务器端总是会将最新的直播数据生成新的小文件，这样客户端只要不停的按顺序播放从服务器获取到的文件，就实现了直播。</li>
+<li>  由此可见，基本上可以认为，HLS是以点播的技术方式来实现直播。</li>
+</ul>
+</li>
+<li>工作流程为:<ul>
+<li>  采集视频源和音频源的数据</li>
+<li>  对原始数据进行H264编码和AAC编码</li>
+<li>  视频和音频数据封装为MPEG-TS包</li>
+<li>  HLS分段生成策略及m3u8索引文件</li>
+<li>  HTTP传输协议传输数据</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231512124.png" alt="工作流程.png"></p>
+<ul>
+<li>  使用FFmpeg命令将mp4文件切换成m3u8&amp;ts切片</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 安装Homebrew</span><br><span class="line">ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</span><br><span class="line">// 安装FFmpeg</span><br><span class="line">brew install ffmpeg</span><br><span class="line">// 执行转换命令</span><br><span class="line">ffmpeg -i XXX.mp4 -c:v libx264 -c:a copy -f hls XXX.m3u8</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  m3u8索引头解析</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231512157.png" alt="m3u8索引头解析.png"></p>
+<h3 id="RTMP"><a href="#RTMP" class="headerlink" title="RTMP"></a>RTMP</h3><ul>
+<li>  RTMP协议是 Adobe 公司开发的一个基于TCP的应用层协议，Adobe 公司也公布了关于RTMP的规范</li>
+<li>RTMP本质上是流协议，主要的优势是：<ul>
+<li>  实时性高：RTMP的实时性在3秒之内，经过多层CDN节点分发后，实时性也在3秒左右,在一些实时性有要求的应用中以RTMP为主。</li>
+<li>  支持加密：RTMPE和RTMPS为加密协议</li>
+<li>  稳定性高：HTTP也很稳定，但HTTP是在协议上稳定稳定性不只是服务端的事情，在CDN分发，服务器管理，客户端的支持上</li>
+</ul>
+</li>
+<li>RTMP的使用<ul>
+<li>  RTMP协议也要客户端和服务器通过“握手”来建立基于传输层链接之上的RTMP Connection链接，在Connection链接上会传输一些控制信息</li>
+<li>  TMP协议传输时会对数据做自己的格式化，这种格式的消息我们称之为RTMP Message</li>
+<li>  而实际传输的时候为了更好地实现多路复用、分包和信息的公平性，发送端会把Message划分为带有Message ID的Chunk，每个Chunk可能是一个单独的Message，也可能是Message的一部分，在接受端会根据chunk中包含的data的长度，message id和message的长度把chunk还原成完整的Message，从而实现信息的收发。</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2017/09/15/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-YUV%E9%A2%9C%E8%89%B2%E7%A9%BA%E9%97%B4%EF%BC%88%E5%85%AD%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1616,87 +1738,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2016/08/31/iOS%E9%9B%86%E6%88%90Ping++%E6%94%AF%E4%BB%98,%E7%BB%95%E8%BF%87%E4%B8%80%E4%BA%9B%E5%9D%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tate Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/08/31/iOS%E9%9B%86%E6%88%90Ping++%E6%94%AF%E4%BB%98,%E7%BB%95%E8%BF%87%E4%B8%80%E4%BA%9B%E5%9D%91/" class="post-title-link" itemprop="url">iOS集成Ping++支付,绕过一些坑</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2016-08-31 20:18:50" itemprop="dateCreated datePublished" datetime="2016-08-31T20:18:50+08:00">2016-08-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-22 17:05:22" itemprop="dateModified" datetime="2021-12-22T17:05:22+08:00">2021-12-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>这一段时间比较忙，主要公司的产品需要重构与加多一个货币支付系统。说到移动端的支付，自然会牵扯到支付这一块。支付这一块主流的目前就微信、支付宝、银联。做过这些SDK集成的开发者都知道，集成相对复杂，而且要花大量的时间去阅读他们提供的开发文档，不过还好现在有很多开发者都分享了他们的集成心得，使这件事越发简单，比如：<a target="_blank" rel="noopener" href="http://www.jianshu.com/p/97d38b00e53d">iOS支付[支付宝、银联、微信]</a>、<a target="_blank" rel="noopener" href="http://www.jianshu.com/p/6d67cfe0f00c">10分钟搞定支付宝和微信支付 的 各种填坑</a>等等，但是呢，其实还有更加简单的,<a target="_blank" rel="noopener" href="https://www.pingxx.com/docs/overview">Ping++</a>。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/08/31/iOS%E9%9B%86%E6%88%90Ping++%E6%94%AF%E4%BB%98,%E7%BB%95%E8%BF%87%E4%B8%80%E4%BA%9B%E5%9D%91/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1766,7 +1807,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">37</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -158,6 +158,63 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2021/12/27/Swift-Leetcode-%E9%93%BE%E8%A1%A8-%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/27/Swift-Leetcode-%E9%93%BE%E8%A1%A8-%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">Swift Leetcode 链表 算法题解</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-12-27 11:51:24" itemprop="dateCreated datePublished" datetime="2021-12-27T11:51:24+08:00">2021-12-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2021/12/24/Swift%20Leetcode%20%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F%20%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1219,82 +1276,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2019/11/15/iOS-%E5%86%85%E8%B4%AD%E7%9A%84%E5%9D%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tate Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/15/iOS-%E5%86%85%E8%B4%AD%E7%9A%84%E5%9D%91/" class="post-title-link" itemprop="url">iOS 内购的坑</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-11-15 14:29:53" itemprop="dateCreated datePublished" datetime="2019-11-15T14:29:53+08:00">2019-11-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-12-23 15:31:00" itemprop="dateModified" datetime="2021-12-23T15:31:00+08:00">2021-12-23</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>内购的坑：<br>1、设计内购订单状态：游客购买（未充值到账户）、游客购买（已充值到账户）、登录用户购买<br>2、实现游客未登陆模式下购买逻辑，我的app是根据当前是否登录，如果没有登录，默认提取uuid作为订单的用户id，如果登录，用户id就是登录用户的id。<br>3、因为苹果提到了未登陆下也可以内购，然后提供给这个游客随时注册的方法，这里放在一起考虑就可以得出来结论，当已经产生内购的设备，有用户通过这个设备登录或者注册新用户，通过设备的uuid获取到之前游客购买（未充值到账户）的内购虚拟货币总量，直接充值进当前登录或者新注册的账户中，同时更改这部分内购订单的状态。<br>4、可以在内购充值的时候，弹个框仿照B站，提示说<br>登录账号(推荐，可在不同设备使用)<br>以游客身份继续(仅限当前设备使用)</p>
-<p>注意下：使用uuid需要存储到系统中的keychain中，来保证以后每次可以得到相同的唯一标志。</p>
-<p>最后加一点个人理解：内购这东西，有人说是绑定用户的appid，但是我通过设备绑定也上架了，苹果并不是强制要求内购绑定用户当前登录的appid，主要是需要让用户在不登录下能以游客方式进行内购！！！<br>因为并没有看到任何接口或者方法通过用户的appid可以查询到内购订单。<br>但是通过设备uuid的模式，确实可行。而且这样实现也比较简单，同时也做到了逻辑严谨。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1364,7 +1345,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">37</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
