@@ -183,7 +183,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-12-27 21:36:26 / Modified: 17:50:09" itemprop="dateCreated datePublished" datetime="2021-12-27T21:36:26+08:00">2021-12-27</time>
+              <time title="Created: 2021-12-27 21:36:26 / Modified: 17:53:07" itemprop="dateCreated datePublished" datetime="2021-12-27T21:36:26+08:00">2021-12-27</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -235,6 +235,11 @@
 <p>解题思路：</p>
 <p>这里还是使用虚拟节点，每次去取两个链表的值相加的时候都需要再把进位值算进去，由于每次只能把sum的个位数作为新节点的值，所以进位的值只能留给后面的sum相加，获取新的值都插入到lastNode尾部，最后还需要处理剩下的进位值，这里如果有进位值只会是1<br>注意点：<br>遍历的结束条件是两方都没有值了才结束，也就是说都为 nil<br>一方链表为nil，就当做是 0</p>
 <p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112271750105.png" alt="image-20211227174954926"></p>
+<h3 id="3-相交链表"><a href="#3-相交链表" class="headerlink" title="3.相交链表"></a>3.<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/intersection-of-two-linked-lists/">相交链表</a></h3><p>给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 null 。</p>
+<p>图示两个链表在节点 c1 开始相交：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112271753708.png" alt="img"></p>
+<p>题目数据 保证 整个链式结构中不存在环。</p>
+<p>注意，函数返回结果后，链表必须 保持其原始结构 。</p>
 
       
     </div>
