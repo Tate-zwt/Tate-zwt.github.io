@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"tate-zwt.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+  <meta name="description" content="「 少点虚的，多点实践 」">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Tate Blog">
 <meta property="og:url" content="https://tate-zwt.github.io/page/3/index.html">
 <meta property="og:site_name" content="Tate Blog">
-<meta property="og:description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+<meta property="og:description" content="「 少点虚的，多点实践 」">
 <meta property="og:locale">
 <meta property="article:author" content="爱吃番茄炒蛋">
 <meta name="twitter:card" content="summary">
@@ -158,12 +158,145 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2017/09/20/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-iOS%E4%B8%AD%E5%AE%9E%E7%8E%B0%E6%8E%A8%E6%B5%81%EF%BC%88%E5%85%AB%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="爱吃番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践 」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/09/20/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-iOS%E4%B8%AD%E5%AE%9E%E7%8E%B0%E6%8E%A8%E6%B5%81%EF%BC%88%E5%85%AB%EF%BC%89/" class="post-title-link" itemprop="url">iOS直播技术学习笔记-iOS中实现推流（八）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-09-20 21:03:07" itemprop="dateCreated datePublished" datetime="2017-09-20T21:03:07+08:00">2017-09-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="推流演示"><a href="#推流演示" class="headerlink" title="推流演示"></a>推流演示</h1><h3 id="搭建本地服务器"><a href="#搭建本地服务器" class="headerlink" title="搭建本地服务器"></a>搭建本地服务器</h3><h4 id="安装Nginx"><a href="#安装Nginx" class="headerlink" title="安装Nginx"></a>安装Nginx</h4><ul>
+<li>Nginx介绍<ul>
+<li>  Nginx是什么?</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231513139.png" alt="Nginx.png"><br>    *   简言之，Nginx本身是一个非常出色的HTTP服务器，具有占用内存少，高并发的特点。</p>
+<ul>
+<li>  Nginx安装</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 1&gt; 将Nginx Clone到本地</span><br><span class="line">$ brew tap homebrew/nginx</span><br><span class="line">// 2&gt; 链接要执行的命令</span><br><span class="line">$ brew link pcre rtmp-nginx-module</span><br><span class="line">// 3&gt; 安装Nginx</span><br><span class="line">$ brew install nginx-full --with-rtmp-module</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>  记住安装配置文件的路径(/usr/local/etc/nginx/nginx.conf)</p>
+</li>
+<li><p>启动即可:</p>
+<ul>
+<li>  $ nginx</li>
+<li>  在浏览器输入地址验证: <a target="_blank" rel="noopener" href="http://localhost:8080/">http://localhost:8080</a></li>
+</ul>
+</li>
+<li><p>  配置Nginx，支持http协议拉流</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">location /hls &#123;</span><br><span class="line">        #Serve HLS config</span><br><span class="line">        types &#123;</span><br><span class="line">            application/vnd.apple.mpegurl    m3u8;</span><br><span class="line">            video/mp2t ts;</span><br><span class="line">        &#125;</span><br><span class="line">        root /usr/local/var/www;</span><br><span class="line">        add_header Cache-Control    no-cache;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  配置Nginx，支持rtmp协议推流</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">rtmp &#123;</span><br><span class="line">    server &#123;</span><br><span class="line">        listen 1935;</span><br><span class="line">        application rtmplive &#123;</span><br><span class="line">            live on;</span><br><span class="line">            max_connections 1024;</span><br><span class="line">        &#125;</span><br><span class="line">        application hls&#123;</span><br><span class="line">            live on;</span><br><span class="line">            hls on;</span><br><span class="line">            hls_path /usr/local/var/www/hls;</span><br><span class="line">            hls_fragment 1s;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  重启Nginx: nginx -s reload</li>
+</ul>
+<h3 id="推流测试"><a href="#推流测试" class="headerlink" title="推流测试"></a>推流测试</h3><ul>
+<li>推流至RTMP到服务器<ul>
+<li>  生成地址: rtmp://localhost:1935/rtmplive/demo</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -re -i story.mp4 -vcodec libx264 -vprofile baseline -acodec aac -ar 44100 -strict -2 -ac 1 -f flv -s 1280x720 -q 10 rtmp://localhost:1935/rtmplive/demo</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>推流至HLS到服务器<ul>
+<li>  生成地址: <a target="_blank" rel="noopener" href="http://localhost:8080/hls/test.m3u8">http://localhost:8080/hls/test.m3u8</a></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -re -i /Users/apple/Desktop/ffmepg/HLS切片/说出你的励志故事.mp4 -vcodec libx264 -vprofile baseline -acodec aac -ar 44100 -strict -2 -ac 1 -f flv -s 1280x720 -q 10 rtmp://localhost:1935/hls/demo</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="远程服务器配置"><a href="#远程服务器配置" class="headerlink" title="远程服务器配置"></a>远程服务器配置</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">0&gt; 安装git</span><br><span class="line">1&gt; git clone srs</span><br><span class="line">2&gt; cd sis目录</span><br><span class="line">* git checkout 2.0release</span><br><span class="line">* git pull</span><br><span class="line">3&gt; 配置远程服务器环境</span><br><span class="line">* ./configure --disable-all --with-ssl --with-nginx --with-hls --with-http-callback --with-http-server --with-http-api --with-ffmpeg --with-transcode --with-librtmp --with-dvr &amp;&amp; make</span><br><span class="line">4&gt; 启动配置</span><br><span class="line">* ./objcs/srs -c conf/srs.conf</span><br><span class="line">* 查看pid: pgrep</span><br><span class="line">5&gt; 关闭进程</span><br><span class="line">* kill nginx/killall nginx</span><br><span class="line">6&gt; 推流可以播放hls/rtmp</span><br><span class="line">* 加载自己配置的conf文件srs/trunk/conf</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="iOS中实现推流"><a href="#iOS中实现推流" class="headerlink" title="iOS中实现推流"></a>iOS中实现推流</h1><h3 id="推流概述"><a href="#推流概述" class="headerlink" title="推流概述"></a>推流概述</h3><ul>
+<li>  经过前面的讲解&amp;分析, 我们已经可以做到采集-美颜滤镜-视频编码-协议推流</li>
+<li>  那么下面就需要真正实现iOS中的推流</li>
+<li>  采用RTMP进行推流, 因为该协议实时性非常的高, 但是将Message封装成Trunk的过程非常麻烦, 所有我们这里直接采用框架实现推流.</li>
+<li>常见的推流框架<ul>
+<li>  Swift框架: lf.swift</li>
+<li>  OC框架: LFLiveKit</li>
+</ul>
+</li>
+</ul>
+<h3 id="推流框架的使用"><a href="#推流框架的使用" class="headerlink" title="推流框架的使用"></a>推流框架的使用</h3><ul>
+<li>  LFLiveKit是一个集成了视频采集-美颜-编码-推流为一体的框架,并且使用起来非常的简单, 我们可以在iOS中直接使用该框架进行推流</li>
+<li>  使用方式</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2017/09/16/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%B5%81%E5%AA%92%E4%BD%93%E5%8D%8F%E8%AE%AE%EF%BC%88%E4%B8%83%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="爱吃番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+      <meta itemprop="description" content="「 少点虚的，多点实践 」">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -278,7 +411,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="爱吃番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+      <meta itemprop="description" content="「 少点虚的，多点实践 」">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -375,7 +508,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="爱吃番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+      <meta itemprop="description" content="「 少点虚的，多点实践 」">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -575,7 +708,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="爱吃番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+      <meta itemprop="description" content="「 少点虚的，多点实践 」">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -859,7 +992,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="爱吃番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+      <meta itemprop="description" content="「 少点虚的，多点实践 」">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -978,7 +1111,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="爱吃番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+      <meta itemprop="description" content="「 少点虚的，多点实践 」">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1210,7 +1343,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="爱吃番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+      <meta itemprop="description" content="「 少点虚的，多点实践 」">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1380,7 +1513,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="爱吃番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+      <meta itemprop="description" content="「 少点虚的，多点实践 」">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1484,7 +1617,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="爱吃番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
+      <meta itemprop="description" content="「 少点虚的，多点实践 」">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1593,81 +1726,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2016/09/01/%E3%80%8C%20iOS%E5%B9%B2%E8%B4%A7%20%E3%80%8D%E6%8F%90%E9%AB%98%E4%BB%A3%E7%A0%81%E7%AE%80%E6%B4%81%E7%9A%84%E6%96%B9%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="爱吃番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践，持续学习，终身学习」">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tate Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/09/01/%E3%80%8C%20iOS%E5%B9%B2%E8%B4%A7%20%E3%80%8D%E6%8F%90%E9%AB%98%E4%BB%A3%E7%A0%81%E7%AE%80%E6%B4%81%E7%9A%84%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">「 iOS干货 」提高代码简洁的方法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2016-09-01 19:28:29" itemprop="dateCreated datePublished" datetime="2016-09-01T19:28:29+08:00">2016-09-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>开发项目的时候，常常会有一些代码重复而且冗余，在用的时候需要写很长的代码或者用的地方也多，所以这个时候就需要集中起来封装，使代码复用性强，用短短的几行代码搞定。这些方法我都封装在<code>category、tools、View</code>，加上代码里都有写注释，用起来很方便，实用性强，读起来也易懂，可以让代码更加的简洁。里面有一些也是参考别人源码，也做了下搬运工，希望对你们开发项目有所帮助。</p>
-<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><h6 id="WTSDK"><a href="#WTSDK" class="headerlink" title="WTSDK"></a>WTSDK</h6><p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221635861.png" alt="WTSDK目录"><br>看目录结构就觉得清晰易懂，反正我是这么觉得的☺️</p>
-<h6 id="Category（分类）"><a href="#Category（分类）" class="headerlink" title="Category（分类）"></a>Category（分类）</h6><p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221635046.png" alt="Category"></p>
-<h6 id="NS（NS前缀的分类）"><a href="#NS（NS前缀的分类）" class="headerlink" title="NS（NS前缀的分类）"></a>NS（NS前缀的分类）</h6><p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221636013.png" alt="NS"></p>
-<h6 id="UI（UI前缀的分类）"><a href="#UI（UI前缀的分类）" class="headerlink" title="UI（UI前缀的分类）"></a>UI（UI前缀的分类）</h6><p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221636070.png" alt="UI"><br>看<code>class名称</code>，它们都是对应对象的分类方法，里面扩展了很多实用性的功能，具体可以看源码。</p>
-<h6 id="Tool（工具类集合）"><a href="#Tool（工具类集合）" class="headerlink" title="Tool（工具类集合）"></a>Tool（工具类集合）</h6><p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221636337.png" alt="Tool"><br><code>Singleton</code>是一个单例模式的宏使用方法：<br>在<code>.h</code>里写上<code>singleton_interface(类名称)</code>与<code>.m</code>里写上<code>singleton_implementation(类名称)</code>即完美支持MRC和ARC下的单例使用。<br><code>WTConst</code>里面包括很多实用性很强的宏定义，具体看源码。<br><code>WTUtility</code>里面定义了很多实用性很强的类方法，具体看源码。</p>
-<h6 id="View（UITextField与UITextView）"><a href="#View（UITextField与UITextView）" class="headerlink" title="View（UITextField与UITextView）"></a>View（UITextField与UITextView）</h6><p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221636362.png" alt="View"><br><code>View</code>文件夹里包括<code>UITextField</code>与<code>UITextView</code>原生控件的封装。我一直觉得这两个原生控件每次用的时候都要加入好多的判断与代理方法，而且都是差不多一样的，所以我就针对这两个进行了封装，把常用的功能都集合在里面，比如限制文字输入长度等等，这样使用起来更加的方便和简洁。具体可以看下源码。</p>
-<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><p>你可以看下<code>WTSDK</code>里面有啥需要的，单独拉某个文件到你的项目里使用即可。<br>如果你都要使用的话，直接导入<code>#import &quot;WTConst.h&quot;</code>即可。<br>注意如果用到<code>UIViewController+WT</code>还需要项目里有<a target="_blank" rel="noopener" href="https://github.com/jdg/MBProgressHUD">MBProgressHUD</a>这个库。</p>
-<p>####源码在这<br><a target="_blank" rel="noopener" href="https://github.com/Tate-zwt/WTSDK">GitHub</a> 如果你觉得不错的话，麻烦你点一下Star，thank you all!</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1730,14 +1788,14 @@
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
   <p class="site-author-name" itemprop="name">爱吃番茄炒蛋</p>
-  <div class="site-description" itemprop="description">「 少点虚的，多点实践，持续学习，终身学习」</div>
+  <div class="site-description" itemprop="description">「 少点虚的，多点实践 」</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-count">38</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
