@@ -158,6 +158,124 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2017/01/19/C-%E4%B9%8B%E5%88%9D%E4%BD%93%E9%AA%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="爱吃番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践 」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/01/19/C-%E4%B9%8B%E5%88%9D%E4%BD%93%E9%AA%8C/" class="post-title-link" itemprop="url">C++ 之初体验</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-01-19 21:34:57" itemprop="dateCreated datePublished" datetime="2017-01-19T21:34:57+08:00">2017-01-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%90%8E%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">后端</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>C++与Objective-C都是在1980+年代诞生，所以语法糖上面都有很多相似地方，学起来并不难。至于我用的IDE，我直接用的是Xcode，很方便。</p>
+<p>国际惯例，打印<code>hello world</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cout &lt;&lt; &quot;hello world&quot; &lt;&lt; endl;</span><br></pre></td></tr></table></figure>
+
+<p>这里介绍几个关键词：</p>
+<blockquote>
+<p>cout 输出<br>cin    输入<br>endl 换行打印</p>
+</blockquote>
+<p>cout 语法形式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cout &lt;&lt; x &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; &quot;x + y =&quot; &lt;&lt; x+y &lt;&lt; endl;</span><br></pre></td></tr></table></figure>
+<p>cin 语法形式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cin &gt;&gt; x;</span><br><span class="line">cin &gt;&gt; x &gt;&gt; y;</span><br></pre></td></tr></table></figure>
+
+<p>这样的输入、输出方式有哪些便利？<br>1、不用关注占位符<br>2、不用关注数据类型<br>3、不易出现问题</p>
+<h4 id="C-命名空间（namespace）"><a href="#C-命名空间（namespace）" class="headerlink" title="C++命名空间（namespace）"></a>C++命名空间（namespace）</h4><p>在C++中，名称（name）可以是符号常量、变量、宏、函数、结构、枚举、类和对象等等。为了避免，在大规模程序的设计中，以及在程序员使用各种各样的C++库时，这些标识符的命名发生冲突，标准C++引入了关键字namespace（命名空间/名字空间/名称空间/名域），可以更好地控制标识符的作用域。</p>
+<p>举个例子：同个年级有相同名字的同学，那样为了避免认错人，我们可以把他们分到不同班级里，这样就区分开来了。这里的班级就可以称为命名空间。</p>
+<p>关于命名空间描述几点</p>
+<blockquote>
+<p>1、使用namespace定义命名空间。<br>2、通过命名空间可以区分具有相同名字的变量。<br>3、通过命名空间可以区分具有相同名字的函数。</p>
+</blockquote>
+<p>代码示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">   namespace     myNum            //填写命名空间的关键字</span><br><span class="line">&#123;</span><br><span class="line">    int x = 105;</span><br><span class="line">&#125;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    // 使用bool类型定义isOdd，作为状态位</span><br><span class="line">        bool    isFlag = false;       </span><br><span class="line">	</span><br><span class="line">	if(myNum::x % 2 == 0)</span><br><span class="line">	&#123;</span><br><span class="line">		//改变状态位的值，使其为false</span><br><span class="line">        isFlag = false;</span><br><span class="line">	&#125;</span><br><span class="line">	else</span><br><span class="line">	&#123;</span><br><span class="line">	    //改变状态位的值，使其为true</span><br><span class="line">        isFlag = true;</span><br><span class="line">	&#125;</span><br><span class="line">    // 判断状态位的值</span><br><span class="line">	if(isFlag)</span><br><span class="line">	&#123;</span><br><span class="line">		// 如果状态位的值为true，则打印变量x是奇数</span><br><span class="line">        cout &lt;&lt; x是奇数 ;</span><br><span class="line">	&#125;</span><br><span class="line">	else</span><br><span class="line">	&#123;</span><br><span class="line">        // 如果状态位的值为false，则打印变量x是偶数</span><br><span class="line">		cout &lt;&lt; x是偶数 ;</span><br><span class="line">	&#125;</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="C-引用"><a href="#C-引用" class="headerlink" title="C++ 引用"></a>C++ 引用</h4><p>代码示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">    int x = 3;</span><br><span class="line">    //定义引用，y是x的引用</span><br><span class="line">    int &amp;y = x;</span><br><span class="line">    //打印x和y的值</span><br><span class="line">	cout &lt;&lt; x &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; y &lt;&lt;endl;</span><br><span class="line">	//修改y的值</span><br><span class="line">    y = 100;</span><br><span class="line">    //再次打印x和y的值</span><br><span class="line">    cout &lt;&lt; x &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; y &lt;&lt;endl;  </span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="C-const关键字"><a href="#C-const关键字" class="headerlink" title="C++ const关键字"></a>C++ const关键字</h4><p>代码示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">//const</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">    //定义常量count</span><br><span class="line">    const int count = 3;</span><br><span class="line">    const int *p =  &amp;count;</span><br><span class="line">    //打印count次字符串Hello C++</span><br><span class="line">	for(int i = 0; i &lt; count; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; &quot;Hello C++&quot; &lt;&lt; endl;</span><br><span class="line">	&#125; </span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="C-函数新亮点"><a href="#C-函数新亮点" class="headerlink" title="C++函数新亮点"></a>C++函数新亮点</h4><h6 id="函数参数默认值"><a href="#函数参数默认值" class="headerlink" title="函数参数默认值"></a>函数参数默认值</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void fun( int i,int j=5,int k=10 );//有默认参数值的参数必须在参数表的最右端</span><br></pre></td></tr></table></figure>
+<h6 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h6><p>在相同作用域内<br>用同一个函数名定义的多个函数<br>参数个数和参数类型不同</p>
+<h6 id="内联函数"><a href="#内联函数" class="headerlink" title="内联函数"></a>内联函数</h6><p>编译时将函数体代码和实参代替函数调用语句<br>内联函数关键字：inline</p>
+<p>关于C++函数形参默认值的说法</p>
+<blockquote>
+<p>1、当函数有多个形参时，可以都有默认值。<br>2、当函数有多个形参时，可以都没有默认值。<br>3、当函数有多个形参且都有默认值时，实参个数可以少于形参个数。</p>
+</blockquote>
+<p>代码示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">/**</span><br><span class="line">  *函数功能：返回a和b的最大值</span><br><span class="line">  *a和b是两个整数</span><br><span class="line">  */</span><br><span class="line">int getMax(int a, int b)</span><br><span class="line">&#123;</span><br><span class="line">    return a &gt; b ? a : b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">  * 函数功能：返回数组中的最大值</span><br><span class="line">  * arr：整型数组</span><br><span class="line">  * count：数组长度</span><br><span class="line">  * 该函数是对上面函数的重载</span><br><span class="line">  */</span><br><span class="line">int getMax(int *arr,int count)</span><br><span class="line">&#123;</span><br><span class="line">    //定义一个变量并获取数组的第一个元素</span><br><span class="line">    int maxNum = arr[0];</span><br><span class="line">	for(int i = 1; i &lt; count; i++)</span><br><span class="line">	&#123;</span><br><span class="line">        //比较变量与下一个元素的大小</span><br><span class="line">		if(maxNum &lt; arr[i])</span><br><span class="line">		&#123;</span><br><span class="line">            //如果数组中的元素比maxNum大，则获取数组中的值</span><br><span class="line">			maxNum = arr[i];</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;</span><br><span class="line">	return maxNum;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">    //定义int数组并初始化</span><br><span class="line">	int numArr[3] = &#123;3, 8, 6&#125;;</span><br><span class="line">    </span><br><span class="line">    //自动调用int getMax(int a, int b)</span><br><span class="line">	cout &lt;&lt; getMax(numArr, 3) &lt;&lt; endl;</span><br><span class="line">    </span><br><span class="line">    //自动调用返回数组中最大值的函数返回数组中的最大值</span><br><span class="line">	cout &lt;&lt; getMax(numArr[0], numArr[2]) &lt;&lt; endl;</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="C-内存管理"><a href="#C-内存管理" class="headerlink" title="C++内存管理"></a>C++内存管理</h4><p>什么是内存管理？</p>
+<blockquote>
+<p>内存的本质是资源<br>操作系统掌管内存资源<br>对于我们开发者，我们能手动申请与归还<br>申请/归还内存资源就是内存管理</p>
+</blockquote>
+<p>如图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231458277" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231435536.jpeg" alt="1A160E69-BD72-4B65-983B-AE17F12E7A9B.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231459253" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231435538.jpeg" alt="C8FEF922-5C3C-4AF6-9CD6-67F01BED98A5.png"></p>
+<p>内容总结<br>使用new申请内存，使用delete释放内存<br>申请内存需要判断是否成功，释放内存需要设空指针<br>new与delete配套使用</p>
+<p>代码示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;string.h&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">    //在堆中申请100个char类型的内存</span><br><span class="line">    char *str = new char[100];</span><br><span class="line">    //拷贝Hello C++字符串到分配的堆中的内存中</span><br><span class="line">	strcpy(str, &quot;Hello imooc&quot;);</span><br><span class="line">    //打印字符串</span><br><span class="line">    cout &lt;&lt; str &lt;&lt; endl;</span><br><span class="line">    //释放内存</span><br><span class="line">	delete []str;</span><br><span class="line">    str = NULL;</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2016/09/01/%E3%80%8C%20iOS%E5%B9%B2%E8%B4%A7%20%E3%80%8D%E6%8F%90%E9%AB%98%E4%BB%A3%E7%A0%81%E7%AE%80%E6%B4%81%E7%9A%84%E6%96%B9%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -955,7 +1073,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-count">39</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
