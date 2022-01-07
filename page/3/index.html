@@ -158,6 +158,128 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2018/05/03/Swift-Develop-Tips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="爱吃番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践 」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/05/03/Swift-Develop-Tips/" class="post-title-link" itemprop="url">Swift Develop Tips</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-03 17:37:12" itemprop="dateCreated datePublished" datetime="2018-05-03T17:37:12+08:00">2018-05-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-23 15:19:06" itemprop="dateModified" datetime="2021-12-23T15:19:06+08:00">2021-12-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h5 id="Xcode12模板位置"><a href="#Xcode12模板位置" class="headerlink" title="Xcode12模板位置:"></a>Xcode12模板位置:</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Templates/File Templates/iOS/Source/Cocoa Touch Class.xctemplate</span><br></pre></td></tr></table></figure>
+
+<h2 id="1、设置导航栏为透明"><a href="#1、设置导航栏为透明" class="headerlink" title="1、设置导航栏为透明"></a>1、设置导航栏为透明</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">self.navigationBar.setBackgroundImage(UIImage(), for: .default)</span><br><span class="line">self.navigationBar.shadowImage = UIImage()</span><br><span class="line">self.navigationBar.isTranslucent = true</span><br></pre></td></tr></table></figure>
+
+<h2 id="2、bridging-header是swift刚出的时候，官方提供一种混编的方式。现在cocoapods-的版本已经支持swift-了，当你在安装pods的时候，添加下面这句话"><a href="#2、bridging-header是swift刚出的时候，官方提供一种混编的方式。现在cocoapods-的版本已经支持swift-了，当你在安装pods的时候，添加下面这句话" class="headerlink" title="2、bridging-header是swift刚出的时候，官方提供一种混编的方式。现在cocoapods 的版本已经支持swift 了，当你在安装pods的时候，添加下面这句话."></a>2、bridging-header是swift刚出的时候，官方提供一种混编的方式。现在cocoapods 的版本已经支持swift 了，当你在安装pods的时候，添加下面这句话.</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Uncomment this line if you&#x27;re using Swift</span><br><span class="line">use_frameworks!</span><br></pre></td></tr></table></figure>
+<p>它在cocoa pods中已经对Swift进行了配置，所以可以直接使用,不需要创建bridging-header。</p>
+<p>推荐swift项目学习：<br> <a target="_blank" rel="noopener" href="https://github.com/spicyShrimp/U17">U17</a><br> <a target="_blank" rel="noopener" href="https://github.com/lb2281075105/LBXMLYFM-Swift">LBXMLYFM-Swift</a></p>
+<h2 id="3、必要构造器"><a href="#3、必要构造器" class="headerlink" title="3、必要构造器"></a>3、必要构造器</h2><p>我们可以通过required关键字来实现必要构造器，子类必须实现父类的必要构造器。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Animal &#123;</span><br><span class="line">    var name: String</span><br><span class="line">    required init(name: String) &#123;</span><br><span class="line">        self.name = name</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Dog: Animal &#123;</span><br><span class="line">    var foot: Int</span><br><span class="line">    //在重写父类必要构造器的时候不需要加override</span><br><span class="line">    required init(name: String) &#123;</span><br><span class="line">        foot = 4</span><br><span class="line">        super.init(name: name)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Dog(name: &quot;dog&quot;)</span><br></pre></td></tr></table></figure>
+<p>有一点需要注意的就是：如果子类继承的构造器能满足必要构造器的要求，则无须在子类中显式提供必要构造器的实现。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class Animal &#123;</span><br><span class="line">    var name: String</span><br><span class="line">    required init(name: String) &#123;</span><br><span class="line">        self.name = name</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Dog: Animal &#123;</span><br><span class="line">    var foot = 2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Dog(name: &quot;dog&quot;)</span><br></pre></td></tr></table></figure>
+<p>在我们日常开发中，我们会经常自定义UITableViewCell的子类来实现我们定制化的需求，如果我们没有实现required init?(coder aDecoder: NSCoder)方法的话，我们的代码是编译报错的。查看文档我们发现该方法为NSCoding的方法，且该方法为UIView 必要构造器，所以它的子类必须实现该方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class CustomTableViewCell: UITableViewCell &#123;</span><br><span class="line">    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) &#123;</span><br><span class="line">        super.init(style: style, reuseIdentifier: reuseIdentifier)</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    required init?(coder aDecoder: NSCoder) &#123;</span><br><span class="line">        fatalError(&quot;init(coder:) has not been implemented&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4、访问级别"><a href="#4、访问级别" class="headerlink" title="4、访问级别"></a>4、访问级别</h2><p>Swift 为代码中的实体提供了五种不同的<em>访问级别</em>。这些访问级别不仅与源文件中定义的实体相关，同时也与源文件所属的模块相关。</p>
+<ul>
+<li><p>  <em>open</em> 和 <em>public</em> 级别可以让实体被同一模块源文件中的所有实体访问，在模块外也可以通过导入该模块来访问源文件里的所有实体。通常情况下，你会使用 open 或 public 级别来指定框架的外部接口。open 和 public 的区别在后面会提到。</p>
+</li>
+<li><p>  <em>internal</em> 级别让实体被同一模块源文件中的任何实体访问，但是不能被模块外的实体访问。通常情况下，如果某个接口只在应用程序或框架内部使用，就可以将其设置为 internal 级别。</p>
+</li>
+<li><p>  <em>fileprivate</em> 限制实体只能在其定义的文件内部访问。如果功能的部分实现细节只需要在文件内使用时，可以使用 fileprivate 来将其隐藏。</p>
+</li>
+<li><p>  <em>private</em> 限制实体只能在其定义的作用域，以及同一文件内的 extension 访问。如果功能的部分细节只需要在当前作用域内使用时，可以使用 private 来将其隐藏。</p>
+</li>
+</ul>
+<p>open 为最高访问级别（限制最少），private 为最低访问级别（限制最多）。</p>
+<p>open 只能作用于类和类的成员，它和 public 的区别主要在于 open 限定的类和成员能够在模块外能被继承和重写，在下面的 子类 这一节中有详解。将类的访问级别显示指定为 <code>open</code> 表明你已经设计好了类的代码，并且充分考虑过这个类在其他模块中用作父类时的影响。</p>
+<h2 id="5、pod不重新安装已有的库"><a href="#5、pod不重新安装已有的库" class="headerlink" title="5、pod不重新安装已有的库"></a>5、pod不重新安装已有的库</h2><p><code>pod install --no-repo-update</code></p>
+<h2 id="6、swift-闭包-循环引用"><a href="#6、swift-闭包-循环引用" class="headerlink" title="6、swift 闭包 循环引用"></a>6、swift 闭包 循环引用</h2><p>参考链接：<br><a href="/p/36ecc33df9c9">Swift闭包循环引用</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/bf2b8f278a81">Swift与OC真正去理解Block解决循环引用的技巧</a></p>
+<h2 id="7、Swift-5-1-字符串"><a href="#7、Swift-5-1-字符串" class="headerlink" title="7、Swift 5.1  - 字符串"></a>7、Swift 5.1  - 字符串</h2><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/7af97cd7b501">Swift 5.1 (3) - 字符串</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/623f5fce25af">iOS Swift中String的常用操作以及数据转化</a></p>
+<h2 id="8、tableView-deselectRow-at-indexPath-animated-true-注意事项"><a href="#8、tableView-deselectRow-at-indexPath-animated-true-注意事项" class="headerlink" title="8、tableView.deselectRow(at: indexPath, animated: true) 注意事项"></a>8、tableView.deselectRow(at: indexPath, animated: true) 注意事项</h2><p>这里不单单取消选中，还会把cell所有的子控件设置为选中或者高亮</p>
+<h2 id="9、VC的便利构造方法"><a href="#9、VC的便利构造方法" class="headerlink" title="9、VC的便利构造方法"></a>9、VC的便利构造方法</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">convenience init(type: ContentType) &#123;</span><br><span class="line">        // 便利构造函数中 一定不会有super 对于属性的赋值 一般在self.init()之后 只有self被初始化后,才能对其进行赋值, 不能使用let修饰属性 var 并且告诉编译器其强制解包 一定有值</span><br><span class="line">        self.init()</span><br><span class="line">        self.type = type</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) &#123;</span><br><span class="line">        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    required init?(coder aDecoder: NSCoder) &#123;</span><br><span class="line">        fatalError(&quot;init(coder:) has not been implemented&quot;)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="10、实现TableView下拉关闭"><a href="#10、实现TableView下拉关闭" class="headerlink" title="10、实现TableView下拉关闭"></a>10、实现TableView下拉关闭</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">let cv:CGFloat = -150 //下拉关闭数值</span><br><span class="line">func scrollViewDidScroll(_ scrollView: UIScrollView) &#123;</span><br><span class="line">        let offset = tableView.contentOffset.y;</span><br><span class="line">        print(message: offset)</span><br><span class="line">        if (offset &lt; cv) &#123;</span><br><span class="line">             close()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="11、关于UILabel设置AttributedString以后末尾…不出现的问题"><a href="#11、关于UILabel设置AttributedString以后末尾…不出现的问题" class="headerlink" title="11、关于UILabel设置AttributedString以后末尾…不出现的问题"></a>11、关于UILabel设置AttributedString以后末尾…不出现的问题</h2><p>需要重新设置一次label的lineBreakMode属性</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">editLabel.attributedText = PublicTools.load_attributedString(model.editor_note.trimmingCharacters(in: .newlines), font: FMFont13, color: CFontColor8, alignment: .left, lineSpacing: kLabelSpace)</span><br><span class="line">editLabel.lineBreakMode = .byTruncatingTail</span><br></pre></td></tr></table></figure>
+<h2 id="12、当两个UILabel并排显示时，如何设置约束，让A或者B能显示你想要的需求，就需要用到下面两个约束"><a href="#12、当两个UILabel并排显示时，如何设置约束，让A或者B能显示你想要的需求，就需要用到下面两个约束" class="headerlink" title="12、当两个UILabel并排显示时，如何设置约束，让A或者B能显示你想要的需求，就需要用到下面两个约束"></a>12、当两个UILabel并排显示时，如何设置约束，让A或者B能显示你想要的需求，就需要用到下面两个约束</h2><p> ContentHuggingPriority                         ==&gt; 表示当前的Label的内容不想被拉伸</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">playCountLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)</span><br></pre></td></tr></table></figure>
+<p> ContentCompressionResistancePriority   ==&gt; 表示当前的Label的内容不想被收缩</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">playCountLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)</span><br></pre></td></tr></table></figure>
+
+
+<p>默认情况下: HuggingPriority == 250,  CompressionResistancePriority == 750</p>
+<h2 id="12、-discardableResult的作用"><a href="#12、-discardableResult的作用" class="headerlink" title="12、@discardableResult的作用"></a>12、@discardableResult的作用</h2><p>在Swift中，当有返回值的方法未得到接收和使用时通常会出现警告<br>在正式编译中不会影响编译结果，但是也妨碍代码的美观整洁，在方法上加上“@discardableResult”就可以取消这个警告</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@discardableResult</span><br><span class="line"> public func handleUrl(url: String, completion: </span><br></pre></td></tr></table></figure>
+<p>还有一种取消警告的方法，不加@discardableResult直接加通配符接收方法返回值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_ = XX</span><br></pre></td></tr></table></figure>
+
+<h2 id="13、dynamic关键字"><a href="#13、dynamic关键字" class="headerlink" title="13、dynamic关键字"></a>13、dynamic关键字</h2><p>如果您有过OC的开发经验，那一定会对OC中@dynamic关键字比较熟悉，它告诉编译器不要为属性合成getter和setter方法。<br>Swift中也有dynamic关键字，它可以用于修饰变量或函数，它的意思也与OC完全不同。它告诉编译器使用动态分发而不是静态分发。OC区别于其他语言的一个特点在于它的动态性，任何方法调用实际上都是消息分发，而Swift则尽可能做到静态分发。<br>因此，标记为dynamic的变量/函数会隐式的加上@objc关键字，它会使用OC的runtime机制。<br>虽然静态分发在效率上可能更好，不过一些app分析统计的库需要依赖动态分发的特性，动态的添加一些统计代码，这一点在Swift的静态分发机制下很难完成。这种情况下，虽然使用dynamic关键字会牺牲因为使用静态分发而获得的一些性能优化，但也依然是值得的。<br>使用动态分发，您可以更好的与OC中runtime的一些特性（如CoreData，KVC/KVO）进行交互，不过如果您不能确定变量或函数会被动态的修改、添加或使用了Method-Swizzle，那么就不应该使用dynamic关键字，否则有可能程序崩溃。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2018/04/04/Restful-API%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1683,110 +1805,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2017/08/25/Swift%E5%BC%80%E5%8F%91%E4%B9%8B%E7%B2%92%E5%AD%90%E5%8A%A8%E7%94%BB%E7%9A%84%E5%AE%9E%E7%8E%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="爱吃番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践 」">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tate Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/08/25/Swift%E5%BC%80%E5%8F%91%E4%B9%8B%E7%B2%92%E5%AD%90%E5%8A%A8%E7%94%BB%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">Swift开发之粒子动画的实现</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2017-08-25 20:41:59" itemprop="dateCreated datePublished" datetime="2017-08-25T20:41:59+08:00">2017-08-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="粒子系统介绍"><a href="#粒子系统介绍" class="headerlink" title="粒子系统介绍"></a>粒子系统介绍</h4><ul>
-<li>什么是粒子系统？<ul>
-<li>粒子系统是由总体具有相同的表现规律，个体却随机表现出不同的特征的大量显示元素构成的集合。</li>
-</ul>
-</li>
-<li>粒子定义有三要素<ul>
-<li>群体性：粒子系统是由“大量显示元素”构成的(例如雪、雨、一团雾等等)</li>
-<li>统一性：粒子系统的每个元素具有相同的表现规律(例如下雨、下雪，方向都是从上向下)</li>
-<li>随机性：粒子系统的每个元素又随机表现出不同特征(例如下雪，每个雪花下落的速度会有不同，大小会有不同、方向也会有略微的不同)</li>
-</ul>
-</li>
-</ul>
-<h4 id="粒子系统应用场景"><a href="#粒子系统应用场景" class="headerlink" title="粒子系统应用场景"></a>粒子系统应用场景</h4><ul>
-<li>影视行业<ul>
-<li>目前我们经常看的大片，比如沙尘暴、暴风雨、暴雪、烟花 等等，很多都是粒子特效做出来的。很逼真，而且相比真实世界中去实拍，成本要低很多</li>
-</ul>
-</li>
-<li>游戏中<ul>
-<li>爆炸、雨、雪、雾、烟花等等。都是粒子系统实现</li>
-</ul>
-</li>
-<li>应用中<ul>
-<li>主播房间右下角粒子动画</li>
-<li>雪花/下雨/烟花等效果</li>
-<li>QQ生日快乐一堆表情的跳动</li>
-</ul>
-</li>
-</ul>
-<h4 id="iOS粒子动画的使用"><a href="#iOS粒子动画的使用" class="headerlink" title="iOS粒子动画的使用"></a>iOS粒子动画的使用</h4><ul>
-<li>步骤<ul>
-<li>创建发射器</li>
-<li>创建粒子, 设置粒子属性</li>
-</ul>
-</li>
-<li>swift核心代码<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">// 1.创建发射器</span><br><span class="line"> let emitter = CAEmitterLayer()</span><br><span class="line"> </span><br><span class="line"> // 2.设置发射器的位置</span><br><span class="line"> emitter.emitterPosition = point</span><br><span class="line"> </span><br><span class="line"> // 3.开启三维效果</span><br><span class="line"> emitter.preservesDepth = true</span><br><span class="line"> </span><br><span class="line"> // 4.创建例子, 并且设置例子相关的属性</span><br><span class="line"> var cells = [CAEmitterCell]()</span><br><span class="line"> for i in 0..&lt;10 &#123;</span><br><span class="line">     // 4.1.创建例子Cell</span><br><span class="line">     let cell = CAEmitterCell()</span><br><span class="line">     </span><br><span class="line">     // 4.2.设置粒子速度</span><br><span class="line">     cell.velocity = 150</span><br><span class="line">     cell.velocityRange = 100</span><br><span class="line">     </span><br><span class="line">     // 4.3.设置例子的大小</span><br><span class="line">     cell.scale = 0.7</span><br><span class="line">     cell.scaleRange = 0.3</span><br><span class="line">     </span><br><span class="line">     // 4.4.设置粒子方向</span><br><span class="line">     cell.emissionLongitude = CGFloat(-Double.pi/2)</span><br><span class="line">     cell.emissionRange = CGFloat(Double.pi/2 / 6)</span><br><span class="line">     </span><br><span class="line">     // 4.5.设置例子的存活时间</span><br><span class="line">     cell.lifetime = 3</span><br><span class="line">     cell.lifetimeRange = 1.5</span><br><span class="line">     </span><br><span class="line">     // 4.6.设置粒子旋转</span><br><span class="line">     cell.spin = CGFloat(Double.pi/2)</span><br><span class="line">     cell.spinRange = CGFloat(Double.pi/2 / 2)</span><br><span class="line">     </span><br><span class="line">     // 4.6.设置例子每秒弹出的个数</span><br><span class="line">     cell.birthRate = 2</span><br><span class="line">     </span><br><span class="line">     // 4.7.设置粒子展示的图片</span><br><span class="line">     cell.contents = UIImage(named: &quot;good\(i)_30x30&quot;)?.cgImage</span><br><span class="line">     </span><br><span class="line">     // 4.8.添加到数组中</span><br><span class="line">     cells.append(cell)</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> // 5.将粒子设置到发射器中</span><br><span class="line"> emitter.emitterCells = cells</span><br><span class="line"> </span><br><span class="line"> // 6.将发射器的layer添加到父layer中</span><br><span class="line"> view.layer.addSublayer(emitter)</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="粒子动画效果展示"><a href="#粒子动画效果展示" class="headerlink" title="粒子动画效果展示"></a>粒子动画效果展示</h4><p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231443242.gif" alt="粒子动画.gif"></p>
-<h4 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h4><p>GitHub地址：<a target="_blank" rel="noopener" href="https://github.com/Tate-zwt/ParticleAnimationDemo">ParticleAnimationDemo</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1856,7 +1874,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-count">40</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

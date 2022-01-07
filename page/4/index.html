@@ -158,6 +158,110 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2017/08/25/Swift%E5%BC%80%E5%8F%91%E4%B9%8B%E7%B2%92%E5%AD%90%E5%8A%A8%E7%94%BB%E7%9A%84%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="爱吃番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践 」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/08/25/Swift%E5%BC%80%E5%8F%91%E4%B9%8B%E7%B2%92%E5%AD%90%E5%8A%A8%E7%94%BB%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">Swift开发之粒子动画的实现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-08-25 20:41:59" itemprop="dateCreated datePublished" datetime="2017-08-25T20:41:59+08:00">2017-08-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="粒子系统介绍"><a href="#粒子系统介绍" class="headerlink" title="粒子系统介绍"></a>粒子系统介绍</h4><ul>
+<li>什么是粒子系统？<ul>
+<li>粒子系统是由总体具有相同的表现规律，个体却随机表现出不同的特征的大量显示元素构成的集合。</li>
+</ul>
+</li>
+<li>粒子定义有三要素<ul>
+<li>群体性：粒子系统是由“大量显示元素”构成的(例如雪、雨、一团雾等等)</li>
+<li>统一性：粒子系统的每个元素具有相同的表现规律(例如下雨、下雪，方向都是从上向下)</li>
+<li>随机性：粒子系统的每个元素又随机表现出不同特征(例如下雪，每个雪花下落的速度会有不同，大小会有不同、方向也会有略微的不同)</li>
+</ul>
+</li>
+</ul>
+<h4 id="粒子系统应用场景"><a href="#粒子系统应用场景" class="headerlink" title="粒子系统应用场景"></a>粒子系统应用场景</h4><ul>
+<li>影视行业<ul>
+<li>目前我们经常看的大片，比如沙尘暴、暴风雨、暴雪、烟花 等等，很多都是粒子特效做出来的。很逼真，而且相比真实世界中去实拍，成本要低很多</li>
+</ul>
+</li>
+<li>游戏中<ul>
+<li>爆炸、雨、雪、雾、烟花等等。都是粒子系统实现</li>
+</ul>
+</li>
+<li>应用中<ul>
+<li>主播房间右下角粒子动画</li>
+<li>雪花/下雨/烟花等效果</li>
+<li>QQ生日快乐一堆表情的跳动</li>
+</ul>
+</li>
+</ul>
+<h4 id="iOS粒子动画的使用"><a href="#iOS粒子动画的使用" class="headerlink" title="iOS粒子动画的使用"></a>iOS粒子动画的使用</h4><ul>
+<li>步骤<ul>
+<li>创建发射器</li>
+<li>创建粒子, 设置粒子属性</li>
+</ul>
+</li>
+<li>swift核心代码<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">// 1.创建发射器</span><br><span class="line"> let emitter = CAEmitterLayer()</span><br><span class="line"> </span><br><span class="line"> // 2.设置发射器的位置</span><br><span class="line"> emitter.emitterPosition = point</span><br><span class="line"> </span><br><span class="line"> // 3.开启三维效果</span><br><span class="line"> emitter.preservesDepth = true</span><br><span class="line"> </span><br><span class="line"> // 4.创建例子, 并且设置例子相关的属性</span><br><span class="line"> var cells = [CAEmitterCell]()</span><br><span class="line"> for i in 0..&lt;10 &#123;</span><br><span class="line">     // 4.1.创建例子Cell</span><br><span class="line">     let cell = CAEmitterCell()</span><br><span class="line">     </span><br><span class="line">     // 4.2.设置粒子速度</span><br><span class="line">     cell.velocity = 150</span><br><span class="line">     cell.velocityRange = 100</span><br><span class="line">     </span><br><span class="line">     // 4.3.设置例子的大小</span><br><span class="line">     cell.scale = 0.7</span><br><span class="line">     cell.scaleRange = 0.3</span><br><span class="line">     </span><br><span class="line">     // 4.4.设置粒子方向</span><br><span class="line">     cell.emissionLongitude = CGFloat(-Double.pi/2)</span><br><span class="line">     cell.emissionRange = CGFloat(Double.pi/2 / 6)</span><br><span class="line">     </span><br><span class="line">     // 4.5.设置例子的存活时间</span><br><span class="line">     cell.lifetime = 3</span><br><span class="line">     cell.lifetimeRange = 1.5</span><br><span class="line">     </span><br><span class="line">     // 4.6.设置粒子旋转</span><br><span class="line">     cell.spin = CGFloat(Double.pi/2)</span><br><span class="line">     cell.spinRange = CGFloat(Double.pi/2 / 2)</span><br><span class="line">     </span><br><span class="line">     // 4.6.设置例子每秒弹出的个数</span><br><span class="line">     cell.birthRate = 2</span><br><span class="line">     </span><br><span class="line">     // 4.7.设置粒子展示的图片</span><br><span class="line">     cell.contents = UIImage(named: &quot;good\(i)_30x30&quot;)?.cgImage</span><br><span class="line">     </span><br><span class="line">     // 4.8.添加到数组中</span><br><span class="line">     cells.append(cell)</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> // 5.将粒子设置到发射器中</span><br><span class="line"> emitter.emitterCells = cells</span><br><span class="line"> </span><br><span class="line"> // 6.将发射器的layer添加到父layer中</span><br><span class="line"> view.layer.addSublayer(emitter)</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="粒子动画效果展示"><a href="#粒子动画效果展示" class="headerlink" title="粒子动画效果展示"></a>粒子动画效果展示</h4><p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231443242.gif" alt="粒子动画.gif"></p>
+<h4 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h4><p>GitHub地址：<a target="_blank" rel="noopener" href="https://github.com/Tate-zwt/ParticleAnimationDemo">ParticleAnimationDemo</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2017/01/19/C-%E4%B9%8B%E5%88%9D%E4%BD%93%E9%AA%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1073,7 +1177,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-count">40</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

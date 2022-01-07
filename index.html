@@ -158,7 +158,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2022/01/06/Swift-Leetcode-%E5%AD%97%E7%AC%A6%E4%B8%B2-%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2022/01/07/Swift%20Leetcode%20%E4%BA%8C%E5%8F%89%E6%A0%91%20%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -172,7 +172,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/01/06/Swift-Leetcode-%E5%AD%97%E7%AC%A6%E4%B8%B2-%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">Swift Leetcode 字符串 算法题解</a>
+            <a href="/2022/01/07/Swift%20Leetcode%20%E4%BA%8C%E5%8F%89%E6%A0%91%20%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">Swift Leetcode 二叉树 算法题解</a>
         </h2>
 
         <div class="post-meta">
@@ -182,7 +182,7 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-01-06 17:21:18" itemprop="dateCreated datePublished" datetime="2022-01-06T17:21:18+08:00">2022-01-06</time>
+              <time title="Created: 2022-01-07 14:12:28" itemprop="dateCreated datePublished" datetime="2022-01-07T14:12:28+08:00">2022-01-07</time>
             </span>
 
           
@@ -196,7 +196,183 @@
     <div class="post-body" itemprop="articleBody">
 
       
+          <h3 id="1-二叉树的前序遍历"><a href="#1-二叉树的前序遍历" class="headerlink" title="1.二叉树的前序遍历"></a>1.<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/binary-tree-preorder-traversal/">二叉树的前序遍历</a></h3><p>给你二叉树的根节点 <code>root</code> ，返回它节点值的 <strong>前序</strong> 遍历。</p>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202201071456889.jpg" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：root = [1,null,2,3]</span><br><span class="line">输出：[1,2,3]</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：root = []</span><br><span class="line">输出：[]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     public var val: Int</span></span><br><span class="line"><span class="comment"> *     public var left: TreeNode?</span></span><br><span class="line"><span class="comment"> *     public var right: TreeNode?</span></span><br><span class="line"><span class="comment"> *     public init() &#123; self.val = 0; self.left = nil; self.right = nil; &#125;</span></span><br><span class="line"><span class="comment"> *     public init(_ val: Int) &#123; self.val = val; self.left = nil; self.right = nil; &#125;</span></span><br><span class="line"><span class="comment"> *     public init(_ val: Int, _ left: TreeNode?, _ right: TreeNode?) &#123;</span></span><br><span class="line"><span class="comment"> *         self.val = val</span></span><br><span class="line"><span class="comment"> *         self.left = left</span></span><br><span class="line"><span class="comment"> *         self.right = right</span></span><br><span class="line"><span class="comment"> *     &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">preorderTraversal</span>(<span class="keyword">_</span> <span class="params">root</span>: <span class="type">TreeNode</span>?)</span> -&gt; [<span class="type">Int</span>] &#123;</span><br><span class="line">        <span class="keyword">var</span> result <span class="operator">=</span> [<span class="type">Int</span>]()</span><br><span class="line">        <span class="keyword">guard</span> root <span class="operator">!=</span> <span class="literal">nil</span> <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        &#125;</span><br><span class="line">        result.append(root<span class="operator">?</span>.val <span class="operator">??</span> <span class="number">0</span>)</span><br><span class="line">        result <span class="operator">+=</span> preorderTraversal(root<span class="operator">?</span>.left)</span><br><span class="line">        result <span class="operator">+=</span> preorderTraversal(root<span class="operator">?</span>.right)</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解题思路：</p>
+<ol>
+<li>前序遍历按照根节点-&gt;左子树-&gt;右子树的顺序访问</li>
+<li>访问根节点</li>
+<li>采用中序递归遍历左子树</li>
+<li>采用中序递归遍历右子树</li>
+</ol>
+<h3 id="2-二叉树的中序遍历"><a href="#2-二叉树的中序遍历" class="headerlink" title="2.二叉树的中序遍历"></a>2.<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/binary-tree-inorder-traversal/">二叉树的中序遍历</a></h3><p>给定一个二叉树的根节点 root ，返回它的 中序 遍历。</p>
+<p>示例 1：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202201071448429.jpg" alt="img"></p>
+<p>输入：root = [1,null,2,3]<br>输出：[1,3,2]</p>
+<p>示例 2：</p>
+<p>输入：root = []<br>输出：[]</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     public var val: Int</span></span><br><span class="line"><span class="comment"> *     public var left: TreeNode?</span></span><br><span class="line"><span class="comment"> *     public var right: TreeNode?</span></span><br><span class="line"><span class="comment"> *     public init() &#123; self.val = 0; self.left = nil; self.right = nil; &#125;</span></span><br><span class="line"><span class="comment"> *     public init(_ val: Int) &#123; self.val = val; self.left = nil; self.right = nil; &#125;</span></span><br><span class="line"><span class="comment"> *     public init(_ val: Int, _ left: TreeNode?, _ right: TreeNode?) &#123;</span></span><br><span class="line"><span class="comment"> *         self.val = val</span></span><br><span class="line"><span class="comment"> *         self.left = left</span></span><br><span class="line"><span class="comment"> *         self.right = right</span></span><br><span class="line"><span class="comment"> *     &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">inorderTraversal</span>(<span class="keyword">_</span> <span class="params">root</span>: <span class="type">TreeNode</span>?)</span> -&gt; [<span class="type">Int</span>] &#123;</span><br><span class="line">        <span class="keyword">var</span> result <span class="operator">=</span> [<span class="type">Int</span>]()</span><br><span class="line">        <span class="comment">//递归到root为空停止</span></span><br><span class="line">        <span class="keyword">guard</span> root <span class="operator">!=</span> <span class="literal">nil</span> <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        &#125;</span><br><span class="line">        result <span class="operator">+=</span> inorderTraversal(root<span class="operator">?</span>.left)</span><br><span class="line">        result.append(root<span class="operator">?</span>.val <span class="operator">??</span> <span class="number">0</span>)</span><br><span class="line">        result <span class="operator">+=</span> inorderTraversal(root<span class="operator">?</span>.right)</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解题思路：</p>
+<ol>
+<li>中序遍历按照左子树-&gt;根节点-&gt;右子树的顺序访问</li>
+<li>采用中序递归遍历左子树</li>
+<li>访问根节点</li>
+<li>采用中序递归遍历右子树</li>
+</ol>
+<h3 id="3-二叉树的后序遍历"><a href="#3-二叉树的后序遍历" class="headerlink" title="3.二叉树的后序遍历"></a>3.<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/binary-tree-postorder-traversal/">二叉树的后序遍历</a></h3><p>给定一个二叉树，返回它的 后序 遍历。</p>
+<p>示例:</p>
+<p>输入: [1,null,2,3]<br>   1<br>    <br>     2<br>    /<br>   3 </p>
+<p>输出: [3,2,1]</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     public var val: Int</span></span><br><span class="line"><span class="comment"> *     public var left: TreeNode?</span></span><br><span class="line"><span class="comment"> *     public var right: TreeNode?</span></span><br><span class="line"><span class="comment"> *     public init() &#123; self.val = 0; self.left = nil; self.right = nil; &#125;</span></span><br><span class="line"><span class="comment"> *     public init(_ val: Int) &#123; self.val = val; self.left = nil; self.right = nil; &#125;</span></span><br><span class="line"><span class="comment"> *     public init(_ val: Int, _ left: TreeNode?, _ right: TreeNode?) &#123;</span></span><br><span class="line"><span class="comment"> *         self.val = val</span></span><br><span class="line"><span class="comment"> *         self.left = left</span></span><br><span class="line"><span class="comment"> *         self.right = right</span></span><br><span class="line"><span class="comment"> *     &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">postorderTraversal</span>(<span class="keyword">_</span> <span class="params">root</span>: <span class="type">TreeNode</span>?)</span> -&gt; [<span class="type">Int</span>] &#123;</span><br><span class="line">        <span class="keyword">var</span> result <span class="operator">=</span> [<span class="type">Int</span>]()</span><br><span class="line">        <span class="keyword">guard</span> root <span class="operator">!=</span> <span class="literal">nil</span> <span class="keyword">else</span> &#123;<span class="keyword">return</span> result&#125;</span><br><span class="line">        result <span class="operator">+=</span> postorderTraversal(root<span class="operator">?</span>.left)</span><br><span class="line">        result <span class="operator">+=</span> postorderTraversal(root<span class="operator">?</span>.right)</span><br><span class="line">        result.append(root<span class="operator">?</span>.val <span class="operator">??</span> <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解题思路：</p>
+<ol>
+<li>后序遍历按照左子树-&gt;右子树的顺序访问-&gt;根节点</li>
+<li>采用后序递归遍历左子树</li>
+<li>采用后序递归遍历右子树</li>
+<li>访问根节点</li>
+</ol>
+<h3 id="4-二叉树的层序遍历"><a href="#4-二叉树的层序遍历" class="headerlink" title="4.二叉树的层序遍历"></a>4.<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/binary-tree-level-order-traversal/">二叉树的层序遍历</a></h3><p>给你一个二叉树，请你返回其按 层序遍历 得到的节点值。 （即逐层地，从左到右访问所有节点）。</p>
+<p>示例：<br>二叉树：[3,9,20,null,null,15,7],</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  3</span><br><span class="line"> / \</span><br><span class="line">9  20</span><br><span class="line">  /  \</span><br><span class="line"> 15   7</span><br></pre></td></tr></table></figure>
+<p>返回其层序遍历结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  [3],</span><br><span class="line">  [9,20],</span><br><span class="line">  [15,7]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     public var val: Int</span></span><br><span class="line"><span class="comment"> *     public var left: TreeNode?</span></span><br><span class="line"><span class="comment"> *     public var right: TreeNode?</span></span><br><span class="line"><span class="comment"> *     public init() &#123; self.val = 0; self.left = nil; self.right = nil; &#125;</span></span><br><span class="line"><span class="comment"> *     public init(_ val: Int) &#123; self.val = val; self.left = nil; self.right = nil; &#125;</span></span><br><span class="line"><span class="comment"> *     public init(_ val: Int, _ left: TreeNode?, _ right: TreeNode?) &#123;</span></span><br><span class="line"><span class="comment"> *         self.val = val</span></span><br><span class="line"><span class="comment"> *         self.left = left</span></span><br><span class="line"><span class="comment"> *         self.right = right</span></span><br><span class="line"><span class="comment"> *     &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">/** 层序遍历 */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">levelOrderTranversal</span>(<span class="keyword">_</span> <span class="params">root</span>: <span class="type">TreeNode</span>?)</span> -&gt; [<span class="type">Int</span>] &#123;</span><br><span class="line">    <span class="keyword">guard</span> root <span class="operator">!=</span> <span class="literal">nil</span> <span class="keyword">else</span> &#123;<span class="keyword">return</span> []&#125;</span><br><span class="line">    <span class="keyword">var</span> result <span class="operator">=</span> [<span class="type">Int</span>]()</span><br><span class="line">    <span class="keyword">var</span> queue <span class="operator">=</span> [<span class="type">TreeNode</span>?]()</span><br><span class="line">    queue.append(root)</span><br><span class="line">    <span class="keyword">while</span> <span class="operator">!</span>queue.isEmpty &#123;</span><br><span class="line">        <span class="comment">//出队</span></span><br><span class="line">        <span class="keyword">let</span> node <span class="operator">=</span>  queue.removeFirst()</span><br><span class="line">        result.append(node<span class="operator">?</span>.val <span class="operator">??</span> <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> node<span class="operator">?</span>.left <span class="operator">!=</span> <span class="literal">nil</span> &#123;</span><br><span class="line">            queue.append(node<span class="operator">?</span>.left)</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> node<span class="operator">?</span>.right <span class="operator">!=</span> <span class="literal">nil</span> &#123;</span><br><span class="line">            queue.append(node<span class="operator">?</span>.right)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解题思路：</p>
+<ol>
+<li>将根节点入队</li>
+<li>循环执行以下操作，直到队列为空<ol>
+<li>将根节点node出队，进行访问</li>
+<li>将node的左子节点入队</li>
+<li>将node的右子节点入队</li>
+</ol>
+</li>
+</ol>
+<p>不过题目要求每个层级都分出来改成二维数组，那需要改动下</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">levelOrder</span>(<span class="keyword">_</span> <span class="params">root</span>: <span class="type">TreeNode</span>?)</span> -&gt; [[<span class="type">Int</span>]] &#123;</span><br><span class="line">        <span class="keyword">guard</span> root <span class="operator">!=</span> <span class="literal">nil</span> <span class="keyword">else</span> &#123;<span class="keyword">return</span> []&#125;</span><br><span class="line">        <span class="keyword">var</span> result <span class="operator">=</span> [[<span class="type">Int</span>]]()</span><br><span class="line">        <span class="comment">//队列先进先出的特性</span></span><br><span class="line">        <span class="keyword">var</span> queue <span class="operator">=</span> [<span class="type">TreeNode</span>?]()</span><br><span class="line">        queue.append(root)</span><br><span class="line">        <span class="keyword">while</span> <span class="operator">!</span>queue.isEmpty &#123;</span><br><span class="line">            <span class="keyword">var</span> level <span class="operator">=</span> [<span class="type">Int</span>]()</span><br><span class="line">            <span class="comment">//同时在队列里的元素都属于同一层的，都遍历出来</span></span><br><span class="line">            <span class="keyword">for</span> <span class="keyword">_</span> <span class="keyword">in</span> <span class="number">0</span><span class="operator">..&lt;</span>queue.count &#123;</span><br><span class="line">                <span class="comment">//出队</span></span><br><span class="line">                <span class="keyword">let</span> node <span class="operator">=</span>  queue.removeFirst()</span><br><span class="line">                level.append(node<span class="operator">?</span>.val <span class="operator">??</span> <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">if</span> node<span class="operator">?</span>.left <span class="operator">!=</span> <span class="literal">nil</span> &#123;</span><br><span class="line">                    queue.append(node<span class="operator">?</span>.left)</span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> node<span class="operator">?</span>.right <span class="operator">!=</span> <span class="literal">nil</span> &#123;</span><br><span class="line">                    queue.append(node<span class="operator">?</span>.right)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            result.append(level)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解题思路：</p>
+<p>这里可以确定同时在队列里的元素都是同一个层级的，所以我们直接在每次while循环遍历出所有元素即可。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2022/01/06/Swift%20Leetcode%20%E5%AD%97%E7%AC%A6%E4%B8%B2%20%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="爱吃番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践 」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
           
+            <a href="/2022/01/06/Swift%20Leetcode%20%E5%AD%97%E7%AC%A6%E4%B8%B2%20%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">Swift Leetcode 字符串 算法题解</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-01-06 20:21:18 / Modified: 17:21:18" itemprop="dateCreated datePublished" datetime="2022-01-06T20:21:18+08:00">2022-01-06</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="1-字符串轮转"><a href="#1-字符串轮转" class="headerlink" title="1.字符串轮转"></a>1.<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/string-rotation-lcci/">字符串轮转</a></h3><p>字符串轮转。给定两个字符串s1和s2，请编写代码检查s2是否为s1旋转而成（比如，waterbottle是erbottlewat旋转后的字符串）。</p>
+<p>示例1:</p>
+<p> 输入：s1 = “waterbottle”, s2 = “erbottlewat”<br> 输出：True<br>示例2:</p>
+<p> 输入：s1 = “aa”, s2 = “aba”<br> 输出：False<br>提示：</p>
+<p>字符串长度在[0, 100000]范围内。<br>说明:</p>
+<p>你能只调用一次检查子串的方法吗？</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">isFlipedString</span>(<span class="keyword">_</span> <span class="params">s1</span>: <span class="type">String</span>, <span class="keyword">_</span> <span class="params">s2</span>: <span class="type">String</span>)</span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> s1 <span class="operator">==</span> <span class="string">&quot;&quot;</span> <span class="operator">&amp;&amp;</span> s2 <span class="operator">==</span> <span class="string">&quot;&quot;</span> &#123; <span class="keyword">return</span> <span class="literal">true</span> &#125; <span class="comment">//处理空字符串</span></span><br><span class="line">        <span class="keyword">guard</span> s1.count <span class="operator">==</span> s2.count <span class="keyword">else</span> &#123;<span class="keyword">return</span> <span class="literal">false</span>&#125;</span><br><span class="line">        <span class="keyword">return</span> (s1 <span class="operator">+</span> s1).contains(s2)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解题思路：</p>
+<ol>
+<li>利用s1+s1拼接起来，这样子就包括所有的旋转字符串了</li>
+<li>只要新的字符串包含s2直接返回true</li>
+</ol>
+<h3 id="2-另一棵树的子树"><a href="#2-另一棵树的子树" class="headerlink" title="2.另一棵树的子树"></a>2.<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/subtree-of-another-tree/">另一棵树的子树</a></h3><p>给你两棵二叉树 root 和 subRoot 。检验 root 中是否包含和 subRoot 具有相同结构和节点值的子树。如果存在，返回 true ；否则，返回 false 。</p>
+<p>二叉树 tree 的一棵子树包括 tree 的某个节点和这个节点的所有后代节点。tree 也可以看做它自身的一棵子树。</p>
+<p><strong>示例</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202201071741576.jpg" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：root = [3,4,5,1,2], subRoot = [4,1,2]</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
+
+<p>提示：</p>
+<p>root 树上的节点数量范围是 [1, 2000]<br>subRoot 树上的节点数量范围是 [1, 1000]<br>-104 &lt;= root.val &lt;= 104<br>-104 &lt;= subRoot.val &lt;= 104</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     public var val: Int</span></span><br><span class="line"><span class="comment"> *     public var left: TreeNode?</span></span><br><span class="line"><span class="comment"> *     public var right: TreeNode?</span></span><br><span class="line"><span class="comment"> *     public init() &#123; self.val = 0; self.left = nil; self.right = nil; &#125;</span></span><br><span class="line"><span class="comment"> *     public init(_ val: Int) &#123; self.val = val; self.left = nil; self.right = nil; &#125;</span></span><br><span class="line"><span class="comment"> *     public init(_ val: Int, _ left: TreeNode?, _ right: TreeNode?) &#123;</span></span><br><span class="line"><span class="comment"> *         self.val = val</span></span><br><span class="line"><span class="comment"> *         self.left = left</span></span><br><span class="line"><span class="comment"> *         self.right = right</span></span><br><span class="line"><span class="comment"> *     &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">isSubtree</span>(<span class="keyword">_</span> <span class="params">root</span>: <span class="type">TreeNode</span>?, <span class="keyword">_</span> <span class="params">subRoot</span>: <span class="type">TreeNode</span>?)</span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">        <span class="keyword">guard</span> root <span class="operator">!=</span> <span class="literal">nil</span> <span class="operator">&amp;&amp;</span> subRoot <span class="operator">!=</span> <span class="literal">nil</span> <span class="keyword">else</span> &#123;<span class="keyword">return</span> <span class="literal">false</span>&#125;</span><br><span class="line">        <span class="keyword">return</span> postSerialize(root).contains(postSerialize(subRoot)) <span class="comment">//只要包含就代表是子树</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//使用后序遍历树序列化</span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">postSerialize</span>(<span class="keyword">_</span> <span class="params">root</span>: <span class="type">TreeNode</span>?)</span> -&gt; <span class="type">String</span>&#123;</span><br><span class="line">        <span class="keyword">guard</span> root <span class="operator">!=</span> <span class="literal">nil</span> <span class="keyword">else</span> &#123;<span class="keyword">return</span> <span class="string">&quot;#!&quot;</span>&#125;</span><br><span class="line">        <span class="keyword">var</span> res <span class="operator">=</span> <span class="string">&quot;&quot;</span></span><br><span class="line">        res <span class="operator">+=</span> postSerialize(root<span class="operator">?</span>.left)</span><br><span class="line">        res <span class="operator">+=</span> postSerialize(root<span class="operator">?</span>.right)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">let</span> s <span class="operator">=</span> root<span class="operator">?</span>.val &#123;</span><br><span class="line">            res.append(<span class="string">&quot;<span class="subst">\(s)</span>!&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>解题思路：</p>
+<p>我们可以想到用字符串包含的关系来解出这道题</p>
+<ol>
+<li>使用后续遍历，这里前序中序都是可以的，根据”!”格式划分出每个node的值,空值就用#代替</li>
+<li>序列化成字符串，那基树的序列化字符串肯定要包含子树的序列化字符串才算是它的子树</li>
+<li>直接判断是否包含，问题迎刃而解</li>
+</ol>
+<h3 id="3-有效的字母异位词"><a href="#3-有效的字母异位词" class="headerlink" title="3.有效的字母异位词"></a>3.<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/valid-anagram/">有效的字母异位词</a></h3><p>给定两个字符串 s 和 t ，编写一个函数来判断 t 是否是 s 的字母异位词。</p>
+<p>注意：若 s 和 t 中每个字符出现的次数都相同，则称 s 和 t 互为字母异位词。</p>
+<p>示例 1:</p>
+<p>输入: s = “anagram”, t = “nagaram”<br>输出: true<br>示例 2:</p>
+<p>输入: s = “rat”, t = “car”<br>输出: false</p>
+<p>提示:</p>
+<p>1 &lt;= s.length, t.length &lt;= 5 * 104<br>s 和 t 仅包含小写字母</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">isAnagram</span>(<span class="keyword">_</span> <span class="params">s</span>: <span class="type">String</span>, <span class="keyword">_</span> <span class="params">t</span>: <span class="type">String</span>)</span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">        <span class="comment">//不相等直接返回</span></span><br><span class="line">        <span class="keyword">guard</span> s.count <span class="operator">==</span> t.count <span class="keyword">else</span> &#123;<span class="keyword">return</span> <span class="literal">false</span>&#125;</span><br><span class="line">        <span class="comment">//字符串最多只有26个小写字母</span></span><br><span class="line">        <span class="keyword">var</span> record <span class="operator">=</span> [<span class="type">Int</span>](repeating: <span class="number">0</span>, count: <span class="number">26</span>)</span><br><span class="line">        <span class="keyword">let</span> aUni <span class="operator">=</span> <span class="string">&quot;a&quot;</span>.unicodeScalars.first<span class="operator">!</span>.value <span class="comment">//ASCll码表对应 97</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> uniCode <span class="keyword">in</span> s.unicodeScalars&#123;</span><br><span class="line">            record[<span class="type">Int</span>(uniCode.value <span class="operator">-</span> aUni)] <span class="operator">+=</span> <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> uniCode <span class="keyword">in</span> t.unicodeScalars&#123;</span><br><span class="line">            <span class="keyword">let</span> index <span class="operator">=</span> <span class="type">Int</span>(uniCode.value <span class="operator">-</span> aUni)</span><br><span class="line">            record[index] <span class="operator">-=</span> <span class="number">1</span></span><br><span class="line">            <span class="comment">//只要有对应的字符为 -1 代表不是有效的字母异位词</span></span><br><span class="line">            <span class="keyword">if</span> record[index] <span class="operator">&lt;</span> <span class="number">0</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解题思路：</p>
+<ol>
+<li>题目有个提示s 和 t 仅包含小写字母，那就是只有26个小写字母</li>
+<li>我们可以想到用哈希表来一一对应</li>
+<li>使用”a”ASCll码表对应 97 用它来做起点，把所有的26个小写字母转化为ASCll码去减得到对应的索引值</li>
+<li>遍历第一个s字符串，出现就++，再次遍历t字符串，出现就–，如果一旦有索引值为-1代表不是有效的字母异位词</li>
+</ol>
+
       
     </div>
 
@@ -1381,74 +1557,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2020/06/06/iOS%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6%E7%9A%84%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="爱吃番茄炒蛋">
-      <meta itemprop="description" content="「 少点虚的，多点实践 」">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Tate Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/06/iOS%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6%E7%9A%84%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6/" class="post-title-link" itemprop="url">iOS特殊字符的转义字符</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-06-06 22:36:57" itemprop="dateCreated datePublished" datetime="2020-06-06T22:36:57+08:00">2020-06-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231537007.png" alt="image.png"></p>
-<p>比如你要” 能在代码里显示你就必须填写&quot; </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1518,7 +1626,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-count">40</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
