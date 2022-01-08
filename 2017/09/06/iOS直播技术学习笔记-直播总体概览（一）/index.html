@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"tate-zwt.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="概述 直播的现状  2016年，是一个直播年。直播行业快速发展，同时也滋生了大大小小上千家相关的公司。 中国互联网络信息中心发布的报告显示，截至今年6月，我国网络直播用户规模达到3.25亿，占网民总体的45.8%。   直播的技术  直播技术概况来说，可以分为 采集，前处理，编码，传输，解码，渲染 这几个环节 技术整体概览   图例：   分步解析音视频采集 音视频的采集是直播架构的第一个环节，也">
+  <meta name="description" content="概述 直播的现状  2016年，是一个直播年。直播行业快速发展，同时也滋生了大大小小上千家相关的公司。 中国互联网络信息中心发布的报告显示，截至今年6月，我国网络直播用户规模达到3.25亿，占网民总体的45.8%。   直播的技术  直播技术概况来说，可以分为 采集，前处理，编码，传输，解码，渲染 这几个环节 技术整体概览   图例：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS直播技术学习笔记-直播总体概览（一）">
 <meta property="og:url" content="https://tate-zwt.github.io/2017/09/06/iOS%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%9B%B4%E6%92%AD%E6%80%BB%E4%BD%93%E6%A6%82%E8%A7%88%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
 <meta property="og:site_name" content="Tate Blog">
-<meta property="og:description" content="概述 直播的现状  2016年，是一个直播年。直播行业快速发展，同时也滋生了大大小小上千家相关的公司。 中国互联网络信息中心发布的报告显示，截至今年6月，我国网络直播用户规模达到3.25亿，占网民总体的45.8%。   直播的技术  直播技术概况来说，可以分为 采集，前处理，编码，传输，解码，渲染 这几个环节 技术整体概览   图例：   分步解析音视频采集 音视频的采集是直播架构的第一个环节，也">
+<meta property="og:description" content="概述 直播的现状  2016年，是一个直播年。直播行业快速发展，同时也滋生了大大小小上千家相关的公司。 中国互联网络信息中心发布的报告显示，截至今年6月，我国网络直播用户规模达到3.25亿，占网民总体的45.8%。   直播的技术  直播技术概况来说，可以分为 采集，前处理，编码，传输，解码，渲染 这几个环节 技术整体概览   图例：">
 <meta property="og:locale">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231446819.png">
 <meta property="article:published_time" content="2017-09-06T13:01:11.000Z">
@@ -226,6 +226,8 @@
 <li><p>图例：<br><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112231446819.png" alt="技术整体总结.png"></p>
 </li>
 </ul>
+<span id="more"></span>
+
 <h4 id="分步解析"><a href="#分步解析" class="headerlink" title="分步解析"></a>分步解析</h4><h5 id="音视频采集"><a href="#音视频采集" class="headerlink" title="音视频采集"></a>音视频采集</h5><ul>
 <li><p>音视频的采集是直播架构的第一个环节，也是直播的视频来源</p>
 </li>

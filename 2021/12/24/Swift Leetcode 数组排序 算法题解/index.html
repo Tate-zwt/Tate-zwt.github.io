@@ -232,17 +232,14 @@
 <p>这里解题思路用到了归并排序算法：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112241037111.gif" alt="图片"></p>
 <ol>
-<li><p>申请空间，使其大小为两个已经排序序列之和，该空间用来存放合并后的序列；</p>
-</li>
-<li><p>设定两个指针，最初位置分别为两个已经排序序列的起始位置；</p>
-</li>
-<li><p>比较两个指针所指向的元素，选择相对小的元素放入到合并空间，并移动指针到下一位置；</p>
-</li>
-<li><p>重复步骤 3 直到某一指针达到序列尾；</p>
-</li>
-<li><p>将另一序列剩下的所有元素直接复制到合并序列尾。</p>
-</li>
+<li>申请空间，使其大小为两个已经排序序列之和，该空间用来存放合并后的序列；</li>
+<li>设定两个指针，最初位置分别为两个已经排序序列的起始位置；</li>
+<li>比较两个指针所指向的元素，选择相对小的元素放入到合并空间，并移动指针到下一位置；</li>
+<li>重复步骤 3 直到某一指针达到序列尾；</li>
+<li>将另一序列剩下的所有元素直接复制到合并序列尾。</li>
 </ol>
+<span id="more"></span>
+
 <h3 id="2-颜色分类"><a href="#2-颜色分类" class="headerlink" title="2. 颜色分类"></a>2. <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/sort-colors/">颜色分类</a></h3><p>给定一个包含红色、白色和蓝色，一共 n 个元素的数组，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。</p>
 <p>此题中，我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [2,0,2,1,1,0]</span><br><span class="line">输出：[0,0,1,1,2,2]</span><br></pre></td></tr></table></figure>

@@ -224,6 +224,8 @@
 <p>3、解决ScrollView等在viewController无法滚动到最顶部</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//自动滚动调整，默认为YES</span><br><span class="line">self.automaticallyAdjustsScrollViewInsets = NO;</span><br></pre></td></tr></table></figure>
 
+<span id="more"></span>
+
 <p>4、隐藏navigationBar上返回按钮</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[self.navigationController.navigationItem setHidesBackButton:YES];</span><br><span class="line">[self.navigationItem setHidesBackButton:YES];</span><br><span class="line">[self.navigationController.navigationBar.backItem setHidesBackButton:YES];</span><br></pre></td></tr></table></figure>
 
