@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"tate-zwt.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="前言最近公司要求把维护期的项目都集成极光推送，集成期间遇到一些小坑，特此在这总结！ 极光推送能干嘛？ 1.为 JPush Server 上报 Device Token，免除开发者管理 Device Token 的麻烦2.支持iOS APNs推送3.前台运行时，可接收由JPush下发的（透传的）自定义消息4.灵活管理接收用户：Tag（标签分组）、Alias（用户别名）、RegistrationID（">
+  <meta name="description" content="前言最近要把维护期的项目都集成极光推送，集成期间遇到一些小坑，特此在这总结！ 极光推送能干嘛？ 1.为 JPush Server 上报 Device Token，免除开发者管理 Device Token 的麻烦2.支持iOS APNs推送3.前台运行时，可接收由JPush下发的（透传的）自定义消息4.灵活管理接收用户：Tag（标签分组）、Alias（用户别名）、RegistrationID（设备注">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS 集成极光推送，绕过一些坑">
 <meta property="og:url" content="https://tate-zwt.github.io/2016/02/02/iOS%20%E9%9B%86%E6%88%90%E6%9E%81%E5%85%89%E6%8E%A8%E9%80%81%EF%BC%8C%E7%BB%95%E8%BF%87%E4%B8%80%E4%BA%9B%E5%9D%91/index.html">
 <meta property="og:site_name" content="Tate Blog">
-<meta property="og:description" content="前言最近公司要求把维护期的项目都集成极光推送，集成期间遇到一些小坑，特此在这总结！ 极光推送能干嘛？ 1.为 JPush Server 上报 Device Token，免除开发者管理 Device Token 的麻烦2.支持iOS APNs推送3.前台运行时，可接收由JPush下发的（透传的）自定义消息4.灵活管理接收用户：Tag（标签分组）、Alias（用户别名）、RegistrationID（">
+<meta property="og:description" content="前言最近要把维护期的项目都集成极光推送，集成期间遇到一些小坑，特此在这总结！ 极光推送能干嘛？ 1.为 JPush Server 上报 Device Token，免除开发者管理 Device Token 的麻烦2.支持iOS APNs推送3.前台运行时，可接收由JPush下发的（透传的）自定义消息4.灵活管理接收用户：Tag（标签分组）、Alias（用户别名）、RegistrationID（设备注">
 <meta property="og:locale">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221627687.jpeg">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tate-zwt/ImageHost/blog/202112221627678.jpg">
@@ -211,7 +211,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近公司要求把维护期的项目都集成极光推送，集成期间遇到一些小坑，特此在这总结！</p>
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近要把维护期的项目都集成极光推送，集成期间遇到一些小坑，特此在这总结！</p>
 <h4 id="极光推送能干嘛？"><a href="#极光推送能干嘛？" class="headerlink" title="极光推送能干嘛？"></a>极光推送能干嘛？</h4><blockquote>
 <p>1.为 JPush Server 上报 Device Token，免除开发者管理 Device Token 的麻烦<br>2.支持iOS APNs推送<br>3.前台运行时，可接收由JPush下发的（透传的）自定义消息<br>4.灵活管理接收用户：Tag（标签分组）、Alias（用户别名）、RegistrationID（设备注册ID）</p>
 </blockquote>
