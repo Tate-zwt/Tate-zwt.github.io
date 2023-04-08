@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tate-zwt.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="刚接触Flutter开发时，不管是为了性能还是项目代码简洁等原因，总归还是会选择一个合适的状态管理工具。但是看着茫茫多的选择还是感觉无从下手，当然我也一样。下方记录一下各种状态管理（Riverpod、Provider、Getx）的使用，以便后续遇到其他项目使用不同状态管理时能快速上手。也希望为看到这篇文章的同学提供一些参考。 Riverpod使用的前提需要注意，需要使用ProviderScope包">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter状态管理Riverpod、Provider、GetX">
+<meta property="og:url" content="https://tate-zwt.github.io/2022/10/01/Flutter%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86Riverpod%E3%80%81Provider%E3%80%81GetX/index.html">
+<meta property="og:site_name" content="Tate Blog">
+<meta property="og:description" content="刚接触Flutter开发时，不管是为了性能还是项目代码简洁等原因，总归还是会选择一个合适的状态管理工具。但是看着茫茫多的选择还是感觉无从下手，当然我也一样。下方记录一下各种状态管理（Riverpod、Provider、Getx）的使用，以便后续遇到其他项目使用不同状态管理时能快速上手。也希望为看到这篇文章的同学提供一些参考。 Riverpod使用的前提需要注意，需要使用ProviderScope包">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-10-01T06:12:28.000Z">
+<meta property="article:modified_time" content="2022-10-06T06:12:28.000Z">
+<meta property="article:author" content="爱吃番茄炒蛋">
+<meta property="article:tag" content="Dart">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tate-zwt.github.io/2022/10/01/Flutter%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86Riverpod%E3%80%81Provider%E3%80%81GetX/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Flutter状态管理Riverpod、Provider、GetX | Tate Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Tate Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS Developer</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://tate-zwt.github.io/2022/10/01/Flutter%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86Riverpod%E3%80%81Provider%E3%80%81GetX/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="爱吃番茄炒蛋">
+      <meta itemprop="description" content="「 少点虚的，多点实践 」">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tate Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Flutter状态管理Riverpod、Provider、GetX
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-10-01 14:12:28" itemprop="dateCreated datePublished" datetime="2022-10-01T14:12:28+08:00">2022-10-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-06 14:12:28" itemprop="dateModified" datetime="2022-10-06T14:12:28+08:00">2022-10-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Flutter/" itemprop="url" rel="index"><span itemprop="name">Flutter</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>刚接触Flutter开发时，不管是为了性能还是项目代码简洁等原因，总归还是会选择一个合适的状态管理工具。但是看着茫茫多的选择还是感觉无从下手，当然我也一样。下方记录一下各种状态管理（Riverpod、Provider、Getx）的使用，以便后续遇到其他项目使用不同状态管理时能快速上手。也希望为看到这篇文章的同学提供一些参考。</p>
+<h2 id="Riverpod"><a href="#Riverpod" class="headerlink" title="Riverpod"></a>Riverpod</h2><p>使用的前提需要注意，需要使用ProviderScope包裹父级节点。</p>
+<span id="more"></span>
+
+<h2 id="Provider"><a href="#Provider" class="headerlink" title="Provider"></a>Provider</h2><p>Provider可以简单的用来共享数据，也可以用来拆分逻辑用来监听一些值的变化。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">///<span class="markdown">简单共享数据</span></span></span><br><span class="line"><span class="keyword">final</span> _counterProvider = Provider&lt;<span class="built_in">int</span>&gt;((ref) =&gt; <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/// <span class="markdown">使用的地方</span></span></span><br><span class="line">Consumer(builder: (context, ref, child) &#123;</span><br><span class="line">        <span class="keyword">return</span> Text(ref.read(_counterProvider).toString());</span><br><span class="line">    &#125;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>用来拆分逻辑</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_UserInfo</span> </span>&#123;</span><br><span class="line">  <span class="built_in">String</span> phone;</span><br><span class="line">  <span class="built_in">String</span> pwd;</span><br><span class="line">  _UserInfo(&#123;</span><br><span class="line">    <span class="keyword">this</span>.phone = <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">    <span class="keyword">this</span>.pwd = <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> _userInfoProvider = StateNotifierProvider&lt;_UserInfoNotifier, _UserInfo&gt;(</span><br><span class="line">    (ref) =&gt; _UserInfoNotifier());</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> _isComplete = Provider&lt;<span class="built_in">bool</span>&gt;((ref) &#123;</span><br><span class="line">  <span class="keyword">final</span> info = ref.watch(_userInfoProvider);</span><br><span class="line">  <span class="keyword">return</span> info.phone.length == <span class="number">11</span> &amp;&amp; info.pwd.length &gt;= <span class="number">8</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">Consumer(builder: (context, ref, _) &#123;</span><br><span class="line">    <span class="keyword">final</span> isComplete = ref.watch(_isComplete);</span><br><span class="line">    <span class="keyword">return</span> TextButton(</span><br><span class="line">        onPressed: isComplete ? () &#123;&#125; : <span class="keyword">null</span>,</span><br><span class="line">        child: <span class="keyword">const</span> Text(<span class="string">&#x27;登录&#x27;</span>));</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="StateProvider"><a href="#StateProvider" class="headerlink" title="StateProvider"></a>StateProvider</h2><p>对于简单数据的状态管理，可以直接使用StateProvider，相比于Provider提供了直接修改数据的能力，相比于StateNotifierProvider,避免了为实现简单逻辑还要编写一个StateNotifier类。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> _counter = StateProvider((ref) =&gt; <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/// <span class="markdown">改变状态值</span></span></span><br><span class="line">ref.read(_counter.state).state += <span class="number">1</span>;</span><br><span class="line"><span class="comment">/// <span class="markdown">重新设置为默认值</span></span></span><br><span class="line">ref.refresh(_counter);</span><br><span class="line"><span class="comment">/// <span class="markdown">监听值的改变</span></span></span><br><span class="line">ref.listen(_counter, (_, value) &#123;</span><br><span class="line">    <span class="built_in">print</span>(value);</span><br><span class="line">&#125;);</span><br><span class="line">Consumer(builder: (context, ref, _) &#123;</span><br><span class="line">    <span class="keyword">return</span> Text(ref.watch(_counter).toString());</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="StateNotifierProvider"><a href="#StateNotifierProvider" class="headerlink" title="StateNotifierProvider"></a>StateNotifierProvider</h2><p>一般页面都会有比较复杂的逻辑，这个时候就推荐创建 <code>CustomState</code>、 <code>CustomStateNotifier\</code>, 以及提供<code>StateNotifierProvider</code> 下方代码可能太多，具体例子可以在<a href="https://link.juejin.cn/?target=https://github.com/MengLiMing/flutter_ui_challenge/blob/68a25fa980a1d6f660307b560ade03bdf2208046/lib/examples/flutter_deer/modules/login/providers/code_login_providers.dart">此处</a>查看</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">mixin</span> CodeLoginProviders &#123;</span><br><span class="line">  <span class="keyword">final</span> manager =</span><br><span class="line">      StateNotifierProvider.autoDispose&lt;CodeLoginStateNotifier, CodeLoginState&gt;(</span><br><span class="line">          (ref) &#123;</span><br><span class="line">    <span class="keyword">return</span> CodeLoginStateNotifier();</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">late</span> <span class="keyword">final</span> canSendCode = Provider.autoDispose&lt;<span class="built_in">bool</span>&gt;((ref) &#123;</span><br><span class="line">    <span class="keyword">final</span> state = ref.watch(manager);</span><br><span class="line">    <span class="keyword">return</span> state.phone.length == <span class="number">11</span>;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CodeLoginStateNotifier</span> <span class="keyword">extends</span> <span class="title">StateNotifier</span>&lt;<span class="title">CodeLoginState</span>&gt; </span>&#123;</span><br><span class="line">  CodeLoginStateNotifier()</span><br><span class="line">      : <span class="keyword">super</span>(</span><br><span class="line">          CodeLoginState(phone: DeerStorage.phone),</span><br><span class="line">        );</span><br><span class="line">  Timer? _timer;</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> sendCode() &#123;</span><br><span class="line">    _startTimer();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> _startTimer() &#123;</span><br><span class="line">    _stopTimer();</span><br><span class="line">    _hadSendCode = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    _timeCount = <span class="number">60</span>;</span><br><span class="line">    _timer = Timer.periodic(<span class="keyword">const</span> <span class="built_in">Duration</span>(seconds: <span class="number">1</span>), (_) &#123;</span><br><span class="line">      <span class="keyword">if</span> (state.timeCount == <span class="number">1</span>) &#123;</span><br><span class="line">        _stopTimer();</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        _timeCount = state.timeCount - <span class="number">1</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CodeLoginState</span> <span class="keyword">extends</span> <span class="title">Equatable</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">String</span> phone;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">String</span> code;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">int</span> timeCount;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">bool</span> hadSendCode;</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="FutureProvider"><a href="#FutureProvider" class="headerlink" title="FutureProvider"></a>FutureProvider</h2><p>FutureProvider可以用来进行异步操作，比如网络请求、应用启动加载配置等</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// <span class="markdown">网络请求</span></span></span><br><span class="line"><span class="keyword">final</span> request = FutureProvider.autoDispose&lt;<span class="built_in">int</span>&gt;((ref) <span class="keyword">async</span> &#123;</span><br><span class="line">  ref.onDispose(() &#123;</span><br><span class="line">    <span class="comment">/// <span class="markdown">可以在此处取消网络请求</span></span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;dispose&#x27;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">await</span> Future.delayed(<span class="keyword">const</span> <span class="built_in">Duration</span>(seconds: <span class="number">2</span>));</span><br><span class="line">  <span class="keyword">return</span> Random().nextInt(<span class="number">1000</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">Consumer(builder: (context, ref, _) &#123;</span><br><span class="line">    <span class="keyword">return</span> ref.watch(request).map(data: (value) &#123;</span><br><span class="line">            <span class="keyword">if</span> (value.isLoading) <span class="keyword">return</span> <span class="keyword">const</span> CircularProgressIndicator();</span><br><span class="line">            <span class="keyword">return</span> Text(<span class="string">&#x27;数据 <span class="subst">$&#123;value.value&#125;</span>&#x27;</span>);</span><br><span class="line">        &#125;, error: (error) &#123;</span><br><span class="line">            <span class="keyword">return</span> Text(error.error.toString());</span><br><span class="line">        &#125;, loading: (_) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">const</span> CircularProgressIndicator();</span><br><span class="line">        &#125;);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/// <span class="markdown">模拟App启动时加载必要的配置</span></span></span><br><span class="line"><span class="keyword">final</span> sharePreference = FutureProvider&lt;<span class="keyword">void</span>&gt;((ref) <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="comment">/// <span class="markdown">可以保存起来，封装存储 ，或者直接返回，使用此provider</span></span></span><br><span class="line">  <span class="keyword">await</span> SharedPreferences.getInstance();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> loadConfig = FutureProvider&lt;<span class="keyword">void</span>&gt;((ref) <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="comment">/// <span class="markdown">获取一些本地存储的数据等</span></span></span><br><span class="line">  <span class="keyword">await</span> Future.delayed(<span class="keyword">const</span> <span class="built_in">Duration</span>(seconds: <span class="number">2</span>));</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">/// <span class="markdown">其他配置</span></span></span><br><span class="line"><span class="keyword">final</span> otherFuture = FutureProvider&lt;<span class="keyword">void</span>&gt;((ref) <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="keyword">await</span> Future.delayed(<span class="keyword">const</span> <span class="built_in">Duration</span>(seconds: <span class="number">4</span>));</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">/// <span class="markdown">统一配置状态完成provider</span></span></span><br><span class="line"><span class="keyword">final</span> appConfig = FutureProvider((ref) <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="keyword">await</span> Future.wait([</span><br><span class="line">    ref.watch(sharePreference.future),</span><br><span class="line">    ref.watch(loadConfig.future),</span><br><span class="line">    ref.watch(otherFuture.future),</span><br><span class="line">  ]);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以在应用启动时包裹，提供 Splash页面。</span></span><br><span class="line">Consumer(builder: (context, ref, _) &#123;</span><br><span class="line">    <span class="keyword">return</span> ref.watch(appConfig).when(data: (_) &#123;</span><br><span class="line">       <span class="built_in">print</span>(<span class="built_in">DateTime</span>.now());</span><br><span class="line">       <span class="keyword">return</span> Text(<span class="string">&#x27;程序初始化完成&#x27;</span>);</span><br><span class="line">    &#125;, error: (_, __) &#123;</span><br><span class="line">       <span class="keyword">return</span> Text(<span class="string">&#x27;错误&#x27;</span>);</span><br><span class="line">    &#125;, loading: () &#123;</span><br><span class="line">       <span class="built_in">print</span>(<span class="built_in">DateTime</span>.now());</span><br><span class="line">       <span class="keyword">return</span> Text(<span class="string">&#x27;loading&#x27;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="family-amp-dependencies"><a href="#family-amp-dependencies" class="headerlink" title="family &amp; dependencies"></a>family &amp; dependencies</h2><p>像商品详情页，如果你的provider定义的是全局变量，可以使用family使用商品的id作为入参，提供不同的StateNotifier。我一般是使用mixin提供页面相关的provider，State混入即可，感觉这样更适合单页面的状态管理。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/// pageView切换</span></span><br><span class="line"> <span class="keyword">static</span> final pageIndex = StateProvider&lt;int&gt;(<span class="function">(<span class="params">ref</span>) =&gt;</span> <span class="number">0</span>);</span><br><span class="line"> <span class="keyword">static</span> final isSelected = Provider.family&lt;bool, int&gt;((ref, arg) &#123;</span><br><span class="line">   final index = ref.watch(pageIndex);</span><br><span class="line">   <span class="keyword">return</span> index == arg;</span><br><span class="line"> &#125;, <span class="attr">dependencies</span>: [pageIndex]);</span><br><span class="line"> </span><br><span class="line"><span class="comment">/// 对应下标的item是否处于点击状态</span></span><br><span class="line">final isSelected = ref.watch(HeaderProviders.isSelected(index));</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="overrideWithValue"><a href="#overrideWithValue" class="headerlink" title="overrideWithValue"></a>overrideWithValue</h2><p>可以设置provider的值 如例子中应用初始化配置完成后，为全局Provider设置当前用户的信息</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// 等待本地存储等加载完成后设置用户信息</span></span><br><span class="line">final userInfo =</span><br><span class="line">      StateNotifierProvider&lt;DeerUserInfoState, DeerUserInfo?&gt;(</span><br><span class="line">          <span class="function">(<span class="params">ref</span>) =&gt;</span> <span class="keyword">throw</span> UnimplementedError())</span><br><span class="line"></span><br><span class="line">ProviderScope(</span><br><span class="line">      overrides: [</span><br><span class="line">        UserProviders.userInfo</span><br><span class="line">            .overrideWithValue(DeerUserInfoState(DeerStorage.userInfo)),</span><br><span class="line">      ],</span><br><span class="line">      ...</span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Provider-1"><a href="#Provider-1" class="headerlink" title="Provider"></a>Provider</h2><p>简单的提供数据共享，不会刷新UI，使用和InheritedWidget差不多，树</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProviderPage</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> ProviderPage(&#123;Key? key&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Scaffold(</span><br><span class="line">      appBar: AppBar(</span><br><span class="line">        title: <span class="keyword">const</span> Text(ProviderRouters.counter),</span><br><span class="line">      ),</span><br><span class="line">      body: Provider(</span><br><span class="line">        create: (context) =&gt; <span class="number">2</span>,<span class="comment">// 提供数据</span></span><br><span class="line">        child: <span class="keyword">const</span> _ProviderContainer(),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_ProviderContainer</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> _ProviderContainer(&#123;Key? key&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Center(</span><br><span class="line">      <span class="comment">// 获取数据</span></span><br><span class="line">      child: Consumer&lt;<span class="built_in">int</span>&gt;(builder: (context, value, _) &#123;</span><br><span class="line">        <span class="keyword">return</span> Text(value.toString());</span><br><span class="line">      &#125;),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="ChangeNotifierProvider"><a href="#ChangeNotifierProvider" class="headerlink" title="ChangeNotifierProvider"></a>ChangeNotifierProvider</h2><p>提供数据共享，数据模型需要继承或者混入<code>ChangeNotifier</code>，并且在数据改变时调用<code>notifyListeners</code>，不过在实际开发中很少会只有一个属性变化，需要注意合理使用<code>Consumer</code>和<code>Selector</code>，避免不必要的刷新。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChangeNotifierProviderPage</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> ChangeNotifierProviderPage(&#123;Key? key&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Scaffold(</span><br><span class="line">      appBar: AppBar(</span><br><span class="line">        title: <span class="keyword">const</span> Text(ProviderRouters.changeNotifierProvider),</span><br><span class="line">      ),</span><br><span class="line">      body: ChangeNotifierProvider(</span><br><span class="line">        create: (context) =&gt; _State(), <span class="comment">// 提供状态</span></span><br><span class="line">        child: <span class="keyword">const</span> Center(child: _CounterContainer()),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_CounterContainer</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> _CounterContainer(&#123;Key? key&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">final</span> _state = context.read&lt;_State&gt;();</span><br><span class="line">    <span class="keyword">return</span> Column(</span><br><span class="line">      mainAxisAlignment: MainAxisAlignment.center,</span><br><span class="line">      children: [</span><br><span class="line">        Row(</span><br><span class="line">          mainAxisSize: MainAxisSize.min,</span><br><span class="line">          children: [</span><br><span class="line">            <span class="comment">// 如果有多个属性值更新，只想在一个值改变时刷新</span></span><br><span class="line">            Selector&lt;_State, <span class="built_in">int</span>&gt;(</span><br><span class="line">              builder: (context, value, _) &#123;</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;text - rebuild&#x27;</span>);</span><br><span class="line">                <span class="keyword">return</span> Text(value.toString());</span><br><span class="line">              &#125;,</span><br><span class="line">              selector: (_, value) =&gt; value.count,</span><br><span class="line">            ),</span><br><span class="line">            TextButton(</span><br><span class="line">              onPressed: _state.increase,</span><br><span class="line">              child: <span class="keyword">const</span> Text(<span class="string">&#x27;+&#x27;</span>),</span><br><span class="line">            ),</span><br><span class="line">          ],</span><br><span class="line">        ),</span><br><span class="line">        Row(</span><br><span class="line">          mainAxisSize: MainAxisSize.min,</span><br><span class="line">          children: [</span><br><span class="line">            <span class="comment">/// <span class="markdown">对比Selector</span></span></span><br><span class="line">            Consumer&lt;_State&gt;(builder: (context, value, _) &#123;</span><br><span class="line">              <span class="built_in">print</span>(<span class="string">&#x27;switch - rebuild&#x27;</span>);</span><br><span class="line">              <span class="keyword">return</span> Switch(</span><br><span class="line">                value: value.isOpen,</span><br><span class="line">                onChanged: (_) &#123;&#125;,</span><br><span class="line">              );</span><br><span class="line">            &#125;),</span><br><span class="line">            TextButton(</span><br><span class="line">              onPressed: _state.change,</span><br><span class="line">              child: <span class="keyword">const</span> Text(<span class="string">&#x27;打开/关闭&#x27;</span>),</span><br><span class="line">            ),</span><br><span class="line">          ],</span><br><span class="line">        )</span><br><span class="line">      ],</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_State</span> <span class="keyword">extends</span> <span class="title">ChangeNotifier</span> </span>&#123;</span><br><span class="line">  <span class="built_in">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">bool</span> isOpen = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> increase() &#123;</span><br><span class="line">    count += <span class="number">1</span>;</span><br><span class="line">    notifyListeners();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> change() &#123;</span><br><span class="line">    isOpen = !isOpen;</span><br><span class="line">    notifyListeners();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="FutureProvider-1"><a href="#FutureProvider-1" class="headerlink" title="FutureProvider"></a>FutureProvider</h2><p>设置<code>初始值</code>，接收一个<code>Future</code>，在状态更新时刷新child</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FutureProviderPage</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> FutureProviderPage(&#123;Key? key&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Scaffold(</span><br><span class="line">      appBar: AppBar(</span><br><span class="line">        title: <span class="keyword">const</span> Text(ProviderRouters.futuerProvider),</span><br><span class="line">      ),</span><br><span class="line">      body: FutureProvider.value(</span><br><span class="line">        value: Future.delayed(</span><br><span class="line">            <span class="keyword">const</span> <span class="built_in">Duration</span>(seconds: <span class="number">2</span>), () =&gt; _State()..loadCompleted()),</span><br><span class="line">        initialData: _State(),</span><br><span class="line">        child: Consumer&lt;_State&gt;(builder: (_, value, __) &#123;</span><br><span class="line">          Widget container;</span><br><span class="line">          <span class="keyword">if</span> (value.isLoading) &#123;</span><br><span class="line">            container = <span class="keyword">const</span> CircularProgressIndicator();</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            container = <span class="keyword">const</span> Text(<span class="string">&#x27;加载完成&#x27;</span>);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> Center(child: container);</span><br><span class="line">        &#125;),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_State</span> </span>&#123;</span><br><span class="line">  <span class="built_in">bool</span> isLoading = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> loadCompleted() &#123;</span><br><span class="line">    isLoading = <span class="keyword">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="StreamProvider"><a href="#StreamProvider" class="headerlink" title="StreamProvider"></a>StreamProvider</h2><p>和FutureProvider一致，只是接收变成了一个Stream</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StreamProviderPage</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> StreamProviderPage(&#123;Key? key&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Scaffold(</span><br><span class="line">      appBar: AppBar(</span><br><span class="line">        title: <span class="keyword">const</span> Text(ProviderRouters.streamProvider),</span><br><span class="line">      ),</span><br><span class="line">      body: StreamProvider&lt;<span class="built_in">int</span>&gt;(</span><br><span class="line">        create: (_) &#123;</span><br><span class="line">          <span class="keyword">return</span> Stream.periodic(<span class="keyword">const</span> <span class="built_in">Duration</span>(seconds: <span class="number">1</span>), (value) &#123;</span><br><span class="line">            <span class="keyword">return</span> value;</span><br><span class="line">          &#125;);</span><br><span class="line">        &#125;,</span><br><span class="line">        initialData: <span class="number">0</span>,</span><br><span class="line">        builder: (context, __) &#123;</span><br><span class="line">          <span class="keyword">return</span> Center(</span><br><span class="line">            <span class="comment">/// <span class="markdown">此处使用context.watch，原理和Consumer是一样的</span></span></span><br><span class="line">            child: Text(context.watch&lt;<span class="built_in">int</span>&gt;().toString()),</span><br><span class="line">          );</span><br><span class="line">        &#125;,</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="ProxyProvider"><a href="#ProxyProvider" class="headerlink" title="ProxyProvider"></a>ProxyProvider</h2><p>如果一个模型需要依赖另外一个或者多个模型值的改变，则可以使用ProxyProvider</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProxyProviderPage</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> ProxyProviderPage(&#123;Key? key&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> MultiProvider(</span><br><span class="line">      providers: [</span><br><span class="line">        ChangeNotifierProvider(create: (context) =&gt; _Counter()),</span><br><span class="line">        ProxyProvider&lt;_Counter, _Logic&gt;(</span><br><span class="line">          create: (_) =&gt; _Logic(number: <span class="number">0</span>),</span><br><span class="line">          update: (context, value, _) &#123;</span><br><span class="line">            <span class="keyword">return</span> _Logic(number: value.count);</span><br><span class="line">          &#125;,</span><br><span class="line">        ),</span><br><span class="line">      ],</span><br><span class="line">      child: Scaffold(</span><br><span class="line">        appBar: AppBar(title: <span class="keyword">const</span> Text(<span class="string">&#x27;data&#x27;</span>)),</span><br><span class="line">        body: Center(</span><br><span class="line">          child: Column(</span><br><span class="line">            mainAxisSize: MainAxisSize.min,</span><br><span class="line">            children: [</span><br><span class="line">              Consumer&lt;_Counter&gt;(</span><br><span class="line">                  builder: (_, value, __) =&gt; Text(value.count.toString())),</span><br><span class="line">              Consumer&lt;_Logic&gt;(builder: (_, value, __) =&gt; Text(value.desc)),</span><br><span class="line">              Builder(builder: (context) &#123;</span><br><span class="line">                <span class="keyword">return</span> TextButton(</span><br><span class="line">                  onPressed: () &#123;</span><br><span class="line">                    context.read&lt;_Counter&gt;().increase();</span><br><span class="line">                  &#125;,</span><br><span class="line">                  child: <span class="keyword">const</span> Text(<span class="string">&#x27;+&#x27;</span>),</span><br><span class="line">                );</span><br><span class="line">              &#125;)</span><br><span class="line">            ],</span><br><span class="line">          ),</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_Counter</span> <span class="keyword">extends</span> <span class="title">ChangeNotifier</span> </span>&#123;</span><br><span class="line">  <span class="built_in">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> increase() &#123;</span><br><span class="line">    count += <span class="number">1</span>;</span><br><span class="line">    notifyListeners();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_Logic</span> </span>&#123;</span><br><span class="line">  <span class="built_in">int</span> number;</span><br><span class="line"></span><br><span class="line">  _Logic(&#123;</span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">this</span>.number,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">String</span> <span class="keyword">get</span> desc =&gt; number.isEven ? <span class="string">&quot;偶数&quot;</span> : <span class="string">&quot;奇数&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="ChangeNotifierProxyProvider"><a href="#ChangeNotifierProxyProvider" class="headerlink" title="ChangeNotifierProxyProvider"></a>ChangeNotifierProxyProvider</h2><p>如果一个数据模型自己是一个ChangeNotifier，并且它需要依赖其他数据模型的数据，则可以使用ChangeNotifierProxyProvider，更适合使用于依赖的数据模型的数据是不变的， 当然依赖的其他数据是ChangeNotifier也是可以的。</p>
+<p>可以查看<a href="https://link.juejin.cn/?target=https://github.com/flutter/samples/tree/main/provider_shopper">官方demo</a></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChangeNotifierProxyProviderPage</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> ChangeNotifierProxyProviderPage(&#123;Key? key&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> MultiProvider(</span><br><span class="line">      providers: [</span><br><span class="line">        Provider(create: (context) =&gt; _Letters()),</span><br><span class="line">        ChangeNotifierProxyProvider&lt;_Letters, _LikeLetters&gt;(</span><br><span class="line">          create: (_) =&gt; _LikeLetters(),</span><br><span class="line">          update: (context, value, like) &#123;</span><br><span class="line">            <span class="keyword">return</span> like!..updateLetters(value.letters);</span><br><span class="line">          &#125;,</span><br><span class="line">        ),</span><br><span class="line">      ],</span><br><span class="line">      child: Scaffold(</span><br><span class="line">        appBar: AppBar(title: <span class="keyword">const</span> Text(<span class="string">&#x27;data&#x27;</span>)),</span><br><span class="line">        body: Column(</span><br><span class="line">          mainAxisSize: MainAxisSize.min,</span><br><span class="line">          children: <span class="keyword">const</span> [</span><br><span class="line">            Expanded(child: AllListView()),</span><br><span class="line">            Divider(),</span><br><span class="line">            Expanded(child: LikeListView()),</span><br><span class="line">          ],</span><br><span class="line">        ),</span><br><span class="line">      ),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AllListView</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> AllListView(&#123;Key? key&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">final</span> letters =</span><br><span class="line">        context.select&lt;_Letters, <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt;&gt;((value) =&gt; value.letters);</span><br><span class="line">    <span class="keyword">return</span> ListView.builder(</span><br><span class="line">      padding: <span class="keyword">const</span> EdgeInsets.symmetric(horizontal: <span class="number">10</span>),</span><br><span class="line">      itemBuilder: (context, index) &#123;</span><br><span class="line">        <span class="keyword">final</span> letter = letters[index];</span><br><span class="line">        <span class="keyword">return</span> Row(children: [</span><br><span class="line">          Expanded(</span><br><span class="line">            child: Text(letter),</span><br><span class="line">          ),</span><br><span class="line">          LikeButton(</span><br><span class="line">            letter: letter,</span><br><span class="line">          ),</span><br><span class="line">        ]);</span><br><span class="line">      &#125;,</span><br><span class="line">      itemExtent: <span class="number">50</span>,</span><br><span class="line">      itemCount: letters.length,</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LikeListView</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> LikeListView(&#123;Key? key&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">final</span> letters = context.watch&lt;_LikeLetters&gt;().like;</span><br><span class="line">    <span class="keyword">return</span> ListView.builder(</span><br><span class="line">      padding: <span class="keyword">const</span> EdgeInsets.symmetric(horizontal: <span class="number">10</span>),</span><br><span class="line">      itemBuilder: (context, index) &#123;</span><br><span class="line">        <span class="keyword">final</span> letter = letters[index];</span><br><span class="line">        <span class="keyword">return</span> Text(letter);</span><br><span class="line">      &#125;,</span><br><span class="line">      itemExtent: <span class="number">50</span>,</span><br><span class="line">      itemCount: letters.length,</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LikeButton</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="built_in">String</span> letter;</span><br><span class="line">  <span class="keyword">const</span> LikeButton(&#123;</span><br><span class="line">    Key? key,</span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">this</span>.letter,</span><br><span class="line">  &#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">final</span> _like = context.watch&lt;_LikeLetters&gt;();</span><br><span class="line">    <span class="keyword">final</span> isLike = _like.isLike(letter);</span><br><span class="line">    <span class="keyword">return</span> TextButton(</span><br><span class="line">        onPressed: () &#123;</span><br><span class="line">          isLike ? _like.removeLetter(letter) : _like.addLetter(letter);</span><br><span class="line">        &#125;,</span><br><span class="line">        child: Text(isLike ? <span class="string">&quot;不喜欢&quot;</span> : <span class="string">&quot;喜欢&quot;</span>));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_Letters</span> </span>&#123;</span><br><span class="line">  <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; letters = [</span><br><span class="line">    <span class="string">&#x27;A&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;B&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;C&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;D&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;E&#x27;</span>,</span><br><span class="line">  ];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_LikeLetters</span> <span class="keyword">extends</span> <span class="title">ChangeNotifier</span> </span>&#123;</span><br><span class="line">  <span class="keyword">late</span> <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; _letters;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; <span class="keyword">get</span> letters =&gt; _letters;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; like = [];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> updateLetters(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; value) &#123;</span><br><span class="line">    _letters = value;</span><br><span class="line">    notifyListeners();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">bool</span> isLike(<span class="built_in">String</span> letter) =&gt; like.contains(letter);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> addLetter(<span class="built_in">String</span> letter) &#123;</span><br><span class="line">    like.add(letter);</span><br><span class="line"></span><br><span class="line">    notifyListeners();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> removeLetter(<span class="built_in">String</span> letter) &#123;</span><br><span class="line">    like.remove(letter);</span><br><span class="line"></span><br><span class="line">    notifyListeners();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="GetX"><a href="#GetX" class="headerlink" title="GetX"></a>GetX</h1><p>项目中按照GetxController+GetBuilder基本可以大部分状态管理问题，这里只做简单使用记录，Getx有一篇文章，感兴趣的可以去看一下</p>
+<h2 id="Obx"><a href="#Obx" class="headerlink" title="Obx"></a>Obx</h2><p>一般 obs 配合 obx 使用</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ObxPage</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  ObxPage(&#123;Key? key&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">final</span> _count = <span class="number">0.</span>obs;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Scaffold(</span><br><span class="line">      appBar: AppBar(</span><br><span class="line">        title: <span class="keyword">const</span> Text(GetXRouter.obx),</span><br><span class="line">      ),</span><br><span class="line">      body: Center(</span><br><span class="line">          child: Column(</span><br><span class="line">        mainAxisSize: MainAxisSize.min,</span><br><span class="line">        children: [</span><br><span class="line">          Obx(() =&gt; Text(_count.value.toString())),</span><br><span class="line">          TextButton(</span><br><span class="line">            onPressed: () =&gt; _count.value += <span class="number">1</span>,</span><br><span class="line">            child: <span class="keyword">const</span> Text(<span class="string">&#x27;+&#x27;</span>),</span><br><span class="line">          )</span><br><span class="line">        ],</span><br><span class="line">      )),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Getbuilder"><a href="#Getbuilder" class="headerlink" title="Getbuilder"></a>Getbuilder</h2><p>一般 GetxController 和 Getbuilder配合使用</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GetBuilderPage</span> <span class="keyword">extends</span> <span class="title">StatelessWidget</span> </span>&#123;</span><br><span class="line">  GetBuilderPage(&#123;Key? key&#125;) : <span class="keyword">super</span>(key: key);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">final</span> controller = Get.put(_Controller());</span><br><span class="line"></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  Widget build(BuildContext context) &#123;</span><br><span class="line">    <span class="keyword">return</span> Scaffold(</span><br><span class="line">      appBar: AppBar(</span><br><span class="line">        title: <span class="keyword">const</span> Text(GetXRouter.getBuilder),</span><br><span class="line">      ),</span><br><span class="line">      body: Center(</span><br><span class="line">          child: Column(</span><br><span class="line">        mainAxisSize: MainAxisSize.min,</span><br><span class="line">        children: [</span><br><span class="line">          GetBuilder&lt;_Controller&gt;(</span><br><span class="line">            builder: (controller) &#123;</span><br><span class="line">              <span class="built_in">print</span>(<span class="string">&#x27;rebuild A&#x27;</span>);</span><br><span class="line">              <span class="keyword">return</span> Text(<span class="string">&#x27;A: <span class="subst">$&#123;controller.a&#125;</span>&#x27;</span>);</span><br><span class="line">            &#125;,</span><br><span class="line">            filter: (controller) =&gt; controller.a,</span><br><span class="line">          ),</span><br><span class="line">          TextButton(</span><br><span class="line">              onPressed: () &#123;</span><br><span class="line">                controller.increaseA();</span><br><span class="line">              &#125;,</span><br><span class="line">              child: <span class="keyword">const</span> Text(<span class="string">&#x27;A +&#x27;</span>)),</span><br><span class="line">          GetBuilder&lt;_Controller&gt;(</span><br><span class="line">            builder: (controller) &#123;</span><br><span class="line">              <span class="built_in">print</span>(<span class="string">&#x27;rebuild B&#x27;</span>);</span><br><span class="line"></span><br><span class="line">              <span class="keyword">return</span> Text(<span class="string">&#x27;B: <span class="subst">$&#123;controller.b&#125;</span>&#x27;</span>);</span><br><span class="line">            &#125;,</span><br><span class="line">            filter: (controller) =&gt; controller.b,</span><br><span class="line">          ),</span><br><span class="line">          TextButton(</span><br><span class="line">              onPressed: () &#123;</span><br><span class="line">                controller.increaseB();</span><br><span class="line">              &#125;,</span><br><span class="line">              child: <span class="keyword">const</span> Text(<span class="string">&#x27;B +&#x27;</span>)),</span><br><span class="line">        ],</span><br><span class="line">      )),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_Controller</span> <span class="keyword">extends</span> <span class="title">GetxController</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> a = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> b = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> increaseA() &#123;</span><br><span class="line">    a += <span class="number">1</span>;</span><br><span class="line">    update();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> increaseB() &#123;</span><br><span class="line">    b += <span class="number">1</span>;</span><br><span class="line">    update();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>还有一些其它就不在此处做记录了，总体来说我是喜欢Riverpod的，配合hooks_riverpod你会感到什么叫做幸福的。Riverpod作为Provider的改进版本(同一作者)，Provider的选择优先级可以降一降。当然Getx也很好，毕竟star量在那里。这里有一篇<a target="_blank" rel="noopener" href="https://juejin.cn/post/6924104248275763208">GetX</a>的详细教程，作者还写有<a target="_blank" rel="noopener" href="https://juejin.cn/post/6856268776510504968">flutter_bloc</a>、<a target="_blank" rel="noopener" href="https://juejin.cn/post/6860029460524040199">fish_redux</a>等框架的使用文章，有需要可以去查看</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Dart/" rel="tag"># Dart</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/01/07/Swift%20Leetcode%20%E4%BA%8C%E5%8F%89%E6%A0%91%20%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/" rel="prev" title="Swift Leetcode 二叉树 算法题解">
+      <i class="fa fa-chevron-left"></i> Swift Leetcode 二叉树 算法题解
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Riverpod"><span class="nav-number">1.</span> <span class="nav-text">Riverpod</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Provider"><span class="nav-number">2.</span> <span class="nav-text">Provider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#StateProvider"><span class="nav-number">3.</span> <span class="nav-text">StateProvider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#StateNotifierProvider"><span class="nav-number">4.</span> <span class="nav-text">StateNotifierProvider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FutureProvider"><span class="nav-number">5.</span> <span class="nav-text">FutureProvider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#family-amp-dependencies"><span class="nav-number">6.</span> <span class="nav-text">family &amp; dependencies</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#overrideWithValue"><span class="nav-number">7.</span> <span class="nav-text">overrideWithValue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Provider-1"><span class="nav-number">8.</span> <span class="nav-text">Provider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ChangeNotifierProvider"><span class="nav-number">9.</span> <span class="nav-text">ChangeNotifierProvider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FutureProvider-1"><span class="nav-number">10.</span> <span class="nav-text">FutureProvider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#StreamProvider"><span class="nav-number">11.</span> <span class="nav-text">StreamProvider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ProxyProvider"><span class="nav-number">12.</span> <span class="nav-text">ProxyProvider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ChangeNotifierProxyProvider"><span class="nav-number">13.</span> <span class="nav-text">ChangeNotifierProxyProvider</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GetX"><span class="nav-number"></span> <span class="nav-text">GetX</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Obx"><span class="nav-number">1.</span> <span class="nav-text">Obx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Getbuilder"><span class="nav-number">2.</span> <span class="nav-text">Getbuilder</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E5%90%8E"><span class="nav-number"></span> <span class="nav-text">最后</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">爱吃番茄炒蛋</p>
+  <div class="site-description" itemprop="description">「 少点虚的，多点实践 」</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Tate-zwt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Tate-zwt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tate_zhangweiting@163.com" title="E-Mail → mailto:tate_zhangweiting@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">爱吃番茄炒蛋</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
